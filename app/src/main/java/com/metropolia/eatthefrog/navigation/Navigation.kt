@@ -9,10 +9,10 @@ import com.metropolia.eatthefrog.screens.HomeScreen
 import com.metropolia.eatthefrog.screens.ProfileScreen
 
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(navController: NavHostController, username: String) {
     NavHost(navController, startDestination = NavigationItem.Home.route) {
         composable(NavigationItem.Home.route) {
-            HomeScreen()
+            HomeScreen(username)
         }
         composable(NavigationItem.AddTask.route) {
             AddTaskScreen()
