@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
@@ -67,11 +68,12 @@ fun WelcomeScreen(application: Application, activity: Activity) {
     }
 
     Column(
-        Modifier
+        modifier = Modifier
             .verticalScroll(scrollState)
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
-            .wrapContentSize(Alignment.Center)
+            .wrapContentSize(Alignment.Center),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_frog),
@@ -79,60 +81,32 @@ fun WelcomeScreen(application: Application, activity: Activity) {
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         )
-        Text(
+        WelcomeText(
             text = stringResource(id = R.string.app_name),
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(20.dp),
-            textAlign = TextAlign.Center,
-            fontSize = 25.sp,
+            size = 25.sp
         )
-        Text(
+        WelcomeText(
             text = stringResource(id = R.string.eat_the_frog_description_first),
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(20.dp),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp,
+            size = 20.sp
         )
-        Text(
+        WelcomeText(
             text = stringResource(id = R.string.eat_the_frog_description_two),
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(20.dp),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp,
+            size = 20.sp
         )
-        Text(
+        WelcomeText(
             text = stringResource(id = R.string.eat_the_frog_description_three),
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(20.dp),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp,
+            size = 20.sp
         )
-        Text(
-            text = "Welcome,\nplease enter your name:",
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(20.dp),
-            textAlign = TextAlign.Center,
-            fontSize = 25.sp,
+        WelcomeText(
+            text = "${stringResource(id = R.string.welcome)}!\n${stringResource(id = R.string.please_enter_your_name)}:",
+            size = 25.sp
         )
+
         TextField(
             value = username,
             onValueChange = { username = it },
             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+            singleLine = true,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         )
@@ -147,4 +121,17 @@ fun WelcomeScreen(application: Application, activity: Activity) {
             Text(text = stringResource(R.string.save))
         }
     }
+}
+
+@Composable
+fun WelcomeText(text: String, size: TextUnit) {
+    Text(
+        text = text,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colors.onSurface,
+        modifier = Modifier
+            .padding(20.dp),
+        textAlign = TextAlign.Center,
+        fontSize = size,
+    )
 }

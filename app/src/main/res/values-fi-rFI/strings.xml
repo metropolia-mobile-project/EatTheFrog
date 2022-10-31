@@ -6,4 +6,6 @@
     <string name="profile">Profiili</string>
     <string name="save">Tallenna</string>
     <string name="welcome_back">Tervetuloa takaisin</string>
+    <string name="welcome">Tervetuloa</string>
+    <string name="please_enter_your_name">Anna nimesi</string>
 </resources>
