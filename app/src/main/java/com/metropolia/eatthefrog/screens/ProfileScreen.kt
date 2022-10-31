@@ -6,7 +6,6 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -47,9 +46,6 @@ fun ProfileScreen() {
 
         PickImageFromGallery()
 
-
-
-
         Text(
             text = "User Name",
             fontWeight = FontWeight.Bold,
@@ -60,147 +56,16 @@ fun ProfileScreen() {
             textAlign = TextAlign.Center,
             fontSize = 25.sp,
         )
+        TaskDetails()
+        SwitchPart()
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp)
-                .padding(50.dp, 30.dp, 50.dp, 0.dp),
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                modifier = Modifier
-                    .width(130.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Closed tasks",
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    fontSize = 18.sp,
-                    textDecoration = TextDecoration.Underline
-                )
-                Text(
-                    text = "1",
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Yellow,
-                    fontSize = 18.sp
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .width(130.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            )
-            {
-                Text(
-                    text = "Frogs eaten",
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    fontSize = 18.sp,
-                    textDecoration = TextDecoration.Underline
-                )
-                Text(
-                    text = "1",
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Yellow,
-                    fontSize = 18.sp
-                )
-            }
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp)
-                .padding(50.dp, 30.dp, 50.dp, 0.dp),
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.SpaceBetween
-
-        ) {
-            Column(
-                modifier = Modifier
-                    .width(130.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            )
-            {
-                Text(
-                    text = "Active tasks",
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    fontSize = 18.sp,
-                    textDecoration = TextDecoration.Underline
-                )
-                Text(
-                    text = "1",
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Yellow,
-                    fontSize = 18.sp
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .width(130.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            )
-            {
-                Text(
-                    text = "Total tasks",
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    fontSize = 18.sp,
-                    textDecoration = TextDecoration.Underline
-                )
-                Text(
-                    text = "1",
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Yellow,
-                    fontSize = 18.sp
-                )
-            }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .padding(20.dp, 20.dp, 0.dp, 0.dp),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.End
-            ) {
-                ProfileSwitches()
-                Text(
-                    text = "Dark mode",
-                    fontWeight = FontWeight.Light,
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .padding(0.dp, 14.dp, 0.dp, 0.dp)
-
-                )
-            }
-            Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.End
-            ) {
-                ProfileSwitches()
-                Text(
-                    text = "Deadline reminder",
-                    fontWeight = FontWeight.Light,
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .padding(0.dp, 6.dp, 0.dp, 0.dp)
-                )
-            }
-        }
     }
 }
 
+
+/**
+ * Creates basic switches for changing dark mode and deadline options
+ */
 @Composable
 fun ProfileSwitches() {
     val checkedState = remember { mutableStateOf(false) }
@@ -284,7 +149,160 @@ fun PickImageFromGallery() {
                     .width(60.dp)
                     .height(60.dp),
             )
+        }
+    }
+}
 
+/**
+ * TaskDetails function creates the middle part of the profile screen
+ */
+
+@Composable
+fun TaskDetails() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .padding(50.dp, 30.dp, 50.dp, 0.dp),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(
+            modifier = Modifier
+                .width(130.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Closed tasks",
+                fontWeight = FontWeight.Medium,
+                color = Color.Black,
+                fontSize = 18.sp,
+                textDecoration = TextDecoration.Underline
+            )
+            Text(
+                text = "1",
+                fontWeight = FontWeight.Medium,
+                color = Color.Yellow,
+                fontSize = 18.sp
+            )
+        }
+        Column(
+            modifier = Modifier
+                .width(130.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        )
+        {
+            Text(
+                text = "Frogs eaten",
+                fontWeight = FontWeight.Medium,
+                color = Color.Black,
+                fontSize = 18.sp,
+                textDecoration = TextDecoration.Underline
+            )
+            Text(
+                text = "1",
+                fontWeight = FontWeight.Medium,
+                color = Color.Yellow,
+                fontSize = 18.sp
+            )
+        }
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp)
+            .padding(50.dp, 30.dp, 50.dp, 0.dp),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.SpaceBetween
+
+    ) {
+        Column(
+            modifier = Modifier
+                .width(130.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        )
+        {
+            Text(
+                text = "Active tasks",
+                fontWeight = FontWeight.Medium,
+                color = Color.Black,
+                fontSize = 18.sp,
+                textDecoration = TextDecoration.Underline
+            )
+            Text(
+                text = "1",
+                fontWeight = FontWeight.Medium,
+                color = Color.Yellow,
+                fontSize = 18.sp
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .width(130.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        )
+        {
+            Text(
+                text = "Total tasks",
+                fontWeight = FontWeight.Medium,
+                color = Color.Black,
+                fontSize = 18.sp,
+                textDecoration = TextDecoration.Underline
+            )
+            Text(
+                text = "1",
+                fontWeight = FontWeight.Medium,
+                color = Color.Yellow,
+                fontSize = 18.sp
+            )
+        }
+    }
+}
+
+
+/**
+ * SwitchPart Function creates the bottom of the profile screen where
+ * option switches are shown
+ */
+@Composable
+fun SwitchPart() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .padding(20.dp, 20.dp, 0.dp, 0.dp),
+        horizontalAlignment = Alignment.Start
+    ) {
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.End
+        ) {
+            ProfileSwitches()
+            Text(
+                text = "Dark mode",
+                fontWeight = FontWeight.Light,
+                color = Color.Black,
+                fontSize = 14.sp,
+                modifier = Modifier
+                    .padding(0.dp, 14.dp, 0.dp, 0.dp)
+
+            )
+        }
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.End
+        ) {
+            ProfileSwitches()
+            Text(
+                text = "Deadline reminder",
+                fontWeight = FontWeight.Light,
+                color = Color.Black,
+                fontSize = 14.sp,
+                modifier = Modifier
+                    .padding(0.dp, 6.dp, 0.dp, 0.dp)
+            )
         }
     }
 }
