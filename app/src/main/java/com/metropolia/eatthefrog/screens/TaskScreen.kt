@@ -31,10 +31,10 @@ fun TaskScreen() {
             }
         }
     )*/ {
-        Column() {
-
+        Column {
+            Text("testing popup window")
         }
 
-        Text("testing popup window")
+
     }
 }

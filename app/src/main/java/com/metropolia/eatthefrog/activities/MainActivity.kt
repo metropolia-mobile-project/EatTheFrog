@@ -22,7 +22,8 @@ open class MainActivity : ComponentActivity() {
 
     var popupVisible = mutableStateOf(false)
 
-    @ExperimentalMaterialApi
+
+    @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
