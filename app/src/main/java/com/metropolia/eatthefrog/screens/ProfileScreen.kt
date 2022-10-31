@@ -33,7 +33,7 @@ import com.metropolia.eatthefrog.R
 
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(username: String) {
     Column(
         Modifier
             .fillMaxSize()
@@ -47,7 +47,7 @@ fun ProfileScreen() {
         PickImageFromGallery()
 
         Text(
-            text = "User Name",
+            text = username,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier
@@ -311,5 +311,5 @@ fun SwitchPart() {
 @Preview
 @Composable
 fun profileScreenPreview() {
-    ProfileScreen()
+
 }
