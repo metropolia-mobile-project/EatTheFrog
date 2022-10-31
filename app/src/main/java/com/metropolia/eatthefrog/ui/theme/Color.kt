@@ -2,7 +2,6 @@ package com.metropolia.eatthefrog.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val YaleBlue = Color(0xFF124191)
+val YaleBlueLight = Color(0xFF6070FD)
+val GreyBlue = Color(0xFF9FABC0)

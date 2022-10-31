@@ -1,4 +1,4 @@
-package com.metropolia.eatthefrog
+package com.metropolia.eatthefrog.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.tooling.preview.Preview
+import com.metropolia.eatthefrog.screens.MainScreen
 import com.metropolia.eatthefrog.ui.theme.EatTheFrogTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,6 +27,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EatTheFrogTheme {
+                MainScreen()
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -39,8 +41,10 @@ class MainActivity : ComponentActivity() {
 }
 
 
-
 @Composable
+fun DefaultPreview() {
+    EatTheFrogTheme {
+        MainScreen()
 fun testPopup() {
 
     var popupStatus by remember { mutableStateOf(false) }
