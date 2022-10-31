@@ -12,13 +12,13 @@ import com.metropolia.eatthefrog.navigation.Navigation
 import com.metropolia.eatthefrog.navigation.components.BottomNavigationBar
 
 @Composable
-fun MainScreen() {
+fun MainScreen(username: String) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) },
         content = { padding ->
         Box(modifier = Modifier.padding(padding)) {
-            Navigation(navController = navController)
+            Navigation(navController = navController, username)
         }
     },
     backgroundColor = MaterialTheme.colors.surface)
@@ -27,5 +27,5 @@ fun MainScreen() {
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen()
+    MainScreen("John Doe")
 }
