@@ -7,6 +7,10 @@ import androidx.lifecycle.AndroidViewModel
 import com.metropolia.eatthefrog.activities.SHARED_PREF_KEY
 import com.metropolia.eatthefrog.activities.USERNAME_KEY
 
+/**
+ * ViewModel for the Welcome screen
+ */
+
 class WelcomeScreenViewModel(application: Application) : AndroidViewModel(application) {
     private val sharedPreferences: SharedPreferences = application.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
 
