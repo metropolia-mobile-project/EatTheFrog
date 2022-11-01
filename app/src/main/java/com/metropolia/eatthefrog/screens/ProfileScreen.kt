@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -173,7 +174,7 @@ fun TaskDetails() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Closed tasks",
+                text = stringResource(id = R.string.closed_tasks),
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
                 fontSize = 18.sp,
@@ -193,7 +194,7 @@ fun TaskDetails() {
         )
         {
             Text(
-                text = "Frogs eaten",
+                text = stringResource(id = R.string.frogs_eaten),
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
                 fontSize = 18.sp,
@@ -224,7 +225,7 @@ fun TaskDetails() {
         )
         {
             Text(
-                text = "Active tasks",
+                text = stringResource(id = R.string.active_tasks),
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
                 fontSize = 18.sp,
@@ -245,7 +246,7 @@ fun TaskDetails() {
         )
         {
             Text(
-                text = "Total tasks",
+                text = stringResource(id = R.string.total_tasks),
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
                 fontSize = 18.sp,
@@ -281,7 +282,7 @@ fun SwitchPart() {
         ) {
             ProfileSwitches()
             Text(
-                text = "Dark mode",
+                text = stringResource(id = R.string.dark_mode),
                 fontWeight = FontWeight.Light,
                 color = Color.Black,
                 fontSize = 14.sp,
@@ -296,7 +297,7 @@ fun SwitchPart() {
         ) {
             ProfileSwitches()
             Text(
-                text = "Deadline reminder",
+                text = stringResource(id = R.string.deadline_rem),
                 fontWeight = FontWeight.Light,
                 color = Color.Black,
                 fontSize = 14.sp,
