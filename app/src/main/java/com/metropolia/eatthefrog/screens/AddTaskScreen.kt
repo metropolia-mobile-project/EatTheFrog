@@ -1,31 +1,22 @@
 package com.metropolia.eatthefrog.screens
 
 import android.app.DatePickerDialog
-import android.icu.text.CaseMap.Upper
+import android.app.TimePickerDialog
 import android.widget.DatePicker
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,6 +35,69 @@ fun AddTaskScreen() {
     }
 }
 
+/**
+ * Functionality to pick deadline for the task
+ * Creates UI for picking the time
+ */
+@Composable
+fun TimePicker() {
+
+    val context = LocalContext.current
+
+    val calendar = Calendar.getInstance()
+    val mHour = calendar[Calendar.HOUR_OF_DAY]
+    val mMinute = calendar[Calendar.MINUTE]
+
+    val sdf = SimpleDateFormat("HH:mm")
+    val currentTime = sdf.format(Date())
+
+    val time = remember { mutableStateOf(currentTime) }
+    val mTimePickerDialog = TimePickerDialog(
+        context,
+        { _, hour: Int, minute: Int ->
+            time.value = "$hour:$minute"
+        }, mHour, mMinute, false
+    )
+
+
+    Column(
+        modifier = Modifier
+            .padding(30.dp, 0.dp, 0.dp, 0.dp)
+    ) {
+        Text(
+            text = "Task deadline"
+        )
+        Row(
+            modifier = Modifier
+                .padding(0.dp, 0.dp, 0.dp, 0.dp)
+        ) {
+            Text(
+                text = time.value,
+                modifier = Modifier
+                    .padding(0.dp, 0.dp, 65.dp, 0.dp)
+            )
+            Image(
+                painter = painterResource(id = R.drawable.ic_add_time),
+                contentDescription = "",
+                modifier = Modifier
+                    .clickable { mTimePickerDialog.show() }
+                    .width(25.dp)
+                    .height(25.dp)
+
+            )
+        }
+        Divider(
+            color = Color.Black, thickness = 2.dp, modifier = Modifier
+                .width(125.dp)
+        )
+
+    }
+
+}
+
+/**
+ * Contains all parts of UI that is needed for picking and showing the dates
+ */
 @Composable
 fun DatePickingSection() {
 
@@ -65,7 +119,7 @@ fun DatePickingSection() {
         }
         Image(
             painter = painterResource(id = R.drawable.ic_horizontal_rule),
-            contentDescription  = null,
+            contentDescription = null,
             modifier = Modifier
                 .height(20.dp)
                 .width(20.dp)
@@ -80,9 +134,13 @@ fun DatePickingSection() {
             EndingDatePicker()
         }
     }
+    TimePicker()
 }
 
-
+/**
+ * Functionality for picking ending date from calendar and showing current date in
+ * text before new date is picked
+ */
 @Composable
 fun EndingDatePicker() {
 
@@ -110,7 +168,7 @@ fun EndingDatePicker() {
             sDate.value = "$sDayOfMonth/${sMonth + 1}/$sYear"
         }, eYear, eMonth, eDay
     )
-    Column() {
+    Column {
         Row {
             Image(
                 painter = painterResource(id = R.drawable.ic_calendar),
@@ -139,23 +197,26 @@ fun EndingDatePicker() {
     }
 }
 
-
+/**
+ * Functionality for picking starting date from calendar and showing current date in
+ * text before new date is picked
+ */
 @Composable
 fun StartingDatePicker() {
 
     val context = LocalContext.current
-    val sYear: Int
-    val sMonth: Int
-    val sDay: Int
+    val mYear: Int
+    val mMonth: Int
+    val mDay: Int
 
     val sdf = SimpleDateFormat("dd-MM-yyyy")
     val currentDate = sdf.format(Date())
 
     val sCalendar = Calendar.getInstance()
 
-    sYear = sCalendar.get(Calendar.YEAR)
-    sMonth = sCalendar.get(Calendar.MONTH)
-    sDay = sCalendar.get(Calendar.DAY_OF_MONTH)
+    mYear = sCalendar.get(Calendar.YEAR)
+    mMonth = sCalendar.get(Calendar.MONTH)
+    mDay = sCalendar.get(Calendar.DAY_OF_MONTH)
 
     sCalendar.time = Date()
 
@@ -163,11 +224,11 @@ fun StartingDatePicker() {
 
     val sDatePickerDialog = DatePickerDialog(
         context,
-        { _: DatePicker, sYear: Int, sMonth: Int, sDayOfMonth: Int ->
-            sDate.value = "$sDayOfMonth/${sMonth + 1}/$sYear"
-        }, sYear, sMonth, sDay
+        { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
+            sDate.value = "$mDayOfMonth/${mMonth + 1}/$mYear"
+        }, mYear, mMonth, mDay
     )
-    Column() {
+    Column {
         Row {
             Image(
                 painter = painterResource(id = R.drawable.ic_calendar),
@@ -198,6 +259,9 @@ fun StartingDatePicker() {
 
 }
 
+/**
+ * Contains textField and title for description
+ */
 @Composable
 private fun Description() {
     Column(
@@ -214,7 +278,9 @@ private fun Description() {
     }
 }
 
-
+/**
+ * TextField for description
+ */
 @Composable
 private fun DescriptionTextField() {
     var text by remember { mutableStateOf("") }
