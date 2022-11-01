@@ -34,7 +34,7 @@ open class MainActivity : ComponentActivity() {
                 EatTheFrogTheme {
                     if (username == null) {
                         WelcomeScreen(application, this)
-                    } else MainScreen(username)
+                    } else MainScreen(username, application)
                 }
             }
         }
