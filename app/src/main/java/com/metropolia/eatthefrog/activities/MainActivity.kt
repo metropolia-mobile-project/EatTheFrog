@@ -6,13 +6,10 @@ import android.util.Log
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.runtime.*
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.metropolia.eatthefrog.screens.MainScreen
 import com.metropolia.eatthefrog.screens.WelcomeScreen
@@ -21,7 +18,11 @@ import com.metropolia.eatthefrog.ui.theme.EatTheFrogTheme
 const val SHARED_PREF_KEY = "PREFERENCES_KEY"
 const val USERNAME_KEY = "USERNAME_KEY"
 
-class MainActivity : ComponentActivity() {
+open class MainActivity : ComponentActivity() {
+
+    var popupVisible = mutableStateOf(false)
+
+    @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -37,13 +38,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    EatTheFrogTheme {
-        MainScreen("John Doe")
     }
 }
