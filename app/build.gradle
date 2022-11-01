@@ -47,6 +47,7 @@ android {
 }
 
 dependencies {
+
     def nav_version = "2.5.3"
     def lifecycle_version = "2.5.1"
 

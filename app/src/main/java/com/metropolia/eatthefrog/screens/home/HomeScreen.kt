@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,29 +22,24 @@ import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.PopupView
 import com.metropolia.eatthefrog.activities.MainActivity
+import com.metropolia.eatthefrog.screens.home.components.ProfileContainer
+import com.metropolia.eatthefrog.screens.home.components.TasksContainer
+import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 @ExperimentalMaterialApi
 @Composable
-fun HomeScreen(username: String) {
+fun HomeScreen(username: String, application: Application) {
     val activity = LocalContext.current as MainActivity
+    val homeScreenViewModel = HomeScreenViewModel(application)
     Column(
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
-            .wrapContentSize(Alignment.Center)
+            .wrapContentSize(Alignment.Center),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "${stringResource(id = R.string.welcome_back)}, $username",
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 25.sp
-        )
-        Button(onClick = { activity.popupVisible.value = !activity.popupVisible.value}) {
-            Text("Open popup window")
-        }
-
+        ProfileContainer(username)
+        TasksContainer(homeScreenViewModel)
     }
     TaskScreen()
 }

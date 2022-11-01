@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.navigation
 
+import android.app.Application
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -12,16 +13,16 @@ import com.metropolia.eatthefrog.screens.ProfileScreen
 
 @ExperimentalMaterialApi
 @Composable
-fun Navigation(navController: NavHostController, username: String) {
+fun Navigation(navController: NavHostController, username: String, application: Application) {
     NavHost(navController, startDestination = NavigationItem.Home.route) {
         composable(NavigationItem.Home.route) {
-            HomeScreen(username)
+            HomeScreen(username, application)
         }
         composable(NavigationItem.AddTask.route) {
             AddTaskScreen()
         }
         composable(NavigationItem.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(username)
         }
     }
 }

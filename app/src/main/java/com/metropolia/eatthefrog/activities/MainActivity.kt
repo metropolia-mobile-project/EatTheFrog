@@ -22,7 +22,6 @@ open class MainActivity : ComponentActivity() {
 
     var popupVisible = mutableStateOf(false)
 
-
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +29,12 @@ open class MainActivity : ComponentActivity() {
         val sharedPreferences = this.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         val username = sharedPreferences.getString(USERNAME_KEY, null)
 
-
         setContent {
             ProvideWindowInsets {
                 EatTheFrogTheme {
                     if (username == null) {
                         WelcomeScreen(application, this)
-                    } else MainScreen(username)
+                    } else MainScreen(username, application)
                 }
             }
         }

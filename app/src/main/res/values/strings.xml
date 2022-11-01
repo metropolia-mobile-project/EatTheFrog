@@ -10,4 +10,18 @@
     <string name="eat_the_frog_description_three" translatable="false">Try this out and see how eating your “frog” gives you energy for the rest of your day.</string>
     <string name="welcome">Welcome</string>
     <string name="please_enter_your_name">Please enter your name</string>
+    <string name="closed_tasks">Closed tasks</string>
+    <string name="frogs_eaten">Frogs eaten</string>
+    <string name="active_tasks">Active tasks</string>
+    <string name="total_tasks">Total tasks</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="deadline_rem">Deadline reminder</string>
+    <string name="hello">Hello</string>
+    <string name="you_have">You have</string>
+    <string name="tasks_today">tasks today</string>
+    <string name="subtasks">subtasks</string>
+    <string name="tasks">Tasks</string>
+    <string name="today">Today</string>
+    <string name="week">Week</string>
+    <string name="month">Month</string>
 </resources>
