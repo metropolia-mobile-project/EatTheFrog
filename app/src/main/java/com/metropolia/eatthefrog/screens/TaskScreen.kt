@@ -58,7 +58,7 @@ fun TaskScreen(vm: HomeScreenViewModel) {
             LazyColumn (
                 Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.9f)
+                    .fillMaxHeight(1f)
             ) {
                 items(vm.highlightedTask.value.subtasks) { st ->
                     Row {
@@ -71,29 +71,29 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                             )
                             Spacer(Modifier.padding(2.dp))
                             Divider(modifier = Modifier
-                                .height(120.dp)
+                                .height(80.dp)
                                 .width(2.dp), color = MaterialTheme.colors.primary)
                             Spacer(Modifier.padding(2.dp))
                         }
 
                         Spacer(Modifier.width(5.dp))
 
-                        Card(modifier = Modifier.clip(RoundedCornerShape(15.dp)), elevation = 25.dp) {
-                            Column(
+                        Card(modifier = Modifier
+                            .clip(RoundedCornerShape(15.dp))
+                            .wrapContentSize(), elevation = 25.dp) {
+                            Row(
                                 Modifier
                                     .fillMaxWidth()
-                                    .height(100.dp)
-                                    .padding(10.dp)
+                                    .padding(5.dp)
                                     .background(MaterialTheme.colors.background),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(st.name)
-                                Row(
-                                    Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.End
-                                ) {
-                                    // TODO: Toggle subtask completion status when checkbox is clicked
-                                    Checkbox(checked = st.completed, onCheckedChange = { st.completed = it })
-                                }
+                                Text(st.name, modifier = Modifier.padding(start = 10.dp))
+                                // TODO: Toggle subtask completion status when checkbox is clicked
+                                Checkbox(
+                                    checked = st.completed,
+                                    onCheckedChange = { st.completed = it })
                             }
                         }
 
