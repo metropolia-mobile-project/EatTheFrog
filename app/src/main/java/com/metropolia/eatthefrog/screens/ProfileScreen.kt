@@ -155,9 +155,34 @@ fun PickImageFromGallery() {
 }
 
 /**
+ * Creates Text units for numbers under detail texts
+ */
+@Composable
+fun TaskNumberText(number: String) {
+    Text(
+        text = number,
+        fontWeight = FontWeight.Medium,
+        color = Color.Yellow,
+        fontSize = 18.sp
+    )
+}
+
+/**
+ * Creates Texts for task titles
+ */
+@Composable
+fun TaskText(text: String) {
+    Text(
+        text = text,
+        fontWeight = FontWeight.Medium,
+        color = Color.Black,
+        fontSize = 18.sp,
+        textDecoration = TextDecoration.Underline
+    )
+}
+/**
  * TaskDetails function creates the middle part of the profile screen
  */
-
 @Composable
 fun TaskDetails() {
     Row(
@@ -173,19 +198,8 @@ fun TaskDetails() {
                 .width(130.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = stringResource(id = R.string.closed_tasks),
-                fontWeight = FontWeight.Medium,
-                color = Color.Black,
-                fontSize = 18.sp,
-                textDecoration = TextDecoration.Underline
-            )
-            Text(
-                text = "1",
-                fontWeight = FontWeight.Medium,
-                color = Color.Yellow,
-                fontSize = 18.sp
-            )
+            TaskText(text = stringResource(id = R.string.closed_tasks))
+            TaskNumberText(number = "1")
         }
         Column(
             modifier = Modifier
@@ -193,19 +207,8 @@ fun TaskDetails() {
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-            Text(
-                text = stringResource(id = R.string.frogs_eaten),
-                fontWeight = FontWeight.Medium,
-                color = Color.Black,
-                fontSize = 18.sp,
-                textDecoration = TextDecoration.Underline
-            )
-            Text(
-                text = "1",
-                fontWeight = FontWeight.Medium,
-                color = Color.Yellow,
-                fontSize = 18.sp
-            )
+            TaskText(text = stringResource(id = R.string.frogs_eaten))
+            TaskNumberText(number = "1")
         }
     }
 
@@ -224,19 +227,8 @@ fun TaskDetails() {
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-            Text(
-                text = stringResource(id = R.string.active_tasks),
-                fontWeight = FontWeight.Medium,
-                color = Color.Black,
-                fontSize = 18.sp,
-                textDecoration = TextDecoration.Underline
-            )
-            Text(
-                text = "1",
-                fontWeight = FontWeight.Medium,
-                color = Color.Yellow,
-                fontSize = 18.sp
-            )
+            TaskText(text = stringResource(id = R.string.active_tasks))
+            TaskNumberText(number = "1")
         }
 
         Column(
@@ -245,19 +237,8 @@ fun TaskDetails() {
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-            Text(
-                text = stringResource(id = R.string.total_tasks),
-                fontWeight = FontWeight.Medium,
-                color = Color.Black,
-                fontSize = 18.sp,
-                textDecoration = TextDecoration.Underline
-            )
-            Text(
-                text = "1",
-                fontWeight = FontWeight.Medium,
-                color = Color.Yellow,
-                fontSize = 18.sp
-            )
+            TaskText(text = stringResource(id = R.string.total_tasks))
+            TaskNumberText(number = "1")
         }
     }
 }
