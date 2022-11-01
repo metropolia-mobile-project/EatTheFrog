@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
@@ -49,7 +50,7 @@ fun CreateTaskButton() {
             .width(200.dp)
             .padding(top = 50.dp)
         ) {
-            Text(text = "Create Task")
+            Text(text = stringResource(id = R.string.create_task))
         }
     }
 }
@@ -65,7 +66,7 @@ fun AddSubtasks() {
             .wrapContentWidth()
     ) {
         Text(
-            text = "Sub-Task Title"
+            text = stringResource(id = R.string.sub_task_title)
         )
         Row() {
             TextField(
@@ -115,7 +116,7 @@ fun TimePicker() {
             .padding(30.dp, 0.dp, 0.dp, 0.dp)
     ) {
         Text(
-            text = "Task deadline"
+            text = stringResource(id = R.string.task_deadline)
         )
         Row(
             modifier = Modifier
@@ -163,7 +164,7 @@ fun DatePickingSection() {
                 .padding(0.dp, 0.dp, 0.dp, 0.dp)
         ) {
             Text(
-                text = "Starting date"
+                text = stringResource(id = R.string.starting_date)
             )
             StartingDatePicker()
         }
@@ -179,7 +180,7 @@ fun DatePickingSection() {
                 .padding(0.dp, 0.dp, 0.dp, 0.dp)
         ) {
             Text(
-                text = "Ending date"
+                text = stringResource(id = R.string.ending_date)
             )
             EndingDatePicker()
         }
@@ -322,7 +323,7 @@ private fun Description() {
 
         ) {
         Text(
-            text = "Description"
+            text = stringResource(id = R.string.description)
         )
         DescriptionTextField()
     }
@@ -406,7 +407,7 @@ private fun UpperPart() {
                 .padding(15.dp, 0.dp, 0.dp, 0.dp),
         ) {
             Text(
-                text = "Task name"
+                text = stringResource(id = R.string.task_name)
             )
             TaskNameTextField()
         }
