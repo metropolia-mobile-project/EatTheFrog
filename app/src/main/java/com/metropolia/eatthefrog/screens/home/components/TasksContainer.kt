@@ -58,7 +58,7 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel) {
     ) {
         items(items = PlaceholderTasks.tasks, itemContent = { item ->
             Box(Modifier.padding(10.dp)) {
-                SingleTaskContainer(item)
+                SingleTaskContainer(item, homeScreenViewModel)
             }
         })
     }

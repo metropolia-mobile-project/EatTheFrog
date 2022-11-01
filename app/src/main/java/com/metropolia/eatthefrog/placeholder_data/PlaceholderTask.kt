@@ -5,14 +5,16 @@ import java.util.*
 
 data class PlaceholderTask(
     val name: String,
+    val description: String,
     val subtasks: List<PlaceholderSubtask>,
     val taskType: TaskType,
     val deadline: Date?,
-    val isFrog: Boolean
+    var isFrog: Boolean
 )
 
 data class PlaceholderSubtask(
     val name: String,
+    var completed: Boolean = false,
 )
 
 enum class TaskType {
@@ -34,20 +36,23 @@ object PlaceholderTasks {
     val tasks = listOf(
         PlaceholderTask(
             "Task 1",
+            "Placeholder description 1",
             subtasks,
             TaskType.MEETING,
             sdf.parse("01-11-2022"),
             true
         ),
         PlaceholderTask(
-            "Task 1",
+            "Task 2",
+            "Placeholder description 2",
             subtasks,
             TaskType.PLANNING,
             sdf.parse("02-11-2022"),
             false
         ),
         PlaceholderTask(
-            "Task 1",
+            "Task 3",
+            "Placeholder description 3",
             subtasks,
             TaskType.DEVELOPMENT,
             sdf.parse("03-11-2022"),
