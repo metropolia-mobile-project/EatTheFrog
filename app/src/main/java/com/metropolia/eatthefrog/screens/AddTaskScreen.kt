@@ -24,14 +24,64 @@ import java.util.*
 @Composable
 fun AddTaskScreen() {
     Column(
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colors.secondary)
+
     ) {
         UpperPart()
         Description()
         DatePickingSection()
+        AddSubtasks()
+        CreateTaskButton()
+    }
+}
 
+
+@Composable
+fun CreateTaskButton() {
+    Column(modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        Button(onClick = {}, modifier = Modifier
+            .width(200.dp)
+            .padding(top = 50.dp)
+        ) {
+            Text(text = "Create Task")
+        }
+    }
+}
+
+@Composable
+fun AddSubtasks() {
+
+    var title by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .padding(30.dp, 30.dp, 0.dp, 0.dp)
+            .wrapContentWidth()
+    ) {
+        Text(
+            text = "Sub-Task Title"
+        )
+        Row() {
+            TextField(
+                value = title,
+                onValueChange = { title = it },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent
+                ),
+                singleLine = true,
+                textStyle = LocalTextStyle.current.copy(
+                    textAlign = TextAlign.Start
+                ),
+                modifier = Modifier
+                    .padding(0.dp, 0.dp, 30.dp, 15.dp),
+                )
+        }
     }
 }
 
