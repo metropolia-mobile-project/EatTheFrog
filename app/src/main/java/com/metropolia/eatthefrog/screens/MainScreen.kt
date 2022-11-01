@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens
 
+import android.app.Application
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +18,7 @@ import com.metropolia.eatthefrog.navigation.components.BottomNavigationBar
 
 @ExperimentalMaterialApi
 @Composable
-fun MainScreen(username: String) {
+fun MainScreen(username: String, application: Application) {
 
     val navController = rememberNavController()
 
@@ -25,7 +26,7 @@ fun MainScreen(username: String) {
         bottomBar = { BottomNavigationBar(navController) },
         content = { padding ->
         Box(modifier = Modifier.padding(padding)) {
-            Navigation(navController = navController, username)
+            Navigation(navController = navController, username, application)
         }
     },
     backgroundColor = MaterialTheme.colors.surface)

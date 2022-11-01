@@ -21,4 +21,12 @@
     <string name="ending_date">Lopetuspäivämäärä</string>
     <string name="description">Kuvaus</string>
     <string name="task_name">Tehtävän nimi</string>
+    <string name="you_have">Sinulla on</string>
+    <string name="hello">Hei</string>
+    <string name="tasks_today">tehtävää tänään</string>
+    <string name="subtasks">alitehtävää</string>
+    <string name="tasks">Tehtävät</string>
+    <string name="today">Tänään</string>
+    <string name="week">Viikko</string>
+    <string name="month">Kuukausi</string>
 </resources>
