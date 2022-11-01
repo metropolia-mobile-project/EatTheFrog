@@ -8,4 +8,10 @@
     <string name="welcome_back">Tervetuloa takaisin</string>
     <string name="welcome">Tervetuloa</string>
     <string name="please_enter_your_name">Anna nimesi</string>
+    <string name="closed_tasks">Tehtäviä valmiina</string>
+    <string name="frogs_eaten">Sammakoita syöty</string>
+    <string name="active_tasks">Tehtäviä kesken</string>
+    <string name="total_tasks">Tehtäviä yhteensä</string>
+    <string name="dark_mode">Tumma tila</string>
+    <string name="deadline_rem">Ilmoitukset deadlinestä</string>
 </resources>
