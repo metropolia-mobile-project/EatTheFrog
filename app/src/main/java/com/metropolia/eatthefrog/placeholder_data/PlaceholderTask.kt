@@ -41,17 +41,17 @@ object PlaceholderTasks {
             "Task 1",
             //subtasks,
             TaskType.MEETING,
-            //sdf.parse("01-11-2022"),
-            //stf.parse("12:00"),
+            "01-11-2022",
+            "12:00",
             true
-        ),
+        )/*,
         Task(
             0,
             "Task 1",
             //subtasks,
             TaskType.PLANNING,
-            //sdf.parse("02-11-2022"),
-            //stf.parse("09:00"),
+            sdf.parse("02-11-2022"),
+            stf.parse("09:00"),
             false
         ),
         Task(
@@ -59,9 +59,9 @@ object PlaceholderTasks {
             "Task 1",
             //subtasks,
             TaskType.DEVELOPMENT,
-            //sdf.parse("03-11-2022"),
-            //stf.parse("13:13"),
+            sdf.parse("03-11-2022"),
+            stf.parse("13:13"),
             false
-        )
+        )*/
     )
 }

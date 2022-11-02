@@ -41,8 +41,8 @@ fun AddTaskScreen(application: Application) {
             "Testing",
             //subtasks,
             TaskType.MEETING,
-            //sdf.parse("24-12-2022"),
-            //stf.parse("12:00"),
+            "24-12-2022",
+            "12:00",
             isFrog = false
         )
 
