@@ -6,7 +6,7 @@ import java.util.*
 data class PlaceholderTask(
     val name: String,
     val description: String,
-    val subtasks: List<PlaceholderSubtask>,
+    var subtasks: List<PlaceholderSubtask>,
     val taskType: TaskType,
     val deadline: Date?,
     var isFrog: Boolean

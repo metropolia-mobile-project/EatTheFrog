@@ -2,115 +2,122 @@ package com.metropolia.eatthefrog.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.PopupView
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.placeholder_data.PlaceholderSubtask
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 /**
  * Popup window which displays the selected Task object and its data. Enables the user to set Sub-tasks as complete, as well as
- * edit the Task object.
+ * edit the Task object in CreateTaskScreen.
  */
-// TODO: Modify TaskScreen to match Task implementation in Room db.
 @ExperimentalMaterialApi
 @Composable
 fun TaskScreen(vm: HomeScreenViewModel) {
 
-    // TODO: Add functionality when Room is avaiable
-    fun toggleCompletedSubTask() {}
+//  TODO: use .observeAsState(listOf())
+    val subtasks = vm.getSubTasks()
 
-
-    // Example use of PopupView. headerContent can be added, as displayed below.
     PopupView(vm.popupVisible.value, callback = {vm.resetPopupStatus()}) {
 
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(Modifier.fillMaxSize().padding(20.dp)) {
+
+            Image(
+                painter = painterResource(R.drawable.edit_24),
+                modifier = Modifier.align(alignment = Alignment.TopEnd).clickable { /* Open up CreateTaskScreen with the task*/ },
+                contentDescription = "edit button")
+
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally) {
 
 
-            Text(vm.highlightedTask.value.name, Modifier.padding(bottom = 15.dp))
-            Text(vm.highlightedTask.value.description, Modifier.padding(bottom = 15.dp))
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("Daily frog")
-                Checkbox(checked = vm.highlightedTask.value.isFrog, onCheckedChange = {vm.setTaskAsDailyFrog(it)})
-            }
+                Text(vm.highlightedTask.value.name, Modifier.padding(bottom = 15.dp), fontWeight = FontWeight.Bold)
+                Text(vm.highlightedTask.value.description, Modifier.padding(bottom = 15.dp))
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(stringResource(R.string.daily_frog))
+                    Checkbox(
+                        checked = vm.highlightedTask.value.isFrog,
+                        onCheckedChange = { vm.setTaskAsDailyFrog(it) })
+                }
 
+                LazyColumn(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(1f)
+                ) {
 
-            LazyColumn (
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(1f)
-            ) {
-                items(vm.highlightedTask.value.subtasks) { st ->
-                    Row {
+                    itemsIndexed(subtasks) { i, st ->
+                        Row {
 
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            // TODO: Check if sub-task is completed, change Image accordingly (checked/unchecked).
-                            Image(
-                                painter = painterResource(R.drawable.radio_btn_checked),
-                                contentDescription = ""
-                            )
-                            Spacer(Modifier.padding(2.dp))
-                            Divider(modifier = Modifier
-                                .height(80.dp)
-                                .width(2.dp), color = MaterialTheme.colors.primary)
-                            Spacer(Modifier.padding(2.dp))
-                        }
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Image(
+                                    painter = if (!st.completed) {
+                                        painterResource(R.drawable.radio_btn_checked)
+                                    } else {
+                                        painterResource(R.drawable.radio_btn_unchecked)
+                                    },
+                                    contentDescription = ""
+                                )
 
-                        Spacer(Modifier.width(5.dp))
+                                if (i < subtasks.size - 1) {
+                                    Spacer(Modifier.padding(2.dp))
+                                    Divider(
+                                        modifier = Modifier
+                                            .height(80.dp)
+                                            .width(2.dp), color = MaterialTheme.colors.primary
+                                    )
+                                    Spacer(Modifier.padding(2.dp))
+                                }
+                            }
 
-                        Card(modifier = Modifier
-                            .clip(RoundedCornerShape(15.dp))
-                            .wrapContentSize(), elevation = 25.dp) {
-                            Row(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(5.dp)
-                                    .background(MaterialTheme.colors.background),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
+                            Spacer(Modifier.width(5.dp))
+
+                            Card(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(15.dp))
+                                    .wrapContentSize(), elevation = 25.dp
                             ) {
-                                Text(st.name, modifier = Modifier.padding(start = 10.dp))
-                                // TODO: Toggle subtask completion status when checkbox is clicked
-                                Checkbox(
-                                    checked = st.completed,
-                                    onCheckedChange = { st.completed = it })
+                                Row(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(5.dp)
+                                        .background(MaterialTheme.colors.background),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(st.name, modifier = Modifier.padding(start = 10.dp))
+                                    Checkbox(
+                                        checked = st.completed,
+                                        onCheckedChange = { vm.updateSubTask(st, it) })
+                                }
                             }
                         }
-
-
                     }
-
                 }
             }
-
-            // TODO: Move this to a better location, maybe top-left corner?
-/*            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    *//* Open CreateTaskScreen with the given task *//*
-                }) {
-                Text("Edit")
-            }*/
         }
     }
 }

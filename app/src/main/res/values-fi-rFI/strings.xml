@@ -22,4 +22,5 @@
     <string name="today">Tänään</string>
     <string name="week">Viikko</string>
     <string name="month">Kuukausi</string>
+    <string name="daily_frog">Päivittäinen sammakko</string>
 </resources>
