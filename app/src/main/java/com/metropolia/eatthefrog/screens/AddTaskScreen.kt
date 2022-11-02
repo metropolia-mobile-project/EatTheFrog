@@ -173,83 +173,16 @@ fun DatePickingSection() {
             )
             StartingDatePicker()
         }
-        Image(
-            painter = painterResource(id = R.drawable.ic_horizontal_rule),
-            contentDescription = null,
-            modifier = Modifier
-                .height(20.dp)
-                .width(20.dp)
-        )
+
         Column(
             modifier = Modifier
                 .padding(0.dp, 0.dp, 0.dp, 0.dp)
         ) {
-            Text(
-                text = stringResource(id = R.string.ending_date)
-            )
-            EndingDatePicker()
+            //Text(
+              //  text = stringResource(id = R.string.task_deadline)
+            //)
+            TimePicker()
         }
-    }
-    TimePicker()
-}
-
-/**
- * Functionality for picking ending date from calendar and showing current date in
- * text before new date is picked
- */
-@Composable
-fun EndingDatePicker() {
-
-    val context = LocalContext.current
-    val eYear: Int
-    val eMonth: Int
-    val eDay: Int
-
-    val sdf = SimpleDateFormat("dd-MM-yyyy")
-    val currentDate = sdf.format(Date())
-
-    val sCalendar = Calendar.getInstance()
-
-    eYear = sCalendar.get(Calendar.YEAR)
-    eMonth = sCalendar.get(Calendar.MONTH)
-    eDay = sCalendar.get(Calendar.DAY_OF_MONTH)
-
-    sCalendar.time = Date()
-
-    val sDate = remember { mutableStateOf(currentDate) }
-
-    val sDatePickerDialog = DatePickerDialog(
-        context,
-        { _: DatePicker, sYear: Int, sMonth: Int, sDayOfMonth: Int ->
-            sDate.value = "$sDayOfMonth/${sMonth + 1}/$sYear"
-        }, eYear, eMonth, eDay
-    )
-    Column {
-        Row {
-            Image(
-                painter = painterResource(id = R.drawable.ic_calendar),
-                contentDescription = null,
-                modifier = Modifier
-                    .width(25.dp)
-                    .height(25.dp)
-                    .padding(0.dp, 0.dp, 4.dp, 0.dp)
-            )
-            Text(
-                text = sDate.value,
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_dropdownarrow),
-                contentDescription = "",
-                modifier = Modifier
-                    .clickable { sDatePickerDialog.show() }
-                    .width(25.dp)
-                    .height(25.dp)
-            )
-        }
-        Divider(
-            color = Color.Black, thickness = 2.dp, modifier = Modifier
-                .width(125.dp)
-        )
     }
 }
 
