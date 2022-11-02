@@ -52,44 +52,43 @@ fun AddTaskScreen() {
 @Composable
 fun AddTaskScreenC() {
 
+    val context = LocalContext.current
+
+    //Variables for time and date
+    val sdf = SimpleDateFormat("dd.MM.yyyy")
+    val stf = SimpleDateFormat("HH:mm")
+    val currentDate = sdf.format(Date())
+    val currentTime = stf.format(Date())
+    val sCalendar = Calendar.getInstance()
+    val mYear = sCalendar.get(Calendar.YEAR)
+    val mMonth = sCalendar.get(Calendar.MONTH)
+    val mDay = sCalendar.get(Calendar.DAY_OF_MONTH)
+    val mHour = sCalendar.get(Calendar.HOUR_OF_DAY)
+    val mMinute = sCalendar.get(Calendar.MINUTE)
+
+
+    //Variables for dropdown menu
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("Planning", "Meeting", "Development")
+    var selectedIndex by remember { mutableStateOf(0) }
     val disabledValue = ""
 
     val taskTypeList = listOf(TaskType.PLANNING, TaskType.MEETING, TaskType.DEVELOPMENT)
 
-    var selectedIndex by remember { mutableStateOf(0) }
+    //Variables for creating task object
     var description by remember { mutableStateOf("") }
     var taskTitle by remember { mutableStateOf("") }
-    var subTaskTitle by remember { mutableStateOf("") }
-
     var taskType: TaskType by remember { mutableStateOf(taskTypeList[0]) }
-
-
-    val context = LocalContext.current
-    val mYear: Int
-    val mMonth: Int
-    val mDay: Int
-    val mHour: Int
-    val mMinute: Int
-
-    val sdf = SimpleDateFormat("dd-MM-yyyy")
-    val stf = SimpleDateFormat("HH:mm")
-    val currentDate = sdf.format(Date())
-    val currentTime = stf.format(Date())
-
-    val sCalendar = Calendar.getInstance()
-
-    mYear = sCalendar.get(Calendar.YEAR)
-    mMonth = sCalendar.get(Calendar.MONTH)
-    mDay = sCalendar.get(Calendar.DAY_OF_MONTH)
-    mHour = sCalendar.get(Calendar.HOUR_OF_DAY)
-    mMinute = sCalendar.get(Calendar.MINUTE)
-
-    sCalendar.time = Date()
-
     val sDate = remember { mutableStateOf(currentDate) }
     val sTime = remember { mutableStateOf(currentTime) }
+    val newTask =
+        PlaceHolderTaskNew(taskTitle, description, taskType, sDate.value, sTime.value, false)
+
+
+    var subTaskTitle by remember { mutableStateOf("") }
+
+
+    sCalendar.time = Date()
 
     val sDatePickerDialog = DatePickerDialog(
         context,
@@ -104,9 +103,11 @@ fun AddTaskScreenC() {
         }, mHour, mMinute, false
     )
 
-    val newTask =
-        PlaceHolderTaskNew(taskTitle, description, taskType, sDate.value, sTime.value, false)
 
+
+    /**
+     * Profile picture, task name and text-field for task name
+     */
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -156,6 +157,10 @@ fun AddTaskScreenC() {
             }
         }
     }
+    /**
+     * Description title and TextField
+     * Dropdown menu for picking task type
+     */
     Column(
         modifier = Modifier
             .wrapContentHeight()
@@ -228,6 +233,9 @@ fun AddTaskScreenC() {
                 .padding(0.dp, 0.dp, 30.dp, 15.dp)
         )
     }
+    /**
+     * UI for picking task date and time
+     */
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -311,6 +319,9 @@ fun AddTaskScreenC() {
             }
         }
     }
+    /**
+     * Sub-task text title and sub-task TextField
+     */
     Column(
         modifier = Modifier
             .padding(30.dp, 30.dp, 0.dp, 0.dp)
@@ -335,6 +346,9 @@ fun AddTaskScreenC() {
             )
         }
     }
+    /**
+     * "Create Task" button
+     */
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
