@@ -7,8 +7,17 @@ data class PlaceholderTask(
     val name: String,
     val subtasks: List<PlaceholderSubtask>,
     val taskType: TaskType,
-    val deadline: Date?,
+    val deadline: String,
     val isFrog: Boolean
+)
+
+data class PlaceHolderTaskNew(
+    val name: String,
+    val description: String,
+    val taskType: TaskType,
+    val startingDate: String,
+    val deadline: String,
+    val isFrog: Boolean,
 )
 
 data class PlaceholderSubtask(
@@ -22,7 +31,7 @@ enum class TaskType {
 }
 
 object PlaceholderTasks {
-    private val subtasks = listOf(
+     val subtasks = listOf(
         PlaceholderSubtask("Subtask 1"),
         PlaceholderSubtask("Subtask 2"),
         PlaceholderSubtask("Subtask 3"),
@@ -36,21 +45,24 @@ object PlaceholderTasks {
             "Task 1",
             subtasks,
             TaskType.MEETING,
-            sdf.parse("01-11-2022"),
+            //sdf.parse("01-11-2022"),
+            "",
             true
         ),
         PlaceholderTask(
             "Task 1",
             subtasks,
             TaskType.PLANNING,
-            sdf.parse("02-11-2022"),
+            //sdf.parse("02-11-2022"),
+            "",
             false
         ),
         PlaceholderTask(
             "Task 1",
             subtasks,
             TaskType.DEVELOPMENT,
-            sdf.parse("03-11-2022"),
+            //sdf.parse("03-11-2022"),
+            "",
             false
         )
     )
