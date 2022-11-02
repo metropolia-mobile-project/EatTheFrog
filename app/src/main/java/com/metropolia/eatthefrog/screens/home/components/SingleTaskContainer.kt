@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.activities.MainActivity
-import com.metropolia.eatthefrog.placeholder_data.PlaceholderTask
+import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
 
 /**
@@ -29,7 +29,7 @@ import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SingleTaskContainer(task: PlaceholderTask) {
+fun SingleTaskContainer(task: Task) {
     val activity = LocalContext.current as MainActivity
     val backgroundColor = if (task.isFrog) MaterialTheme.colors.primaryVariant else Color.White
     val taskNameTextColor = if (task.isFrog) Color.White else Color.Black
@@ -62,7 +62,7 @@ fun SingleTaskContainer(task: PlaceholderTask) {
 
             Column(Modifier.padding(horizontal = 10.dp)) {
                 Text(text = task.name, color = taskNameTextColor, fontSize = 24.sp)
-                Text(text = "${task.subtasks.count()} ${stringResource(id = R.string.subtasks)}", color = subtaskTextColor)
+                //Text(text = "${task.subtasks.count()} ${stringResource(id = R.string.subtasks)}", color = subtaskTextColor)
             }
         }
     }
