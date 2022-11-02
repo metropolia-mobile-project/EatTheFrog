@@ -14,8 +14,15 @@ interface TaskDao {
     @Query("SELECT * FROM task")
     fun getAllTasks(): LiveData<List<Task>>
 
-    @Query("SELECT task_name FROM task WHERE task.uid = :id")
-    fun getSpecificTask(id: Long): LiveData<String>
+    @Query("SELECT * FROM task WHERE task.uid = :id")
+    fun getSpecificTask(id: Long): LiveData<Task>
 }
 
-// SubtaskDao?
+@Dao
+interface SubtaskDao {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSubtask(subtask: Subtask): Long
+
+    @Query("SELECT * FROM subtask WHERE subtask.linkkitesti = :id")
+    fun getSubtaskById(id: Long): LiveData<List<Subtask>>
+}

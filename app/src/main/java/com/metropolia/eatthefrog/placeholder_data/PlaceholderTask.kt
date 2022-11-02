@@ -26,10 +26,10 @@ enum class TaskType {
 
 object PlaceholderTasks {
     private val subtasks = listOf(
-        Subtask("Subtask 1", false),
-        Subtask("Subtask 2", false),
-        Subtask("Subtask 3", false),
-        Subtask("Subtask 4", false),
+        Subtask(0, 0, "Subtask 1", false),
+        Subtask(0, 0, "Subtask 2", false),
+        Subtask(0, 0, "Subtask 3", false),
+        Subtask(0, 0, "Subtask 4", false),
     )
 
     private val sdf = SimpleDateFormat("dd-MM-yyyy")
@@ -43,7 +43,8 @@ object PlaceholderTasks {
             TaskType.MEETING,
             "01-11-2022",
             "12:00",
-            true
+            true,
+            subtasks[0].uid
         )/*,
         Task(
             0,
