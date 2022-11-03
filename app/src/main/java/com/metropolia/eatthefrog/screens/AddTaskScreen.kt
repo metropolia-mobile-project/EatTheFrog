@@ -371,7 +371,7 @@ fun AddTaskScreenC(application: Application) {
                 Log.d("Testing dropdown", selectedIndex.toString())
                 viewModel.insertTask(newTask)
                 Log.d("Last Task", subTaskId.toString())
-                subTaskId = lastTask.value!!.uid + 1
+                subTaskId = if(lastTask.value == null) { 1 } else lastTask.value!!.uid + 1
                 viewModel.insertSubTask(Subtask(0, subTaskId, subTaskTitle, subTaskDone ))
 
             }, modifier = Modifier
