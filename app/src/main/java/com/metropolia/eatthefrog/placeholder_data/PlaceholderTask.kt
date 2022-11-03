@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.placeholder_data
 
+import com.metropolia.eatthefrog.database.TaskType
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,11 +25,11 @@ data class PlaceholderSubtask(
     val name: String,
 )
 
-enum class TaskType {
+/*enum class TaskType {
     MEETING,
     PLANNING,
     DEVELOPMENT
-}
+}*/
 
 object PlaceholderTasks {
      val subtasks = listOf(

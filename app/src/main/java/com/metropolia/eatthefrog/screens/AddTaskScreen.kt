@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens
 
+import android.app.Application
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.util.Log
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -22,18 +24,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
-import com.metropolia.eatthefrog.placeholder_data.PlaceHolderTaskNew
-import com.metropolia.eatthefrog.placeholder_data.PlaceholderTask
-import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
-import com.metropolia.eatthefrog.placeholder_data.TaskType
+import com.metropolia.eatthefrog.database.Subtask
+import com.metropolia.eatthefrog.database.Task
+import com.metropolia.eatthefrog.database.TaskType
+import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AddTaskScreen() {
+fun AddTaskScreen(application: Application) {
     val keyboardController = LocalSoftwareKeyboardController.current
+
 
     Column(
         modifier = Modifier
@@ -44,14 +47,15 @@ fun AddTaskScreen() {
 
     ) {
 
-        AddTaskScreenC()
+        AddTaskScreenC(application)
 
     }
 }
 
 @Composable
-fun AddTaskScreenC() {
+fun AddTaskScreenC(application: Application) {
 
+    val viewModel = AddTaskScreenViewModel(application = application)
     val context = LocalContext.current
 
     //Variables for time and date
@@ -82,10 +86,17 @@ fun AddTaskScreenC() {
     val sDate = remember { mutableStateOf(currentDate) }
     val sTime = remember { mutableStateOf(currentTime) }
     val newTask =
-        PlaceHolderTaskNew(taskTitle, description, taskType, sDate.value, sTime.value, false)
+        Task(0, taskTitle, description, taskType, sDate.value, sTime.value, false)
 
+    val lastTask = viewModel.getLastTask().observeAsState()
 
+    //Variables for creates subtask
     var subTaskTitle by remember { mutableStateOf("") }
+    var subTaskId: Long by remember { mutableStateOf(0) }
+    val subTaskDone by remember { mutableStateOf(false) }
+
+
+
 
 
     sCalendar.time = Date()
@@ -358,6 +369,13 @@ fun AddTaskScreenC() {
             onClick = {
                 Log.d("Testing", newTask.toString())
                 Log.d("Testing dropdown", selectedIndex.toString())
+                viewModel.insertTask(newTask)
+                Log.d("Last Task", subTaskId.toString())
+                subTaskId = lastTask.value!!.uid + 1
+                val newSubTask =
+                    Subtask(0, subTaskId, subTaskTitle, subTaskDone )
+                viewModel.insertSubTask(newSubTask)
+
             }, modifier = Modifier
                 .width(200.dp)
                 .padding(top = 50.dp)

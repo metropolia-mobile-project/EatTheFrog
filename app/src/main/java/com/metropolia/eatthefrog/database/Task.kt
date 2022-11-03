@@ -20,7 +20,7 @@ data class Task(
     tableName = "subtask",
     foreignKeys = [ForeignKey(
         entity = Task::class,
-        childColumns = ["subtask_id"],
+        childColumns = ["task_id"],
         parentColumns = ["uid"]
     )]
 )
