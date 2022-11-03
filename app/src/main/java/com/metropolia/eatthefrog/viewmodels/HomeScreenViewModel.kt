@@ -3,14 +3,11 @@ package com.metropolia.eatthefrog.viewmodels
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
-import com.metropolia.eatthefrog.database.TaskType
-import com.metropolia.eatthefrog.placeholder_data.PlaceholderTask
 import kotlinx.coroutines.launch
 
 enum class DateFilter {
@@ -51,9 +48,10 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         this.highlightedTaskId.value = t.uid
     }
 
-    fun setTaskAsDailyFrog(v: Boolean) {
-//        this.highlightedTask.value.isFrog = v
-        // TODO: Disable other frogs
+    fun setTaskAsDailyFrog(f: Boolean) {
+        viewModelScope.launch {
+            database.taskDao().updateDailyFrog(f, highlightedTaskId.value)
+        }
     }
 
     fun updateSubTask(st: Subtask, status: Boolean) {

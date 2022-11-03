@@ -19,6 +19,9 @@ interface TaskDao {
 
     @Query("SELECT * FROM task ORDER BY uid DESC LIMIT 1")
     fun getLastTask(): LiveData<Task>
+
+    @Query("UPDATE task SET frog = (CASE WHEN uid = :id THEN :f ELSE 0 END)")
+    suspend fun updateDailyFrog(f: Boolean, id: Long)
 }
 
 @Dao
