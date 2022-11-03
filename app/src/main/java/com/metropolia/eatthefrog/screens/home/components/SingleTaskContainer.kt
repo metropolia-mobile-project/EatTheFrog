@@ -22,6 +22,7 @@ import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.activities.MainActivity
 import com.metropolia.eatthefrog.placeholder_data.PlaceholderTask
 import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
+import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 /**
  * Container for a singular task in the Home screen list
@@ -29,8 +30,7 @@ import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SingleTaskContainer(task: PlaceholderTask) {
-    val activity = LocalContext.current as MainActivity
+fun SingleTaskContainer(task: PlaceholderTask, vm: HomeScreenViewModel) {
     val backgroundColor = if (task.isFrog) MaterialTheme.colors.primaryVariant else Color.White
     val taskNameTextColor = if (task.isFrog) Color.White else Color.Black
     val subtaskTextColor = if (task.isFrog) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
@@ -41,7 +41,10 @@ fun SingleTaskContainer(task: PlaceholderTask) {
         shape = RoundedCornerShape(10.dp),
         backgroundColor = backgroundColor,
         elevation = 5.dp,
-        onClick = { activity.popupVisible.value = !activity.popupVisible.value }
+        onClick = {
+            vm.updateHighlightedTask(task)
+            vm.showPopup()
+        }
     ) {
         Row(Modifier.padding(horizontal = 10.dp, vertical = 20.dp)) {
             Column() {
@@ -66,10 +69,4 @@ fun SingleTaskContainer(task: PlaceholderTask) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun SingleTaskContainerPreview() {
-    SingleTaskContainer(PlaceholderTasks.tasks[0])
 }
