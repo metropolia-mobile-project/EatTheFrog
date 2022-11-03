@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
 data class Task(
     @PrimaryKey(autoGenerate = true) val uid: Long = 0,
     @ColumnInfo(name = "task_name") val name: String,
+    @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "task_type") val taskType: TaskType,
     @ColumnInfo(name = "deadline") val deadline: String?,
     @ColumnInfo(name = "time") val time: String?,
@@ -27,7 +28,7 @@ data class Subtask(
     @PrimaryKey(autoGenerate = true) val uid: Long = 0,
     @ColumnInfo(name = "task_id") val taskId: Long,
     @ColumnInfo(name = "subtask_name") val name: String,
-    @ColumnInfo(name = "done") val isDone: Boolean
+    @ColumnInfo(name = "completed") val completed: Boolean
 )
 
 enum class TaskType {
