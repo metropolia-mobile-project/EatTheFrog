@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.activities.MainActivity
+import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.placeholder_data.PlaceholderTask
 import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
@@ -30,7 +31,7 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SingleTaskContainer(task: PlaceholderTask, vm: HomeScreenViewModel) {
+fun SingleTaskContainer(task: Task, vm: HomeScreenViewModel) {
     val backgroundColor = if (task.isFrog) MaterialTheme.colors.primaryVariant else Color.White
     val taskNameTextColor = if (task.isFrog) Color.White else Color.Black
     val subtaskTextColor = if (task.isFrog) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
@@ -65,7 +66,8 @@ fun SingleTaskContainer(task: PlaceholderTask, vm: HomeScreenViewModel) {
 
             Column(Modifier.padding(horizontal = 10.dp)) {
                 Text(text = task.name, color = taskNameTextColor, fontSize = 24.sp)
-                Text(text = "${task.subtasks.count()} ${stringResource(id = R.string.subtasks)}", color = subtaskTextColor)
+                // TODO: Get subtask count from db
+//                Text(text = "${task.subtasks.count()} ${stringResource(id = R.string.subtasks)}", color = subtaskTextColor)
             }
         }
     }

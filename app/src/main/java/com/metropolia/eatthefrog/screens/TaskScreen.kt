@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -20,7 +19,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.PopupView
 import com.metropolia.eatthefrog.R
-import com.metropolia.eatthefrog.placeholder_data.PlaceholderSubtask
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 /**
@@ -32,15 +30,21 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 fun TaskScreen(vm: HomeScreenViewModel) {
 
 //  TODO: use .observeAsState(listOf())
-    val subtasks = vm.getSubTasks()
+    val subtasks = vm.getHighlightedSubTasks().observeAsState(listOf())
+    val task = vm.getSelectedTask().observeAsState()
 
     PopupView(vm.popupVisible.value, callback = {vm.resetPopupStatus()}) {
 
-        Box(Modifier.fillMaxSize().padding(20.dp)) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(20.dp)) {
 
             Image(
                 painter = painterResource(R.drawable.edit_24),
-                modifier = Modifier.align(alignment = Alignment.TopEnd).clickable { /* Open up CreateTaskScreen with the task*/ },
+                modifier = Modifier
+                    .align(alignment = Alignment.TopEnd)
+                    .clickable { /* Open up CreateTaskScreen with the task*/ },
                 contentDescription = "edit button")
 
             Column(
@@ -48,8 +52,8 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally) {
 
 
-                Text(vm.highlightedTask.value.name, Modifier.padding(bottom = 15.dp), fontWeight = FontWeight.Bold)
-                Text(vm.highlightedTask.value.description, Modifier.padding(bottom = 15.dp))
+                Text(vm.getSelectedTask().value?.name ?: "", Modifier.padding(bottom = 15.dp), fontWeight = FontWeight.Bold)
+                Text(vm.getSelectedTask().value?.description ?: "", Modifier.padding(bottom = 15.dp))
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -59,7 +63,7 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                 ) {
                     Text(stringResource(R.string.daily_frog))
                     Checkbox(
-                        checked = vm.highlightedTask.value.isFrog,
+                        checked = task.value?.isFrog ?: false,
                         onCheckedChange = { vm.setTaskAsDailyFrog(it) })
                 }
 
@@ -69,7 +73,7 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                         .fillMaxHeight(1f)
                 ) {
 
-                    itemsIndexed(subtasks) { i, st ->
+                    itemsIndexed(subtasks.value) { i, st ->
                         Row {
 
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -82,7 +86,7 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                                     contentDescription = ""
                                 )
 
-                                if (i < subtasks.size - 1) {
+                                if (i < subtasks.value.size - 1) {
                                     Spacer(Modifier.padding(2.dp))
                                     Divider(
                                         modifier = Modifier

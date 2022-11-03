@@ -34,6 +34,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TasksContainer(homeScreenViewModel: HomeScreenViewModel) {
     val formatter = DateTimeFormatter.ofPattern("dd MMMM, uuuu")
+    val tasks = homeScreenViewModel.getTasks().observeAsState(listOf())
+
     Box(modifier = Modifier
         .fillMaxWidth()
         .clip(RoundedCornerShape(topStart = 50.dp))
@@ -56,7 +58,9 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel) {
             .fillMaxSize()
             .background(MaterialTheme.colors.secondary)
     ) {
-        items(items = PlaceholderTasks.tasks, itemContent = { item ->
+
+
+        items(items = tasks.value, itemContent = { item ->
             Box(Modifier.padding(10.dp)) {
                 SingleTaskContainer(item, homeScreenViewModel)
             }
