@@ -29,7 +29,6 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 @Composable
 fun TaskScreen(vm: HomeScreenViewModel) {
 
-//  TODO: use .observeAsState(listOf())
     val subtasks = vm.getHighlightedSubTasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
 
@@ -52,8 +51,8 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally) {
 
 
-                Text(vm.getSelectedTask().value?.name ?: "", Modifier.padding(bottom = 15.dp), fontWeight = FontWeight.Bold)
-                Text(vm.getSelectedTask().value?.description ?: "", Modifier.padding(bottom = 15.dp))
+                Text(task.value?.name ?: "", Modifier.padding(bottom = 15.dp), fontWeight = FontWeight.Bold)
+                Text(task.value?.description ?: "", Modifier.padding(bottom = 15.dp))
                 Row(
                     Modifier
                         .fillMaxWidth()

@@ -28,4 +28,7 @@ interface SubtaskDao {
 
     @Query("SELECT * FROM subtask WHERE subtask.task_id = :id")
     fun getSubtasks(id: Long): LiveData<List<Subtask>>
+
+    @Query("UPDATE subtask SET completed = :s WHERE uid = :id")
+    suspend fun updateSubtaskCompletedStatus(id: Long, s: Boolean)
 }

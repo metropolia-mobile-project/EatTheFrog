@@ -5,11 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.placeholder_data.PlaceholderTask
+import kotlinx.coroutines.launch
 
 enum class DateFilter {
     TODAY,
@@ -29,10 +31,9 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     var highlightedTaskId = mutableStateOf(0L)
 
-    fun getHighlightedSubTasks() : LiveData<List<Subtask>> = database.subtaskDao().getSubtasks(this.highlightedTaskId.value)
-
     fun getTasks() = database.taskDao().getAllTasks()
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
+    fun getHighlightedSubTasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
 
     fun selectDateFilter(dateFilter: DateFilter) {
         selectedFilter.postValue(dateFilter)
@@ -48,7 +49,6 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun updateHighlightedTask(t: Task) {
         this.highlightedTaskId.value = t.uid
-//        this.highlightedTask.value.subtasks = t.subtasks
     }
 
     fun setTaskAsDailyFrog(v: Boolean) {
@@ -56,6 +56,9 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         // TODO: Disable other frogs
     }
 
-    // TODO: Change this implementation to Update the status of the subtask in Room db
-    fun updateSubTask(st: Subtask, status: Boolean) {}
+    fun updateSubTask(st: Subtask, status: Boolean) {
+        viewModelScope.launch {
+            database.subtaskDao().updateSubtaskCompletedStatus(st.uid, status)
+        }
+    }
 }
