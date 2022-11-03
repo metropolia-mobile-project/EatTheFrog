@@ -23,6 +23,6 @@ interface SubtaskDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSubtask(subtask: Subtask): Long
 
-    @Query("SELECT * FROM subtask WHERE subtask.linkkitesti = :id")
-    fun getSubtaskById(id: Long): LiveData<List<Subtask>>
+    @Query("SELECT * FROM subtask WHERE subtask.task_id = :id")
+    fun getSubtasks(id: Long): LiveData<List<Subtask>>
 }

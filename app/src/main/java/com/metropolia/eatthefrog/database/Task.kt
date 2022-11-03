@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.util.*
 
 @Entity
 data class Task(
@@ -13,8 +12,7 @@ data class Task(
     @ColumnInfo(name = "task_type") val taskType: TaskType,
     @ColumnInfo(name = "deadline") val deadline: String?,
     @ColumnInfo(name = "time") val time: String?,
-    @ColumnInfo(name = "frog") val isFrog: Boolean,
-    @ColumnInfo(name = "subtask_id") val subtask: Long
+    @ColumnInfo(name = "frog") val isFrog: Boolean
 )
 
 @Entity(
