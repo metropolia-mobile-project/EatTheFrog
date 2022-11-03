@@ -372,9 +372,7 @@ fun AddTaskScreenC(application: Application) {
                 viewModel.insertTask(newTask)
                 Log.d("Last Task", subTaskId.toString())
                 subTaskId = lastTask.value!!.uid + 1
-                val newSubTask =
-                    Subtask(0, subTaskId, subTaskTitle, subTaskDone )
-                viewModel.insertSubTask(newSubTask)
+                viewModel.insertSubTask(Subtask(0, subTaskId, subTaskTitle, subTaskDone ))
 
             }, modifier = Modifier
                 .width(200.dp)
