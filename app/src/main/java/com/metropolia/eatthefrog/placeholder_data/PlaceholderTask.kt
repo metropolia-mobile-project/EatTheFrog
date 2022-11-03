@@ -1,17 +1,23 @@
 package com.metropolia.eatthefrog.placeholder_data
 
-import com.metropolia.eatthefrog.database.Subtask
-import com.metropolia.eatthefrog.database.Task
-import com.metropolia.eatthefrog.database.TaskType
 import java.text.SimpleDateFormat
 import java.util.*
 
-/*data class PlaceholderTask(
+data class PlaceholderTask(
     val name: String,
     val subtasks: List<PlaceholderSubtask>,
     val taskType: TaskType,
-    val deadline: Date?,
+    val deadline: String,
     val isFrog: Boolean
+)
+
+data class PlaceHolderTaskNew(
+    val name: String,
+    val description: String,
+    val taskType: TaskType,
+    val startingDate: String,
+    val deadline: String,
+    val isFrog: Boolean,
 )
 
 data class PlaceholderSubtask(
@@ -22,47 +28,42 @@ enum class TaskType {
     MEETING,
     PLANNING,
     DEVELOPMENT
-}*/
+}
 
 object PlaceholderTasks {
-    private val subtasks = listOf(
-        Subtask(0, 0, "Subtask 1", false),
-        Subtask(0, 0, "Subtask 2", false),
-        Subtask(0, 0, "Subtask 3", false),
-        Subtask(0, 0, "Subtask 4", false),
+     val subtasks = listOf(
+        PlaceholderSubtask("Subtask 1"),
+        PlaceholderSubtask("Subtask 2"),
+        PlaceholderSubtask("Subtask 3"),
+        PlaceholderSubtask("Subtask 4"),
     )
 
     private val sdf = SimpleDateFormat("dd-MM-yyyy")
-    private val stf = SimpleDateFormat("HH:mm")
 
     val tasks = listOf(
-        Task(
-            0,
+        PlaceholderTask(
             "Task 1",
-            //subtasks,
+            subtasks,
             TaskType.MEETING,
-            "01-11-2022",
-            "12:00",
-            true,
-            subtasks[0].uid
-        )/*,
-        Task(
-            0,
+            //sdf.parse("01-11-2022"),
+            "",
+            true
+        ),
+        PlaceholderTask(
             "Task 1",
-            //subtasks,
+            subtasks,
             TaskType.PLANNING,
-            sdf.parse("02-11-2022"),
-            stf.parse("09:00"),
+            //sdf.parse("02-11-2022"),
+            "",
             false
         ),
-        Task(
-            0,
+        PlaceholderTask(
             "Task 1",
-            //subtasks,
+            subtasks,
             TaskType.DEVELOPMENT,
-            sdf.parse("03-11-2022"),
-            stf.parse("13:13"),
+            //sdf.parse("03-11-2022"),
+            "",
             false
-        )*/
+        )
     )
 }
