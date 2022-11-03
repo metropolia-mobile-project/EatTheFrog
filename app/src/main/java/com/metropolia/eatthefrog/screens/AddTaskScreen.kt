@@ -29,30 +29,8 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
 @Composable
-fun AddTaskScreen(application: Application) {
-    val addTaskViewModel = AddTaskViewModel(application)
-    val taski = addTaskViewModel.getStuff(1).observeAsState()
-    val subi = addTaskViewModel.getSubtasks(0).observeAsState()
-
-    val task =
-        Task(
-            0,
-            "Testing",
-            TaskType.DEVELOPMENT,
-            "24-12-2022",
-            "12:00",
-            isFrog = false,
-            1
-        )
-    val subtask =
-        Subtask(
-            0,
-            5,
-            "Sub Testing",
-            false
-        )
-
-    Column(
+fun AddTaskScreen() {
+        Column(
         Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
@@ -66,33 +44,5 @@ fun AddTaskScreen(application: Application) {
             textAlign = TextAlign.Center,
             fontSize = 25.sp
         )
-        Button(onClick = {
-            //addTaskViewModel.addSubtask(subtask)
-            //addTaskViewModel.addTask(task)
-            Log.d("BOOP", taski.value.toString())
-            Log.d("BOOP", subi.value.toString())
-        }) {
-            Text(text = "Create")
-        }
-    }
-}
-
-class AddTaskViewModel(application: Application) : AndroidViewModel(application) {
-    private val database = InitialDB.get(application)
-
-    fun getStuff(id: Long): LiveData<Task> = database.taskDao().getSpecificTask(id)
-    fun getAllTasks(): LiveData<List<Task>> = database.taskDao().getAllTasks()
-
-    fun getSubtasks(id: Long): LiveData<List<Subtask>> = database.subtaskDao().getSubtaskById(id)
-
-    fun getBoop(id: Long) {
-        viewModelScope.launch { database.subtaskDao().getSubtaskById(id) }
-    }
-
-    fun addSubtask(subtask: Subtask) {
-        viewModelScope.launch { database.subtaskDao().insertSubtask(subtask) }
-    }
-    fun addTask(task: Task) {
-        viewModelScope.launch { database.taskDao().insert(task) }
     }
 }

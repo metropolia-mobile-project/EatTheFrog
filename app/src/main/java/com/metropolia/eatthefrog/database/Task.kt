@@ -6,14 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity(
-    tableName = "task",
-    foreignKeys = [ForeignKey(
-        entity = Subtask::class,
-        childColumns = ["subtask_id"],
-        parentColumns = ["uid"]
-    )]
-)
+@Entity
 data class Task(
     @PrimaryKey(autoGenerate = true) val uid: Long = 0,
     @ColumnInfo(name = "task_name") val name: String,
@@ -24,10 +17,17 @@ data class Task(
     @ColumnInfo(name = "subtask_id") val subtask: Long
 )
 
-@Entity
+@Entity(
+    tableName = "subtask",
+    foreignKeys = [ForeignKey(
+        entity = Task::class,
+        childColumns = ["subtask_id"],
+        parentColumns = ["uid"]
+    )]
+)
 data class Subtask(
     @PrimaryKey(autoGenerate = true) val uid: Long,
-    @ColumnInfo(name = "linkkitesti") val id: Long,
+    @ColumnInfo(name = "task_id") val taskId: Long,
     @ColumnInfo(name = "subtask_name") val name: String,
     @ColumnInfo(name = "done") val isDone: Boolean
 )
