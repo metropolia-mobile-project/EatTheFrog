@@ -70,6 +70,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-insets:0.22.0-rc"
 
     // Room
+    implementation 'androidx.room:room-common:2.4.3'
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-compiler:$room_version"

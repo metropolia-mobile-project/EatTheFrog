@@ -16,6 +16,9 @@ interface TaskDao {
 
     @Query("SELECT * FROM task WHERE task.uid = :id")
     fun getSpecificTask(id: Long): LiveData<Task>
+
+    @Query("SELECT * FROM task ORDER BY uid DESC LIMIT 1")
+    fun getLastTask(): LiveData<Task>
 }
 
 @Dao
