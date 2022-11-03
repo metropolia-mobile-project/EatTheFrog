@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.placeholder_data.PlaceholderSubtask
 import com.metropolia.eatthefrog.placeholder_data.PlaceholderTask
-import com.metropolia.eatthefrog.placeholder_data.TaskType
 
 enum class DateFilter {
     TODAY,
