@@ -29,7 +29,6 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 @ExperimentalMaterialApi
 @Composable
 fun HomeScreen(username: String, application: Application) {
-    val activity = LocalContext.current as MainActivity
     val homeScreenViewModel = HomeScreenViewModel(application)
     Column(
         modifier = Modifier
@@ -41,5 +40,5 @@ fun HomeScreen(username: String, application: Application) {
         ProfileContainer(username)
         TasksContainer(homeScreenViewModel)
     }
-    TaskScreen()
+    TaskScreen(homeScreenViewModel)
 }

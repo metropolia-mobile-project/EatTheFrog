@@ -20,11 +20,10 @@ const val USERNAME_KEY = "USERNAME_KEY"
 
 open class MainActivity : ComponentActivity() {
 
-    var popupVisible = mutableStateOf(false)
-
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         val sharedPreferences = this.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         val username = sharedPreferences.getString(USERNAME_KEY, null)
