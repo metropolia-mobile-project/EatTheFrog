@@ -21,7 +21,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     val selectedFilter = MutableLiveData(DateFilter.TODAY)
     var popupVisible = mutableStateOf(false)
-    var highlightedTask = mutableStateOf(PlaceholderTask("", "", emptyList(), TaskType.DEVELOPMENT, null, false))
+    var highlightedTask = mutableStateOf(PlaceholderTask("", "", emptyList(), TaskType.DEVELOPMENT, "", false))
 
     // TODO: Change this to Room db call for subtasks
     fun getSubTasks() = highlightedTask.value.subtasks
