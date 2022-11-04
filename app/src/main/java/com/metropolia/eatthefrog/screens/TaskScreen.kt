@@ -29,7 +29,7 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 @Composable
 fun TaskScreen(vm: HomeScreenViewModel) {
 
-    val subtasks = vm.getHighlightedSubTasks().observeAsState(listOf())
+    val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
 
     PopupView(vm.popupVisible.value, callback = {vm.resetPopupStatus()}) {

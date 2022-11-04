@@ -30,7 +30,9 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun getTasks() = database.taskDao().getAllTasks()
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
-    fun getHighlightedSubTasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
+    fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
+    fun getSubtasksAmount(id: Long) = database.subtaskDao().getSubtasksAmount(id)
+
 
     fun selectDateFilter(dateFilter: DateFilter) {
         selectedFilter.postValue(dateFilter)

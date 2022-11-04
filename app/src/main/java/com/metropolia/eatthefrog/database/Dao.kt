@@ -29,9 +29,12 @@ interface SubtaskDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSubtask(subtask: Subtask): Long
 
-    @Query("SELECT * FROM subtask WHERE subtask.task_id = :id")
-    fun getSubtasks(id: Long): LiveData<List<Subtask>>
-
     @Query("UPDATE subtask SET completed = :s WHERE uid = :id")
     suspend fun updateSubtaskCompletedStatus(id: Long, s: Boolean)
+
+    @Query("SELECT COUNT(*) FROM subtask WHERE subtask.task_id = :id")
+    fun getSubtasksAmount(id: Long): LiveData<Int>
+
+    @Query("SELECT * FROM subtask WHERE subtask.task_id = :id")
+    fun getSubtasks(id: Long): LiveData<List<Subtask>>
 }

@@ -25,6 +25,7 @@
     <string name="hello">Hei</string>
     <string name="tasks_today">tehtävää tänään</string>
     <string name="subtasks">alitehtävää</string>
+    <string name="subtask">alitehtävä</string>
     <string name="tasks">Tehtävät</string>
     <string name="today">Tänään</string>
     <string name="week">Viikko</string>
