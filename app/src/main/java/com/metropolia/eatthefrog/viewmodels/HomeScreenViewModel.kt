@@ -52,12 +52,6 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         this.highlightedTaskId.value = t.uid
     }
 
-    fun setTaskAsDailyFrog(f: Boolean) {
-        viewModelScope.launch {
-            database.taskDao().updateDailyFrog(f, highlightedTaskId.value)
-        }
-    }
-
     fun updateSubTask(st: Subtask, status: Boolean) {
         viewModelScope.launch {
             database.subtaskDao().updateSubtaskCompletedStatus(st.uid, status)
