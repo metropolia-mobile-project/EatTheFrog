@@ -253,45 +253,29 @@ fun SwitchPart() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .fillMaxHeight()
             .padding(20.dp, 20.dp, 0.dp, 0.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        Row(
-            modifier = Modifier,
-            horizontalArrangement = Arrangement.End
-        ) {
-            ProfileSwitches()
-            Text(
-                text = stringResource(id = R.string.dark_mode),
-                fontWeight = FontWeight.Light,
-                color = Color.Black,
-                fontSize = 14.sp,
-                modifier = Modifier
-                    .padding(0.dp, 14.dp, 0.dp, 0.dp)
-
-            )
-        }
-        Row(
-            modifier = Modifier,
-            horizontalArrangement = Arrangement.End
-        ) {
-            ProfileSwitches()
-            Text(
-                text = stringResource(id = R.string.deadline_rem),
-                fontWeight = FontWeight.Light,
-                color = Color.Black,
-                fontSize = 14.sp,
-                modifier = Modifier
-                    .padding(0.dp, 6.dp, 0.dp, 0.dp)
-            )
-        }
+        SwitchRow(stringResource(id = R.string.dark_mode))
+        SwitchRow(stringResource(id = R.string.deadline_rem))
+        SwitchRow(desc = "Confirmation window")
     }
 }
 
-
-@Preview
 @Composable
-fun profileScreenPreview() {
-
+fun SwitchRow(desc: String) {
+    Row(
+        modifier = Modifier,
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        ProfileSwitches()
+        Text(
+            text = desc,
+            fontWeight = FontWeight.Light,
+            color = Color.Black,
+            fontSize = 14.sp
+        )
+    }
 }

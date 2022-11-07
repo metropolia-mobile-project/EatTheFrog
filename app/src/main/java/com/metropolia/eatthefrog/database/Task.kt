@@ -13,6 +13,7 @@ data class Task(
     @ColumnInfo(name = "task_type") val taskType: TaskType,
     @ColumnInfo(name = "deadline") val deadline: String?,
     @ColumnInfo(name = "time") val time: String?,
+    @ColumnInfo(name = "completed") val completed: Boolean = false,
     @ColumnInfo(name = "frog") val isFrog: Boolean
 )
 

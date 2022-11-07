@@ -31,4 +31,5 @@
     <string name="week">Viikko</string>
     <string name="month">Kuukausi</string>
     <string name="daily_frog">Päivän sammakko</string>
+    <string name="confirm_window">Vahvistusikkuna</string>
 </resources>

@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.PopupView
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 /**
@@ -32,12 +33,27 @@ fun TaskScreen(vm: HomeScreenViewModel) {
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
 
+    fun closeConfirmWindow() {
+
+    }
+
+    fun confirmCallback() {
+
+    }
+
     PopupView(vm.popupVisible.value, callback = {vm.resetPopupStatus()}) {
 
         Box(
             Modifier
                 .fillMaxSize()
                 .padding(20.dp)) {
+
+            Image(
+                painter = painterResource(R.drawable.ic_baseline_check_circle_outline_24),
+                modifier = Modifier
+                    .align(alignment = Alignment.TopStart)
+                    .clickable { vm.openTaskDoneConfirmWindow() },
+                contentDescription = "Confirm button")
 
             Image(
                 painter = painterResource(R.drawable.edit_24),
@@ -53,6 +69,8 @@ fun TaskScreen(vm: HomeScreenViewModel) {
 
                 Text(task.value?.name ?: "", Modifier.padding(bottom = 15.dp), fontWeight = FontWeight.Bold)
                 Text(task.value?.description ?: "", Modifier.padding(bottom = 15.dp))
+                Text(task.value?.completed.toString(), Modifier.padding(bottom = 15.dp))
+
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -123,4 +141,10 @@ fun TaskScreen(vm: HomeScreenViewModel) {
             }
         }
     }
+
+
+    if (vm.showTaskDoneConfirmWindow.value) {
+        ConfirmWindow({vm.closeTaskDoneConfirmWindow()} ,{ vm.confirmTaskDone() }, "Close task?")
+    }
 }
+
