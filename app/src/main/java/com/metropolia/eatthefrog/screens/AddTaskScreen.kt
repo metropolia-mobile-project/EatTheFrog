@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -27,6 +28,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +41,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.insets.imePadding
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
@@ -46,6 +50,7 @@ import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.screens.home.components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.text.SimpleDateFormat
 import java.time.format.TextStyle
@@ -66,6 +71,7 @@ fun AddTaskScreen(application: Application) {
             .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colors.secondary)
             .clickable { keyboardController?.hide() }
+
 
     ) {
 
@@ -121,7 +127,8 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
     var subTaskId: Long by remember { mutableStateOf(0) }
     val subTaskDone by remember { mutableStateOf(false) }
 
-
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val coroutineScope = rememberCoroutineScope()
 
 
 
@@ -383,7 +390,7 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
                         .wrapContentWidth()
                 ) {
                     Text(
-                        text = (index + 1).toString() + ". " + sub.name, modifier = Modifier
+                        text = (index + 1).toString() + ". " + if(sub.name.length > 15) {sub.name.substring(0,15) + "..."} else { sub.name }, modifier = Modifier
                             .padding(0.dp, 3.dp)
                             .width(185.dp)
                     )
@@ -424,6 +431,7 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent
                 ),
+
                 singleLine = true,
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.Start
