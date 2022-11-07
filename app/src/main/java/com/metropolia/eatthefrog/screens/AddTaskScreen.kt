@@ -7,24 +7,31 @@ import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
-import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.constants.TIME_FORMAT
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
@@ -34,11 +41,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+lateinit var addTaskScreenViewModel: AddTaskScreenViewModel
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AddTaskScreen(application: Application) {
     val keyboardController = LocalSoftwareKeyboardController.current
-
+    addTaskScreenViewModel = AddTaskScreenViewModel(application)
 
     Column(
         modifier = Modifier
@@ -47,19 +56,25 @@ fun AddTaskScreen(application: Application) {
             .background(MaterialTheme.colors.secondary)
             .clickable { keyboardController?.hide() }
 
+
     ) {
-        AddTaskScreenC(application)
+
+
+        AddTaskScreenC(addTaskScreenViewModel)
+
+
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AddTaskScreenC(application: Application) {
+fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
 
-    val viewModel = AddTaskScreenViewModel(application = application)
+
     val context = LocalContext.current
 
     //Variables for time and date
-    val sdf = SimpleDateFormat(DATE_FORMAT)
+    val sdf = SimpleDateFormat(com.metropolia.eatthefrog.constants.DATE_FORMAT)
     val stf = SimpleDateFormat(TIME_FORMAT)
     val currentDate = sdf.format(Date())
     val currentTime = stf.format(Date())
@@ -90,12 +105,16 @@ fun AddTaskScreenC(application: Application) {
 
     val lastTask = viewModel.getLastTask().observeAsState()
 
+
+    val subList = viewModel.subTaskList.observeAsState()
+
     //Variables for creates subtask
     var subTaskTitle by remember { mutableStateOf("") }
     var subTaskId: Long by remember { mutableStateOf(0) }
     val subTaskDone by remember { mutableStateOf(false) }
 
-
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val coroutineScope = rememberCoroutineScope()
 
 
 
@@ -113,7 +132,6 @@ fun AddTaskScreenC(application: Application) {
             sTime.value = "$hour:$minute"
         }, mHour, mMinute, false
     )
-
 
 
     /**
@@ -249,7 +267,7 @@ fun AddTaskScreenC(application: Application) {
      */
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = CenterVertically,
         modifier = Modifier
             .padding(30.dp)
             .fillMaxWidth()
@@ -330,6 +348,61 @@ fun AddTaskScreenC(application: Application) {
             }
         }
     }
+
+    /**
+     * Shows created subtasks in LazyColumn
+     */
+
+    Column(
+        Modifier.heightIn(0.dp, 200.dp)
+    ) {
+        Text(
+            "Subtasks",
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(30.dp, 0.dp, 0.dp, 0.dp)
+        )
+
+        LazyColumn(
+            Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .padding(30.dp, 0.dp, 0.dp, 0.dp)
+        ) {
+            itemsIndexed(subList.value!!.toList()) { index, sub ->
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Top,
+                    modifier = Modifier
+                        .wrapContentWidth()
+                ) {
+                    Text(
+                        text = (index + 1).toString() + ". " + if (sub.name.length > 15) {
+                            sub.name.substring(0, 15) + "..."
+                        } else {
+                            sub.name
+                        }, modifier = Modifier
+                            .padding(0.dp, 3.dp)
+                            .width(185.dp)
+                    )
+
+                    Icon(
+                        painterResource(id = R.drawable.ic_add),
+                        contentDescription = "Delete Subtask from list",
+                        modifier = Modifier
+                            .rotate(45F)
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, Color.Black, CircleShape)
+                            .clickable {
+                                viewModel.deleteSubTask(index)
+                            }
+                    )
+                }
+            }
+        }
+    }
+
+
     /**
      * Sub-task text title and sub-task TextField
      */
@@ -348,12 +421,27 @@ fun AddTaskScreenC(application: Application) {
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent
                 ),
+
                 singleLine = true,
                 textStyle = LocalTextStyle.current.copy(
                     textAlign = TextAlign.Start
                 ),
                 modifier = Modifier
+                    .width(250.dp)
                     .padding(0.dp, 0.dp, 30.dp, 15.dp),
+                trailingIcon = {
+                    Icon(Icons.Default.Add,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .clickable {
+                                subTaskId = if (lastTask.value == null) {
+                                    1
+                                } else lastTask.value!!.uid + 1
+                                val list = listOf(Subtask(0, subTaskId, subTaskTitle, subTaskDone))
+                                viewModel.updateSubTaskList(list)
+                                subTaskTitle = ""
+                            })
+                }
             )
         }
     }
@@ -371,8 +459,11 @@ fun AddTaskScreenC(application: Application) {
                 Log.d("Testing dropdown", selectedIndex.toString())
                 viewModel.insertTask(newTask)
                 Log.d("Last Task", subTaskId.toString())
-                subTaskId = if(lastTask.value == null) { 1 } else lastTask.value!!.uid + 1
-                viewModel.insertSubTask(Subtask(0, subTaskId, subTaskTitle, subTaskDone ))
+                Log.d("Observable", subList.value.toString())
+                viewModel.insertSubTask()
+                taskTitle = ""
+                description = ""
+                viewModel.clearSubTaskList()
 
             }, modifier = Modifier
                 .width(200.dp)
@@ -382,6 +473,11 @@ fun AddTaskScreenC(application: Application) {
         }
     }
 }
+
+
+
+
+
 
 
 
