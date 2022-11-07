@@ -46,9 +46,7 @@ fun AddTaskScreen(application: Application) {
             .clickable { keyboardController?.hide() }
 
     ) {
-
         AddTaskScreenC(application)
-
     }
 }
 
@@ -86,7 +84,7 @@ fun AddTaskScreenC(application: Application) {
     val sDate = remember { mutableStateOf(currentDate) }
     val sTime = remember { mutableStateOf(currentTime) }
     val newTask =
-        Task(0, taskTitle, description, taskType, sDate.value, sTime.value, false)
+        Task(0, taskTitle, description, taskType, sDate.value, sTime.value, false, false)
 
     val lastTask = viewModel.getLastTask().observeAsState()
 
