@@ -24,6 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.constants.TIME_FORMAT
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.database.TaskType
@@ -57,8 +59,8 @@ fun AddTaskScreenC(application: Application) {
     val context = LocalContext.current
 
     //Variables for time and date
-    val sdf = SimpleDateFormat("dd.MM.yyyy")
-    val stf = SimpleDateFormat("HH:mm")
+    val sdf = SimpleDateFormat(DATE_FORMAT)
+    val stf = SimpleDateFormat(TIME_FORMAT)
     val currentDate = sdf.format(Date())
     val currentTime = stf.format(Date())
     val sCalendar = Calendar.getInstance()
@@ -102,7 +104,7 @@ fun AddTaskScreenC(application: Application) {
     val sDatePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            sDate.value = "$mDayOfMonth/${mMonth + 1}/$mYear"
+            sDate.value = "$mDayOfMonth.${mMonth + 1}.$mYear"
         }, mYear, mMonth, mDay
     )
     val mTimePickerDialog = TimePickerDialog(
@@ -369,7 +371,7 @@ fun AddTaskScreenC(application: Application) {
                 Log.d("Testing dropdown", selectedIndex.toString())
                 viewModel.insertTask(newTask)
                 Log.d("Last Task", subTaskId.toString())
-                subTaskId = lastTask.value!!.uid + 1
+                subTaskId = if(lastTask.value == null) { 1 } else lastTask.value!!.uid + 1
                 viewModel.insertSubTask(Subtask(0, subTaskId, subTaskTitle, subTaskDone ))
 
             }, modifier = Modifier
