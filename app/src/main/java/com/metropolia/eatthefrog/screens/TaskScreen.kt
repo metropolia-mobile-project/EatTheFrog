@@ -13,6 +13,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,14 +34,6 @@ fun TaskScreen(vm: HomeScreenViewModel) {
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
 
-    fun closeConfirmWindow() {
-
-    }
-
-    fun confirmCallback() {
-
-    }
-
     PopupView(vm.popupVisible.value, callback = {vm.resetPopupStatus()}) {
 
         Box(
@@ -48,12 +41,25 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                 .fillMaxSize()
                 .padding(20.dp)) {
 
-            Image(
-                painter = painterResource(R.drawable.ic_baseline_check_circle_outline_24),
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .clickable { vm.openTaskDoneConfirmWindow() },
-                contentDescription = "Confirm button")
+            Row(
+                Modifier
+                .align(alignment = Alignment.TopStart),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Switch(
+                    checked = task.value?.completed ?: false,
+                    onCheckedChange = { vm.openTaskConfirmWindow() },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colors.primaryVariant
+                    ),
+                )
+                Text(
+                    if (task.value?.completed == true)
+                    stringResource(R.string.closed)
+                    else stringResource(R.string.open))
+            }
+
 
             Image(
                 painter = painterResource(R.drawable.edit_24),
@@ -66,10 +72,8 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally) {
 
-
                 Text(task.value?.name ?: "", Modifier.padding(bottom = 15.dp), fontWeight = FontWeight.Bold)
                 Text(task.value?.description ?: "", Modifier.padding(bottom = 15.dp))
-                Text(task.value?.completed.toString(), Modifier.padding(bottom = 15.dp))
 
                 Row(
                     Modifier
@@ -142,9 +146,11 @@ fun TaskScreen(vm: HomeScreenViewModel) {
         }
     }
 
-
     if (vm.showTaskDoneConfirmWindow.value) {
-        ConfirmWindow({vm.closeTaskDoneConfirmWindow()} ,{ vm.confirmTaskDone() }, "Close task?")
+        val desc = stringResource(
+            if (task.value?.completed == false) R.string.close_task else R.string.open_task,
+            task.value?.name ?: "")
+        ConfirmWindow({ vm.toggleTaskCompleted() },{vm.closeTaskConfirmWindow()}, desc)
     }
 }
 

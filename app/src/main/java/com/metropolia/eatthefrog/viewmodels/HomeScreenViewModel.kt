@@ -63,17 +63,17 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun closeTaskDoneConfirmWindow() {
+    fun closeTaskConfirmWindow() {
         showTaskDoneConfirmWindow.value = false
     }
 
-    fun openTaskDoneConfirmWindow() {
+    fun openTaskConfirmWindow() {
         showTaskDoneConfirmWindow.value = true
     }
-    fun confirmTaskDone() {
+    fun toggleTaskCompleted() {
         viewModelScope.launch {
-            database.taskDao().closeTask(highlightedTaskId.value)
-            closeTaskDoneConfirmWindow()
+            database.taskDao().toggleTask(highlightedTaskId.value)
+            closeTaskConfirmWindow()
         }
     }
 }

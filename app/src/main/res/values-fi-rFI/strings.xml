@@ -32,4 +32,8 @@
     <string name="month">Kuukausi</string>
     <string name="daily_frog">Päivän sammakko</string>
     <string name="confirm_window">Vahvistusikkuna</string>
+    <string name="open_task">Avaa %1$s?</string>
+    <string name="close_task">Sulje %1$s?</string>
+    <string name="closed">Suljettu</string>
+    <string name="open">Avoin</string>
 </resources>
