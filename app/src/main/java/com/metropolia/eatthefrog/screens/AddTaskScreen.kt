@@ -24,6 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.constants.TIME_FORMAT
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.database.TaskType
@@ -57,8 +59,8 @@ fun AddTaskScreenC(application: Application) {
     val context = LocalContext.current
 
     //Variables for time and date
-    val sdf = SimpleDateFormat("dd.MM.yyyy")
-    val stf = SimpleDateFormat("HH:mm")
+    val sdf = SimpleDateFormat(DATE_FORMAT)
+    val stf = SimpleDateFormat(TIME_FORMAT)
     val currentDate = sdf.format(Date())
     val currentTime = stf.format(Date())
     val sCalendar = Calendar.getInstance()
