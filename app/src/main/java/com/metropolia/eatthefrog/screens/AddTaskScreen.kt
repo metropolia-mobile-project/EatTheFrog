@@ -10,7 +10,11 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -22,13 +26,18 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
@@ -37,16 +46,16 @@ import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 lateinit var addTaskScreenViewModel: AddTaskScreenViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
+
 @Composable
 fun AddTaskScreen(application: Application) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     addTaskScreenViewModel = AddTaskScreenViewModel(application)
 
     Column(
@@ -54,19 +63,16 @@ fun AddTaskScreen(application: Application) {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(Color.White)
-            .clickable { keyboardController?.hide() }
-
 
     ) {
 
-
         AddTaskScreenC(addTaskScreenViewModel)
-
 
     }
 }
 
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
 
@@ -113,9 +119,13 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
     var subTaskId: Long by remember { mutableStateOf(0) }
     val subTaskDone by remember { mutableStateOf(false) }
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val coroutineScope = rememberCoroutineScope()
 
 
-
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     sCalendar.time = Date()
 
@@ -132,7 +142,11 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
         }, mHour, mMinute, false
     )
 
-
+    Column(
+        Modifier
+            .focusRequester(focusRequester)
+            .clickable { keyboardController?.hide(); focusManager.clearFocus() }
+    ) {
 
 
         /**
@@ -354,138 +368,165 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
         }
 
 
-    /**
-     * Shows created subtasks in LazyColumn
-     */
+        /**
+         * Shows created subtasks in LazyColumn
+         */
 
-    Column(
-        Modifier.heightIn(0.dp, 350.dp)
-    ) {
-        Text(
-            "Subtasks",
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(30.dp, 0.dp, 0.dp, 0.dp)
-        )
-
-        LazyColumn(
-            Modifier
-                .wrapContentHeight()
-                .fillMaxWidth()
-                .padding(30.dp, 0.dp, 0.dp, 0.dp)
+        Column(
+            Modifier.heightIn(0.dp, 350.dp)
         ) {
-            itemsIndexed(subList.value!!.toList()) { index, sub ->
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Top,
-                    modifier = Modifier
-                        .wrapContentWidth()
-                ) {
-                    Text(
-                        text = (index + 1).toString() + ". " + if (sub.name.length > 15) {
-                            sub.name.substring(0, 15) + "..."
-                        } else {
-                            sub.name
-                        }, modifier = Modifier
-                            .padding(0.dp, 3.dp)
-                            .width(185.dp)
-                    )
+            Text(
+                "Subtasks",
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(30.dp, 0.dp, 0.dp, 0.dp)
+            )
 
-                    Icon(
-                        painterResource(id = R.drawable.ic_add),
-                        contentDescription = "Delete Subtask from list",
+            LazyColumn(
+                Modifier
+                    .wrapContentHeight()
+                    .fillMaxWidth()
+                    .padding(30.dp, 0.dp, 0.dp, 0.dp)
+            ) {
+                itemsIndexed(subList.value!!.toList()) { index, sub ->
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Top,
                         modifier = Modifier
-                            .rotate(45F)
-                            .size(20.dp)
-                            .clip(CircleShape)
-                            .border(1.dp, Color.Black, CircleShape)
-                            .clickable {
-                                viewModel.deleteSubTask(index)
+                            .wrapContentWidth()
+                    ) {
+                        Text(
+                            text = (index + 1).toString() + ". " + if (sub.name.length > 15) {
+                                sub.name.substring(0, 15) + "..."
+                            } else {
+                                sub.name
+                            }, modifier = Modifier
+                                .padding(0.dp, 3.dp)
+                                .width(185.dp)
+                        )
+
+                        Icon(
+                            painterResource(id = R.drawable.ic_add),
+                            contentDescription = "Delete Subtask from list",
+                            modifier = Modifier
+                                .rotate(45F)
+                                .size(20.dp)
+                                .clip(CircleShape)
+                                .border(1.dp, Color.Black, CircleShape)
+                                .clickable {
+                                    viewModel.deleteSubTask(index)
+                                }
+                        )
+                    }
+                }
+            }
+
+
+            /**
+             * Sub-task text title and sub-task TextField
+             */
+            Column(
+                modifier = Modifier
+                    .padding(30.dp, 30.dp, 0.dp, 0.dp)
+                    .wrapContentWidth()
+                    .bringIntoViewRequester(bringIntoViewRequester)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.sub_task_title)
+                )
+                Row() {
+                    TextField(
+                        value = subTaskTitle,
+                        onValueChange = { subTaskTitle = it },
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent
+                        ),
+
+                        singleLine = true,
+                        textStyle = LocalTextStyle.current.copy(
+                            textAlign = TextAlign.Start
+                        ),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                        modifier = Modifier
+                            .onFocusEvent { focusState ->
+                                if (focusState.isFocused) {
+                                    coroutineScope.launch {
+                                        bringIntoViewRequester.bringIntoView()
+                                    }
+                                }
                             }
+                            .width(250.dp)
+                            .padding(0.dp, 0.dp, 30.dp, 15.dp),
+                        trailingIcon = {
+                            Icon(Icons.Default.Add,
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .clickable {
+                                        subTaskId = if (lastTask.value == null) {
+                                            1
+                                        } else lastTask.value!!.uid + 1
+                                        val list =
+                                            listOf(Subtask(0, subTaskId, subTaskTitle, subTaskDone))
+                                        if (subList.value!!.size < 7 && subTaskTitle != "") {
+                                            viewModel.updateSubTaskList(list); subTaskTitle = ""
+                                        } else if (subTaskTitle == "") {
+                                            Toast.makeText(
+                                                context,
+                                                "Subtask must have title",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "Maximum amount of subtasks reached",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+
+                                    })
+                        }
                     )
                 }
             }
         }
 
-
-
-    /**
-     * Sub-task text title and sub-task TextField
-     */
-    Column(
-        modifier = Modifier
-            .padding(30.dp, 30.dp, 0.dp, 0.dp)
-            .wrapContentWidth()
-    ) {
-        Text(
-            text = stringResource(id = R.string.sub_task_title)
-        )
-        Row() {
-            TextField(
-                value = subTaskTitle,
-                onValueChange = { subTaskTitle = it },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent
-                ),
-
-                singleLine = true,
-                textStyle = LocalTextStyle.current.copy(
-                    textAlign = TextAlign.Start
-                ),
-                modifier = Modifier
-                    .width(250.dp)
-                    .padding(0.dp, 0.dp, 30.dp, 15.dp),
-                trailingIcon = {
-                    Icon(Icons.Default.Add,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .clickable {
-                                subTaskId = if (lastTask.value == null) {
-                                    1
-                                } else lastTask.value!!.uid + 1
-                                val list = listOf(Subtask(0, subTaskId, subTaskTitle, subTaskDone))
-                                if(subList.value!!.size < 7 && subTaskTitle != "") { viewModel.updateSubTaskList(list) ; subTaskTitle = "" }
-                                else if (subTaskTitle == "") { Toast.makeText(context, "Subtask must have title", Toast.LENGTH_SHORT).show()}
-                                else { Toast.makeText(context, "Maximum amount of subtasks reached", Toast.LENGTH_SHORT).show()}
-
-                            })
-                }
-            )
-        }
-    }
-    }
-    /**
-     * "Create Task" button
-     */
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Bottom
-    ) {
-        Button(
-            onClick = {
-                if(newTask.name == "" && newTask.description == "") {
-                    Toast.makeText(context, "Task needs name and description", Toast.LENGTH_SHORT).show()
-                }
-                else if (newTask.name == "") {
-                    Toast.makeText(context, "Give task a name", Toast.LENGTH_SHORT).show()
-                }
-                else if (newTask.description == "") {
-                    Toast.makeText(context, "Give task a description", Toast.LENGTH_SHORT).show()
-                }
-                else {
-                    viewModel.insertTask(newTask)
-                    viewModel.insertSubTask()
-                    taskTitle = ""
-                    description = ""
-                    viewModel.clearSubTaskList()
-                }
-
-
-            }, modifier = Modifier
-                .width(200.dp)
-                .padding(top = 50.dp)
+        /**
+         * "Create Task" button
+         */
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom
         ) {
-            Text(text = stringResource(id = R.string.create_task))
+            Button(
+                onClick = {
+                    if (newTask.name == "" && newTask.description == "") {
+                        Toast.makeText(
+                            context,
+                            "Task needs name and description",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    } else if (newTask.name == "") {
+                        Toast.makeText(context, "Give task a name", Toast.LENGTH_SHORT).show()
+                    } else if (newTask.description == "") {
+                        Toast.makeText(context, "Give task a description", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        viewModel.insertTask(newTask)
+                        viewModel.insertSubTask()
+                        taskTitle = ""
+                        description = ""
+                        viewModel.clearSubTaskList()
+                    }
+
+
+                }, modifier = Modifier
+                    .width(200.dp)
+                    .padding(top = 50.dp)
+            ) {
+                Text(text = stringResource(id = R.string.create_task))
+            }
         }
     }
 }
