@@ -25,11 +25,15 @@ import com.metropolia.eatthefrog.activities.MainActivity
 import com.metropolia.eatthefrog.screens.home.components.ProfileContainer
 import com.metropolia.eatthefrog.screens.home.components.TasksContainer
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
+import java.util.*
 
 @ExperimentalMaterialApi
 @Composable
 fun HomeScreen(username: String, application: Application) {
     val homeScreenViewModel = HomeScreenViewModel(application)
+    val calendar = Calendar.getInstance()
+    calendar.time = Date()
+    val currentWeek = calendar.get(Calendar.WEEK_OF_YEAR)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -37,8 +41,8 @@ fun HomeScreen(username: String, application: Application) {
             .wrapContentSize(Alignment.Center),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ProfileContainer(username)
-        TasksContainer(homeScreenViewModel)
+        ProfileContainer(username, homeScreenViewModel)
+        TasksContainer(homeScreenViewModel, currentWeek)
     }
     TaskScreen(homeScreenViewModel)
 }

@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens.home.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -17,23 +18,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key.Companion.D
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  * Bottom half of the Home screen, containing the task list with filtering for the current day, week
  * and month.
  */
 @Composable
-fun TasksContainer(homeScreenViewModel: HomeScreenViewModel) {
+fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
+    val sdf = SimpleDateFormat(DATE_FORMAT)
+    val today = sdf.format(Date())
     val formatter = DateTimeFormatter.ofPattern("dd MMMM, uuuu")
+    val calendar = Calendar.getInstance()
+
+    val currentDateFilter = homeScreenViewModel.selectedFilter.observeAsState()
     val tasks = homeScreenViewModel.getTasks().observeAsState(listOf())
 
     Box(modifier = Modifier
@@ -58,9 +69,26 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel) {
             .fillMaxSize()
             .background(MaterialTheme.colors.secondary)
     ) {
+        Log.d("TASKS", tasks.value.toString())
+        Log.d("TODAY", today)
+        val items: List<Task> = when(currentDateFilter.value) {
+            DateFilter.TODAY -> tasks.value.filter { it.deadline == today }
+            DateFilter.WEEK -> tasks.value.filter {
+                val deadlineDate = SimpleDateFormat(DATE_FORMAT).parse(it.deadline)
+                calendar.time = deadlineDate
+                Log.d("CURRENT_WEEK", currentWeek.toString())
+                Log.d("TASK_WEEK", calendar.get(Calendar.WEEK_OF_YEAR).toString())
+                calendar.get(Calendar.WEEK_OF_YEAR) == currentWeek
+            }
+            DateFilter.MONTH -> tasks.value.filter {
+                val deadlineArray = it.deadline.split(".")
+                val todayArray = today.split(".")
+                deadlineArray[1] == todayArray[1] && deadlineArray[2] == todayArray[2]
+            }
+            else -> listOf()
+        }
 
-
-        items(items = tasks.value, itemContent = { item ->
+        items(items = items, itemContent = { item ->
             Box(Modifier.padding(10.dp)) {
                 SingleTaskContainer(item, homeScreenViewModel)
             }
