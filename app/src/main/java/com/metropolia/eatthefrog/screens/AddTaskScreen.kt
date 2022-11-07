@@ -16,14 +16,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -43,6 +46,7 @@ import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.screens.home.components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.text.SimpleDateFormat
 import java.time.format.TextStyle
 import java.util.*
@@ -111,7 +115,6 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
 
 
     val subList = viewModel.subTaskList.observeAsState()
-
 
     //Variables for creates subtask
     var subTaskTitle by remember { mutableStateOf("") }
@@ -271,7 +274,7 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
      */
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = CenterVertically,
         modifier = Modifier
             .padding(30.dp)
             .fillMaxWidth()
@@ -353,26 +356,54 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
         }
     }
 
+    /**
+     * Shows created subtasks in LazyColumn
+     */
+
     Column(
         Modifier.heightIn(0.dp, 200.dp)
     ) {
-        Text("Subtasks",
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(30.dp, 0.dp, 0.dp, 0.dp))
+        Text(
+            "Subtasks",
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(30.dp, 0.dp, 0.dp, 0.dp)
+        )
 
         LazyColumn(
             Modifier
                 .wrapContentHeight()
+                .fillMaxWidth()
                 .padding(30.dp, 0.dp, 0.dp, 0.dp)
-        ){
+        ) {
             itemsIndexed(subList.value!!.toList()) { index, sub ->
-                Text(text = (index + 1).toString() + ". " + sub.name, modifier = Modifier
-                    .padding(0.dp, 3.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Top,
+                    modifier = Modifier
+                        .wrapContentWidth()
+                ) {
+                    Text(
+                        text = (index + 1).toString() + ". " + sub.name, modifier = Modifier
+                            .padding(0.dp, 3.dp)
+                            .width(185.dp)
+                    )
+
+                    Icon(
+                        painterResource(id = R.drawable.ic_add),
+                        contentDescription = "Delete Subtask from list",
+                        modifier = Modifier
+                            .rotate(45F)
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, Color.Black, CircleShape)
+                            .clickable {
+                                viewModel.deleteSubTask(index)
+                            }
+                    )
+                }
             }
         }
     }
-    
-
 
 
     /**
@@ -408,7 +439,7 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
                                 subTaskId = if (lastTask.value == null) {
                                     1
                                 } else lastTask.value!!.uid + 1
-                                val list = listOf(Subtask(0, subTaskId, subTaskTitle, false))
+                                val list = listOf(Subtask(0, subTaskId, subTaskTitle, subTaskDone))
                                 viewModel.updateSubTaskList(list)
                                 subTaskTitle = ""
                             })

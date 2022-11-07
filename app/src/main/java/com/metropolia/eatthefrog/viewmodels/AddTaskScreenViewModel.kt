@@ -22,8 +22,9 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
 
 
 
+    var subTaskList = MutableLiveData<List<Subtask>>(listOf())
 
-    val subTaskList = MutableLiveData<List<Subtask>>(listOf())
+
 
     fun updateSubTaskList(list: List<Subtask>) {
         val oldList = subTaskList.value
@@ -34,6 +35,12 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
         subTaskList.value = emptyList<Subtask>()
     }
 
+    fun deleteSubTask(ind : Int) {
+        val newList: MutableList<Subtask> = subTaskList.value!!.toMutableList()
+        newList.removeAt(ind)
+        subTaskList.value = newList
+    }
+
     fun insertTask(task: Task) {
         viewModelScope.launch {
             database.taskDao().insert(task)
@@ -42,12 +49,14 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
     fun insertSubTask() {
         viewModelScope.launch {
             val subTaskList = subTaskList.value ?: emptyList()
-            for (subTask in subTaskList)
-            database.subtaskDao().insertSubtask(subTask)
+            for (subTask in subTaskList) {
+                database.subtaskDao().insertSubtask(subTask)
+            }
         }
     }
 
     fun getLastTask(): LiveData<Task> = database.taskDao().getLastTask()
 
 }
+
 
