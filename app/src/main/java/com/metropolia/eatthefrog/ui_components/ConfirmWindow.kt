@@ -7,6 +7,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
 
+/**
+ * A confirmation window.
+ * @param confirmCallback: Called whenever the user clicks the confirm button.
+ * @param dismissCallback: Called whenever the user clicks outside the popup or the dismiss button.
+ * @param description: The text displayed on the window.
+ */
 @Composable
 fun ConfirmWindow(confirmCallback: () -> Any, dismissCallback: () -> Any, description: String) {
     AlertDialog(onDismissRequest = { dismissCallback() },
