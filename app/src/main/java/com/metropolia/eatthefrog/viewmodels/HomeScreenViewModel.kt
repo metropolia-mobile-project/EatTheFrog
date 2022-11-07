@@ -32,6 +32,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     var popupVisible = mutableStateOf(false)
     var highlightedTaskId = mutableStateOf(0L)
     var showTaskDoneConfirmWindow = mutableStateOf(false)
+    var showFrogConfirmWindow = mutableStateOf(false)
 
     fun getTasks() = database.taskDao().getAllTasks()
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
@@ -55,30 +56,39 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         this.highlightedTaskId.value = t.uid
     }
 
-    fun setTaskAsDailyFrog(f: Boolean) {
-        viewModelScope.launch {
-            database.taskDao().updateDailyFrog(f, highlightedTaskId.value)
-        }
-    }
-
     fun updateSubTask(st: Subtask, status: Boolean) {
         viewModelScope.launch {
             database.subtaskDao().updateSubtaskCompletedStatus(st.uid, status)
         }
     }
 
-    fun closeTaskDoneConfirmWindow() {
+    fun closeTaskConfirmWindow() {
         showTaskDoneConfirmWindow.value = false
     }
 
-    fun openTaskDoneConfirmWindow() {
+    fun openTaskConfirmWindow() {
         showTaskDoneConfirmWindow.value = true
     }
 
-    fun confirmTaskDone() {
+    fun toggleTaskCompleted() {
         viewModelScope.launch {
-            database.taskDao().closeTask(highlightedTaskId.value)
-            closeTaskDoneConfirmWindow()
+            database.taskDao().toggleTask(highlightedTaskId.value)
+            closeTaskConfirmWindow()
+        }
+    }
+
+    fun openFrogConfirmWindow() {
+        showFrogConfirmWindow.value = true
+    }
+
+    fun closeFrogConfirmWindow() {
+        showFrogConfirmWindow.value = false
+    }
+
+    fun toggleTaskFrog() {
+        viewModelScope.launch {
+            database.taskDao().toggleFrog(highlightedTaskId.value)
+            closeFrogConfirmWindow()
         }
     }
 

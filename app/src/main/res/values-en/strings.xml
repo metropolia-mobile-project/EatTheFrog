@@ -32,4 +32,10 @@
     <string name="month">Month</string>
     <string name="daily_frog">Daily frog</string>
     <string name="confirm_window">Confirmation window</string>
+    <string name="open_task">Open %1$s?</string>
+    <string name="close_task">Close %1$s?</string>
+    <string name="closed">Closed</string>
+    <string name="open">Open</string>
+    <string name="set_frog">Set %1$s as daily frog?</string>
+    <string name="remove_frog">Remove daily frog from %1$s?</string>
 </resources>
