@@ -85,7 +85,7 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                     Text(stringResource(R.string.daily_frog))
                     Checkbox(
                         checked = task.value?.isFrog ?: false,
-                        onCheckedChange = { vm.setTaskAsDailyFrog(it) })
+                        onCheckedChange = { vm.openFrogConfirmWindow() })
                 }
 
                 LazyColumn(
@@ -151,6 +151,13 @@ fun TaskScreen(vm: HomeScreenViewModel) {
             if (task.value?.completed == false) R.string.close_task else R.string.open_task,
             task.value?.name ?: "")
         ConfirmWindow({ vm.toggleTaskCompleted() },{vm.closeTaskConfirmWindow()}, desc)
+    }
+
+    if (vm.showFrogConfirmWindow.value) {
+        val desc = stringResource(
+            if (task.value?.isFrog == false) R.string.set_frog else R.string.remove_frog,
+            task.value?.name ?: "")
+        ConfirmWindow({ vm.toggleTaskFrog() },{vm.closeFrogConfirmWindow()}, desc)
     }
 }
 

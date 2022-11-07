@@ -28,6 +28,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     var popupVisible = mutableStateOf(false)
     var highlightedTaskId = mutableStateOf(0L)
     var showTaskDoneConfirmWindow = mutableStateOf(false)
+    var showFrogConfirmWindow = mutableStateOf(false)
 
     fun getTasks() = database.taskDao().getAllTasks()
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
@@ -74,6 +75,21 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         viewModelScope.launch {
             database.taskDao().toggleTask(highlightedTaskId.value)
             closeTaskConfirmWindow()
+        }
+    }
+
+    fun openFrogConfirmWindow() {
+        showFrogConfirmWindow.value = true
+    }
+
+    fun closeFrogConfirmWindow() {
+        showFrogConfirmWindow.value = false
+    }
+
+    fun toggleTaskFrog() {
+        viewModelScope.launch {
+            database.taskDao().toggleFrog(highlightedTaskId.value)
+            closeFrogConfirmWindow()
         }
     }
 }

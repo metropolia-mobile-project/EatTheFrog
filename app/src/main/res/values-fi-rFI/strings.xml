@@ -36,4 +36,6 @@
     <string name="close_task">Sulje %1$s?</string>
     <string name="closed">Suljettu</string>
     <string name="open">Avoin</string>
+    <string name="set_frog">Aseta %1$s päivän sammakoksi?</string>
+    <string name="remove_frog">Poista päivän sammakko: %1$s?</string>
 </resources>

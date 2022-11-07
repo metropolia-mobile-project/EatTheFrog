@@ -25,6 +25,9 @@ interface TaskDao {
 
     @Query("UPDATE task SET completed = (CASE WHEN completed = 0 THEN 1 ELSE 0 END) WHERE task.uid = :id")
     suspend fun toggleTask(id: Long)
+
+    @Query("UPDATE task SET frog = (CASE WHEN frog = 0 THEN 1 ELSE 0 END) WHERE task.uid = :id")
+    suspend fun toggleFrog(id: Long)
 }
 
 @Dao
