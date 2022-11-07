@@ -3,32 +3,25 @@ package com.metropolia.eatthefrog.screens
 import android.app.Application
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.graphics.Paint.Align
 import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
-import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -36,24 +29,15 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.google.accompanist.insets.imePadding
-import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.constants.TIME_FORMAT
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.database.TaskType
-import com.metropolia.eatthefrog.screens.home.components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.text.SimpleDateFormat
-import java.time.format.TextStyle
 import java.util.*
 
 
@@ -75,7 +59,9 @@ fun AddTaskScreen(application: Application) {
 
     ) {
 
+
         AddTaskScreenC(addTaskScreenViewModel)
+
 
     }
 }
@@ -88,8 +74,8 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
     val context = LocalContext.current
 
     //Variables for time and date
-    val sdf = SimpleDateFormat("dd.MM.yyyy")
-    val stf = SimpleDateFormat("HH:mm")
+    val sdf = SimpleDateFormat(com.metropolia.eatthefrog.constants.DATE_FORMAT)
+    val stf = SimpleDateFormat(TIME_FORMAT)
     val currentDate = sdf.format(Date())
     val currentTime = stf.format(Date())
     val sCalendar = Calendar.getInstance()
@@ -115,7 +101,7 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
     val sDate = remember { mutableStateOf(currentDate) }
     val sTime = remember { mutableStateOf(currentTime) }
     val newTask =
-        Task(0, taskTitle, description, taskType, sDate.value, sTime.value, false)
+        Task(0, taskTitle, description, taskType, sDate.value, sTime.value, false, false)
 
     val lastTask = viewModel.getLastTask().observeAsState()
 
@@ -137,7 +123,7 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
     val sDatePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            sDate.value = "$mDayOfMonth/${mMonth + 1}/$mYear"
+            sDate.value = "$mDayOfMonth.${mMonth + 1}.$mYear"
         }, mYear, mMonth, mDay
     )
     val mTimePickerDialog = TimePickerDialog(
@@ -390,7 +376,11 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
                         .wrapContentWidth()
                 ) {
                     Text(
-                        text = (index + 1).toString() + ". " + if(sub.name.length > 15) {sub.name.substring(0,15) + "..."} else { sub.name }, modifier = Modifier
+                        text = (index + 1).toString() + ". " + if (sub.name.length > 15) {
+                            sub.name.substring(0, 15) + "..."
+                        } else {
+                            sub.name
+                        }, modifier = Modifier
                             .padding(0.dp, 3.dp)
                             .width(185.dp)
                     )
@@ -474,6 +464,7 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
                 taskTitle = ""
                 description = ""
                 viewModel.clearSubTaskList()
+
             }, modifier = Modifier
                 .width(200.dp)
                 .padding(top = 50.dp)

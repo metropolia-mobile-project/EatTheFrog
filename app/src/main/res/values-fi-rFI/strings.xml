@@ -25,9 +25,17 @@
     <string name="hello">Hei</string>
     <string name="tasks_today">tehtävää tänään</string>
     <string name="subtasks">alitehtävää</string>
+    <string name="subtask">alitehtävä</string>
     <string name="tasks">Tehtävät</string>
     <string name="today">Tänään</string>
     <string name="week">Viikko</string>
     <string name="month">Kuukausi</string>
     <string name="daily_frog">Päivän sammakko</string>
+    <string name="confirm_window">Vahvistusikkuna</string>
+    <string name="open_task">Avaa %1$s?</string>
+    <string name="close_task">Sulje %1$s?</string>
+    <string name="closed">Suljettu</string>
+    <string name="open">Avoin</string>
+    <string name="set_frog">Aseta %1$s päivän sammakoksi?</string>
+    <string name="remove_frog">Poista päivän sammakko: %1$s?</string>
 </resources>

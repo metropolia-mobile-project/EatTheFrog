@@ -13,12 +13,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.PopupView
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 /**
@@ -29,7 +31,7 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 @Composable
 fun TaskScreen(vm: HomeScreenViewModel) {
 
-    val subtasks = vm.getHighlightedSubTasks().observeAsState(listOf())
+    val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
 
     PopupView(vm.popupVisible.value, callback = {vm.resetPopupStatus()}) {
@@ -38,6 +40,26 @@ fun TaskScreen(vm: HomeScreenViewModel) {
             Modifier
                 .fillMaxSize()
                 .padding(20.dp)) {
+
+            Row(
+                Modifier
+                .align(alignment = Alignment.TopStart),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Switch(
+                    checked = task.value?.completed ?: false,
+                    onCheckedChange = { vm.openTaskConfirmWindow() },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colors.primaryVariant
+                    ),
+                )
+                Text(
+                    if (task.value?.completed == true)
+                    stringResource(R.string.closed)
+                    else stringResource(R.string.open))
+            }
+
 
             Image(
                 painter = painterResource(R.drawable.edit_24),
@@ -50,9 +72,9 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally) {
 
-
                 Text(task.value?.name ?: "", Modifier.padding(bottom = 15.dp), fontWeight = FontWeight.Bold)
                 Text(task.value?.description ?: "", Modifier.padding(bottom = 15.dp))
+
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -63,7 +85,7 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                     Text(stringResource(R.string.daily_frog))
                     Checkbox(
                         checked = task.value?.isFrog ?: false,
-                        onCheckedChange = { vm.setTaskAsDailyFrog(it) })
+                        onCheckedChange = { vm.openFrogConfirmWindow() })
                 }
 
                 LazyColumn(
@@ -123,4 +145,19 @@ fun TaskScreen(vm: HomeScreenViewModel) {
             }
         }
     }
+
+    if (vm.showTaskDoneConfirmWindow.value) {
+        val desc = stringResource(
+            if (task.value?.completed == false) R.string.close_task else R.string.open_task,
+            task.value?.name ?: "")
+        ConfirmWindow({ vm.toggleTaskCompleted() },{vm.closeTaskConfirmWindow()}, desc)
+    }
+
+    if (vm.showFrogConfirmWindow.value) {
+        val desc = stringResource(
+            if (task.value?.isFrog == false) R.string.set_frog else R.string.remove_frog,
+            task.value?.name ?: "")
+        ConfirmWindow({ vm.toggleTaskFrog() },{vm.closeFrogConfirmWindow()}, desc)
+    }
 }
+

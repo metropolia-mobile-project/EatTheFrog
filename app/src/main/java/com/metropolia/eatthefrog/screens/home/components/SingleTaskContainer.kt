@@ -9,6 +9,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -28,13 +30,13 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 /**
  * Container for a singular task in the Home screen list
  */
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SingleTaskContainer(task: Task, vm: HomeScreenViewModel) {
     val backgroundColor = if (task.isFrog) MaterialTheme.colors.primaryVariant else Color.White
     val taskNameTextColor = if (task.isFrog) Color.White else Color.Black
     val subtaskTextColor = if (task.isFrog) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
+    val subtaskAmount = vm.getSubtasksAmount(task.uid).observeAsState()
 
     Card(
         modifier = Modifier
@@ -66,8 +68,9 @@ fun SingleTaskContainer(task: Task, vm: HomeScreenViewModel) {
 
             Column(Modifier.padding(horizontal = 10.dp)) {
                 Text(text = task.name, color = taskNameTextColor, fontSize = 24.sp)
-                // TODO: Get subtask count from db
-//                Text(text = "${task.subtasks.count()} ${stringResource(id = R.string.subtasks)}", color = subtaskTextColor)
+                Text(text = "${subtaskAmount.value} ${stringResource(
+                    id = if (subtaskAmount.value == 1) R.string.subtask else R.string.subtasks
+                )}", color = subtaskTextColor)
             }
         }
     }
