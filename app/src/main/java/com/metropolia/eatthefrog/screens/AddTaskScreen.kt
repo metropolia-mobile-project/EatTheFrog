@@ -52,6 +52,7 @@ import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.format.TextStyle
 import java.util.*
 
 
@@ -109,12 +110,11 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel, navHost: NavHostController
     var taskTitle by remember { mutableStateOf("") }
     var taskType: TaskType by remember { mutableStateOf(taskTypeList[0]) }
     val sDate = remember { mutableStateOf(currentDate) }
-    val sTime = remember { mutableStateOf("16:00") }
+    val sTime = remember { mutableStateOf("16.00") }
     val newTask =
         Task(0, taskTitle, description, taskType, sDate.value, sTime.value, false, false)
 
     val lastTask = viewModel.getLastTask().observeAsState()
-
 
     val subList = viewModel.subTaskList.observeAsState()
 
@@ -142,7 +142,7 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel, navHost: NavHostController
     val mTimePickerDialog = TimePickerDialog(
         context,
         { _, hour: Int, minute: Int ->
-            sTime.value = "$hour:$minute"
+            sTime.value = String.format("%02d:%02d", hour, minute)
         }, mHour, mMinute, false
     )
 
@@ -287,58 +287,45 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel, navHost: NavHostController
         /**
          * UI for picking task date and time
          */
+        Text(
+            text = stringResource(id = R.string.task_deadline),
+            Modifier.padding(30.dp, 15.dp, 0.dp, 10.dp),
+            fontWeight = FontWeight.Bold,
+        )
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = CenterVertically,
             modifier = Modifier
-                .padding(30.dp)
+                .padding(30.dp, 0.dp, 30.dp, 30.dp)
                 .fillMaxWidth()
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(0.dp, 0.dp, 0.dp, 0.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.starting_date)
-                )
-                Column(Modifier.clickable { sDatePickerDialog.show() }) {
-                    Row {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_calendar),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .width(25.dp)
-                                .height(25.dp)
-                                .padding(0.dp, 0.dp, 4.dp, 0.dp)
-                        )
-                        Text(
-                            text = sDate.value,
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_dropdownarrow),
-                            contentDescription = "",
-                            modifier = Modifier
-                                //.clickable { sDatePickerDialog.show() }
-                                .width(25.dp)
-                                .height(25.dp)
-                        )
 
-                    }
-                    Divider(
-                        color = Color.Black, thickness = 2.dp, modifier = Modifier
-                            .width(125.dp)
+            Column(Modifier.clickable { sDatePickerDialog.show() }) {
+                Row {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_calendar),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(25.dp)
+                            .height(25.dp)
+                            .padding(0.dp, 0.dp, 4.dp, 0.dp)
                     )
+                    Text(
+                        text = sDate.value,
+                    )
+
                 }
+                Divider(
+                    color = Color.Black, thickness = 2.dp, modifier = Modifier
+                        .width(125.dp)
+                )
             }
+
 
             Column(
                 modifier = Modifier
                     .padding()
             ) {
-                Text(
-                    text = stringResource(id = R.string.task_deadline),
-                    modifier = Modifier.padding(start = 30.dp)
-                )
                 Column(
                     modifier = Modifier
                         .padding(30.dp, 0.dp, 0.dp, 0.dp)
@@ -349,19 +336,21 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel, navHost: NavHostController
                         modifier = Modifier
                             .padding(0.dp, 0.dp, 0.dp, 0.dp)
                     ) {
-                        Text(
-                            text = sTime.value,
-                            modifier = Modifier
-                                .padding(0.dp, 0.dp, 65.dp, 0.dp)
-                        )
                         Image(
                             painter = painterResource(id = R.drawable.ic_add_time),
                             contentDescription = "",
                             modifier = Modifier
                                 .clickable { mTimePickerDialog.show() }
+                                .size(25.dp)
+                                .padding(end = 4.dp)
                                 .width(25.dp)
                                 .height(25.dp)
 
+                        )
+                        Text(
+                            text = sTime.value,
+                            modifier = Modifier
+                                .padding(0.dp, 0.dp, 0.dp, 0.dp)
                         )
                     }
                     Divider(
@@ -526,7 +515,6 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel, navHost: NavHostController
                         viewModel.clearSubTaskList()
                         navHost.navigate(NavigationItem.Home.route)
                     }
-
 
 
                 }, modifier = Modifier
