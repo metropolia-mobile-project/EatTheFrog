@@ -40,11 +40,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.TIME_FORMAT
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.database.TaskType
+import com.metropolia.eatthefrog.navigation.Navigation
+import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -55,7 +59,7 @@ lateinit var addTaskScreenViewModel: AddTaskScreenViewModel
 
 
 @Composable
-fun AddTaskScreen(application: Application) {
+fun AddTaskScreen(application: Application, navHost: NavHostController) {
     addTaskScreenViewModel = AddTaskScreenViewModel(application)
 
     Column(
@@ -66,7 +70,7 @@ fun AddTaskScreen(application: Application) {
 
     ) {
 
-        AddTaskScreenC(addTaskScreenViewModel)
+        AddTaskScreenC(addTaskScreenViewModel, navHost)
 
     }
 }
@@ -74,7 +78,7 @@ fun AddTaskScreen(application: Application) {
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
+fun AddTaskScreenC(viewModel: AddTaskScreenViewModel, navHost: NavHostController) {
 
 
     val context = LocalContext.current
@@ -520,7 +524,9 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
                         taskTitle = ""
                         description = ""
                         viewModel.clearSubTaskList()
+                        navHost.navigate(NavigationItem.Home.route)
                     }
+
 
 
                 }, modifier = Modifier
