@@ -189,6 +189,8 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
                         colors = TextFieldDefaults.textFieldColors(
                             backgroundColor = Color.Transparent
                         ),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide(); focusManager.clearFocus() }),
                         singleLine = true,
                         textStyle = LocalTextStyle.current.copy(
                             textAlign = TextAlign.Start
@@ -446,7 +448,7 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel) {
                             textAlign = TextAlign.Start
                         ),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide(); focusManager.clearFocus() }),
                         modifier = Modifier
                             .onFocusEvent { focusState ->
                                 if (focusState.isFocused) {
