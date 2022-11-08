@@ -18,10 +18,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import com.metropolia.eatthefrog.PopupView
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * Popup window which displays the selected Task object and its data. Enables the user to set Sub-tasks as complete, as well as
@@ -33,6 +36,12 @@ fun TaskScreen(vm: HomeScreenViewModel) {
 
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
+
+
+    if (task.value?.completed == true) {
+        vm.getMotivationQuote()
+    }
+
 
     PopupView(vm.popupVisible.value, callback = {vm.resetPopupStatus()}) {
 

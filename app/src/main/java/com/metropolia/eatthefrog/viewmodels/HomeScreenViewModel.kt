@@ -11,6 +11,7 @@ import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
+import com.metropolia.eatthefrog.services.APIService
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,6 +28,7 @@ enum class DateFilter {
 class HomeScreenViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = InitialDB.get(application)
+    private val service = APIService.service
 
     val selectedFilter = MutableLiveData(DateFilter.TODAY)
     var popupVisible = mutableStateOf(false)
@@ -39,6 +41,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     fun getDateTaskCount(date: String) = database.taskDao().getDateTaskCount(date)
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
     fun getSubtasksAmount(id: Long) = database.subtaskDao().getSubtasksAmount(id)
+
 
     fun selectDateFilter(dateFilter: DateFilter) {
         selectedFilter.postValue(dateFilter)
@@ -89,6 +92,13 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         viewModelScope.launch {
             database.taskDao().toggleFrog(highlightedTaskId.value)
             closeFrogConfirmWindow()
+        }
+    }
+
+    fun getMotivationQuote() {
+        viewModelScope.launch {
+            val quote = service.getRandomMotivationalQuote()
+            Log.d("MOTIVATIONAL_QUOTE", quote[0].q)
         }
     }
 

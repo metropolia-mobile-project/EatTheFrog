@@ -53,6 +53,11 @@ dependencies {
     def lifecycle_version = "2.5.1"
     def room_version = "2.4.3"
 
+    // Retrofit
+    final retrofit_version = '2.9.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
     // Compose navigation
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
