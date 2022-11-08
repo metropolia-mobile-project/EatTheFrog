@@ -2,19 +2,15 @@ package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
 import android.util.Log
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.services.APIService
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 
 enum class DateFilter {
     TODAY,
@@ -101,5 +97,4 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
             Log.d("MOTIVATIONAL_QUOTE", quote[0].q)
         }
     }
-
 }
