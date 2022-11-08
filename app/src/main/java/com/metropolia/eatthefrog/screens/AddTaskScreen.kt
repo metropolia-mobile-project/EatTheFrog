@@ -57,7 +57,7 @@ import java.util.*
 
 
 lateinit var addTaskScreenViewModel: AddTaskScreenViewModel
-
+const val MUX_SUBTASK_AMOUNT = 7
 
 @Composable
 fun AddTaskScreen(application: Application, navHost: NavHostController) {
@@ -462,7 +462,7 @@ fun AddTaskScreenC(viewModel: AddTaskScreenViewModel, navHost: NavHostController
                                         } else lastTask.value!!.uid + 1
                                         val list =
                                             listOf(Subtask(0, subTaskId, subTaskTitle, subTaskDone))
-                                        if (subList.value!!.size < 7 && subTaskTitle != "") {
+                                        if (subList.value!!.size < MUX_SUBTASK_AMOUNT && subTaskTitle != "") {
                                             viewModel.updateSubTaskList(list); subTaskTitle = ""
                                         } else if (subTaskTitle == "") {
                                             Toast.makeText(
