@@ -22,7 +22,7 @@ fun Navigation(navController: NavHostController, username: String, application: 
             AddTaskScreen(application, navController)
         }
         composable(NavigationItem.Profile.route) {
-            ProfileScreen(username)
+            ProfileScreen(username, application)
         }
     }
 }

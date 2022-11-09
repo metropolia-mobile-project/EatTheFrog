@@ -11,12 +11,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
+import com.metropolia.eatthefrog.constants.USERNAME_KEY
 import com.metropolia.eatthefrog.screens.MainScreen
 import com.metropolia.eatthefrog.screens.WelcomeScreen
 import com.metropolia.eatthefrog.ui.theme.EatTheFrogTheme
-
-const val SHARED_PREF_KEY = "PREFERENCES_KEY"
-const val USERNAME_KEY = "USERNAME_KEY"
 
 open class MainActivity : ComponentActivity() {
 
