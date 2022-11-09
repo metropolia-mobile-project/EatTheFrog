@@ -92,7 +92,7 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
 
         items(items = items, itemContent = { item ->
             Box(Modifier.padding(10.dp)) {
-                SingleTaskContainer(item, items, homeScreenViewModel)
+                SingleTaskContainer(item, homeScreenViewModel)
             }
         })
     }
