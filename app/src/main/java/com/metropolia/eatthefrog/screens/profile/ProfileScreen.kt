@@ -43,7 +43,7 @@ fun ProfileScreen(username: String, application: Application) {
             textAlign = TextAlign.Center,
             fontSize = 25.sp,
         )
-        ProfileTaskDetailsContainer()
+        ProfileTaskDetailsContainer(profileScreenViewModel)
         ProfileTaskSwitchContainer()
 
     }

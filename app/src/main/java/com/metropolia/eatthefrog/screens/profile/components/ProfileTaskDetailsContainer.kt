@@ -3,6 +3,7 @@ package com.metropolia.eatthefrog.screens.profile.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -12,14 +13,20 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
 
 /**
  * ProfileTaskDetailsContainer function creates the middle part of the profile screen
  */
 @Composable
-fun ProfileTaskDetailsContainer() {
-    ProfileTaskDetailsRow(stringResource(id = R.string.closed_tasks), 1, stringResource(id = R.string.frogs_eaten), 1)
-    ProfileTaskDetailsRow(stringResource(id = R.string.active_tasks), 1, stringResource(id = R.string.total_tasks), 1)
+fun ProfileTaskDetailsContainer(vm: ProfileScreenViewModel) {
+    val closedTasks = vm.getClosedTasks().observeAsState(0)
+    val activeTasks = vm.getActiveTasks().observeAsState(0)
+    val frogsEaten = vm.getFrogsEaten().observeAsState(0)
+    val totalTasks = vm.getTotalTaskCount().observeAsState(0)
+
+    ProfileTaskDetailsRow(stringResource(id = R.string.closed_tasks), closedTasks.value, stringResource(id = R.string.frogs_eaten), frogsEaten.value)
+    ProfileTaskDetailsRow(stringResource(id = R.string.active_tasks), activeTasks.value, stringResource(id = R.string.total_tasks), totalTasks.value)
 }
 
 @Composable

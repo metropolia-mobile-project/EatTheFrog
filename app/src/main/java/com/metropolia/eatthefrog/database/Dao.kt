@@ -39,7 +39,7 @@ interface TaskDao {
     @Query("SELECT COUNT(uid) FROM task WHERE task.completed = 1")
     fun getClosedTasks(): LiveData<Int>
 
-    @Query("SELECT COUNT(uid) FROM task WHERE task.completed = 1 AND task.isFrog = 1")
+    @Query("SELECT COUNT(uid) FROM task WHERE task.completed = 1 AND task.frog = 1")
     fun getFrogsEaten(): LiveData<Int>
 
     @Query("SELECT COUNT(uid) FROM task WHERE task.completed = 0")
