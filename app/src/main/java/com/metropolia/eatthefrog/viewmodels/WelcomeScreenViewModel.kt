@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
-import com.metropolia.eatthefrog.activities.SHARED_PREF_KEY
-import com.metropolia.eatthefrog.activities.USERNAME_KEY
+import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
+import com.metropolia.eatthefrog.constants.USERNAME_KEY
 
 /**
  * ViewModel for the Welcome screen

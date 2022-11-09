@@ -33,6 +33,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     var highlightedTaskId = mutableStateOf(0L)
     var showTaskDoneConfirmWindow = mutableStateOf(false)
     var showFrogConfirmWindow = mutableStateOf(false)
+    val dailyFrogSelected = MutableLiveData(false)
 
     fun getTasks() = database.taskDao().getAllTasks()
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
