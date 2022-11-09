@@ -168,5 +168,9 @@ fun TaskScreen(vm: HomeScreenViewModel) {
             task.value?.name ?: "")
         ConfirmWindow({ vm.toggleTaskFrog() },{vm.closeFrogConfirmWindow()}, desc)
     }
+
+    if (vm.showQuoteWindow.value) {
+        ConfirmWindow({ vm.closeQuoteWindow() }, { vm.closeQuoteWindow() }, "Love is trash, bitches need cash \n   - Mahatma Gandhi")
+    }
 }
 
