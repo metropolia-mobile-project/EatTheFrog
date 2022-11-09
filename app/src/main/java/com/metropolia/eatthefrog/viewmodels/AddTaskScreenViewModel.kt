@@ -1,10 +1,6 @@
 package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,8 +9,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
+import com.metropolia.eatthefrog.database.TaskType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.util.*
 
 class AddTaskScreenViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -23,7 +21,6 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
 
 
     var subTaskList = MutableLiveData<List<Subtask>>(listOf())
-
 
 
     fun updateSubTaskList(list: List<Subtask>) {

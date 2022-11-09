@@ -22,6 +22,7 @@ import androidx.lifecycle.viewModelScope
 import com.metropolia.eatthefrog.PopupView
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
+import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ fun TaskScreen(vm: HomeScreenViewModel) {
 
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
+    val dailyFrogSelected = vm.dailyFrogSelected.observeAsState()
 
 
     if (task.value?.completed == true) {
@@ -84,17 +86,20 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                 Text(task.value?.name ?: "", Modifier.padding(bottom = 15.dp), fontWeight = FontWeight.Bold)
                 Text(task.value?.description ?: "", Modifier.padding(bottom = 15.dp))
 
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(stringResource(R.string.daily_frog))
-                    Checkbox(
-                        checked = task.value?.isFrog ?: false,
-                        onCheckedChange = { vm.openFrogConfirmWindow() })
+                if (vm.selectedFilter.value == DateFilter.TODAY && (dailyFrogSelected.value == false || task.value?.isFrog == true)) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(stringResource(R.string.daily_frog))
+                        Checkbox(
+                            checked = task.value?.isFrog ?: false,
+                            onCheckedChange = { vm.openFrogConfirmWindow() }
+                        )
+                    }
                 }
 
                 LazyColumn(

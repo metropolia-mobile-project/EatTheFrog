@@ -7,9 +7,9 @@ import androidx.compose.runtime.MutableState
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.metropolia.eatthefrog.screens.AddTaskScreen
 import com.metropolia.eatthefrog.screens.HomeScreen
 import com.metropolia.eatthefrog.screens.ProfileScreen
+import com.metropolia.eatthefrog.screens.addTask.AddTaskScreen
 
 @ExperimentalMaterialApi
 @Composable
@@ -22,7 +22,7 @@ fun Navigation(navController: NavHostController, username: String, application: 
             AddTaskScreen(application, navController)
         }
         composable(NavigationItem.Profile.route) {
-            ProfileScreen(username)
+            ProfileScreen(username, application)
         }
     }
 }
