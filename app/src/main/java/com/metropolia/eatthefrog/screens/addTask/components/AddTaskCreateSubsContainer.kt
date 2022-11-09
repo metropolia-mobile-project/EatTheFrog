@@ -26,7 +26,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.MAX_SUBTASK_AMOUNT
-import com.metropolia.eatthefrog.constants.MUX_SUBTASK_AMOUNT
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import kotlinx.coroutines.launch
