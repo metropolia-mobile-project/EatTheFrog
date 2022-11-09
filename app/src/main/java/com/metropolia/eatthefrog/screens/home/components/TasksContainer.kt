@@ -69,15 +69,15 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
             .fillMaxSize()
             .background(MaterialTheme.colors.secondary)
     ) {
-        Log.d("TASKS", tasks.value.toString())
-        Log.d("TODAY", today)
         val items: List<Task> = when(currentDateFilter.value) {
-            DateFilter.TODAY -> tasks.value.filter { it.deadline == today }
+            DateFilter.TODAY -> tasks.value.filter {
+                Log.d("TODAY", today)
+                Log.d("TASK_DEADLINE", it.deadline)
+                it.deadline == today
+            }
             DateFilter.WEEK -> tasks.value.filter {
                 val deadlineDate = SimpleDateFormat(DATE_FORMAT).parse(it.deadline)
                 calendar.time = deadlineDate
-                Log.d("CURRENT_WEEK", currentWeek.toString())
-                Log.d("TASK_WEEK", calendar.get(Calendar.WEEK_OF_YEAR).toString())
                 calendar.get(Calendar.WEEK_OF_YEAR) == currentWeek
             }
             DateFilter.MONTH -> tasks.value.filter {
