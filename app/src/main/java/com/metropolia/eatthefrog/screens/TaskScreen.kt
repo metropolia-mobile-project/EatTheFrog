@@ -13,19 +13,16 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewModelScope
 import com.metropolia.eatthefrog.PopupView
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+
 
 /**
  * Popup window which displays the selected Task object and its data. Enables the user to set Sub-tasks as complete, as well as
@@ -38,12 +35,6 @@ fun TaskScreen(vm: HomeScreenViewModel) {
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
     val dailyFrogSelected = vm.dailyFrogSelected.observeAsState()
-
-
-    if (task.value?.completed == true) {
-        vm.getMotivationQuote()
-    }
-
 
     PopupView(vm.popupVisible.value, callback = {vm.resetPopupStatus()}) {
 
@@ -164,7 +155,7 @@ fun TaskScreen(vm: HomeScreenViewModel) {
         val desc = stringResource(
             if (task.value?.completed == false) R.string.close_task else R.string.open_task,
             task.value?.name ?: "")
-        ConfirmWindow({ vm.toggleTaskCompleted() },{vm.closeTaskConfirmWindow()}, desc)
+        ConfirmWindow({ vm.toggleTaskCompleted(task.value) },{vm.closeTaskConfirmWindow()}, desc)
     }
 
     if (vm.showFrogConfirmWindow.value) {
@@ -172,10 +163,6 @@ fun TaskScreen(vm: HomeScreenViewModel) {
             if (task.value?.isFrog == false) R.string.set_frog else R.string.remove_frog,
             task.value?.name ?: "")
         ConfirmWindow({ vm.toggleTaskFrog() },{vm.closeFrogConfirmWindow()}, desc)
-    }
-
-    if (vm.showQuoteWindow.value) {
-        ConfirmWindow({ vm.closeQuoteWindow() }, { vm.closeQuoteWindow() }, "Love is trash, bitches need cash \n   - Mahatma Gandhi")
     }
 }
 

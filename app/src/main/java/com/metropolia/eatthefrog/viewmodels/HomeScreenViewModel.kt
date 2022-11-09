@@ -2,6 +2,7 @@ package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -31,8 +32,9 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     var highlightedTaskId = mutableStateOf(0L)
     var showTaskDoneConfirmWindow = mutableStateOf(false)
     var showFrogConfirmWindow = mutableStateOf(false)
-    var showQuoteWindow = mutableStateOf(false)
+    var showQuoteToast = mutableStateOf(false)
     val dailyFrogSelected = MutableLiveData(false)
+    private var quote = APIService.Result("", "", "")
 
     fun getTasks() = database.taskDao().getAllTasks()
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
@@ -40,6 +42,11 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
     fun getSubtasksAmount(id: Long) = database.subtaskDao().getSubtasksAmount(id)
 
+    init {
+        viewModelScope.launch {
+            quote = service.getRandomMotivationalQuote()[0]
+        }
+    }
 
     fun selectDateFilter(dateFilter: DateFilter) {
         selectedFilter.postValue(dateFilter)
@@ -71,13 +78,14 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         showTaskDoneConfirmWindow.value = true
     }
 
-    fun toggleTaskCompleted() {
+    fun toggleTaskCompleted(t: Task?) {
         viewModelScope.launch {
             database.taskDao().toggleTask(highlightedTaskId.value)
             closeTaskConfirmWindow()
 
-            if (getSelectedTask().value?.isFrog == true) {
-                openQuoteWindow()
+            if ((t?.isFrog == true && !showQuoteToast.value) && !t.completed) {
+                Toast.makeText(getApplication(), "\"${quote.q}\"\n\n-${quote.a}", Toast.LENGTH_LONG).show()
+                showQuoteToast.value = true
             }
         }
     }
@@ -90,25 +98,10 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         showFrogConfirmWindow.value = false
     }
 
-    fun openQuoteWindow() {
-        showQuoteWindow.value = true
-    }
-
-    fun closeQuoteWindow() {
-        showQuoteWindow.value = false
-    }
-
     fun toggleTaskFrog() {
         viewModelScope.launch {
             database.taskDao().toggleFrog(highlightedTaskId.value)
             closeFrogConfirmWindow()
-        }
-    }
-
-    fun getMotivationQuote() {
-        viewModelScope.launch {
-            val quote = service.getRandomMotivationalQuote()
-            Log.d("MOTIVATIONAL_QUOTE", quote[0].q)
         }
     }
 }
