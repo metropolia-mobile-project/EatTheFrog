@@ -25,6 +25,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.constants.MAX_SUBTASK_AMOUNT
 import com.metropolia.eatthefrog.constants.MUX_SUBTASK_AMOUNT
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
@@ -94,7 +95,7 @@ fun AddTaskCreateSubsContainer(viewModel: AddTaskScreenViewModel) {
                                 } else lastTask.value!!.uid + 1
                                 val list =
                                     listOf(Subtask(0, subTaskId, subTaskTitle, subTaskDone))
-                                if (subList.value!!.size < MUX_SUBTASK_AMOUNT && subTaskTitle != "") {
+                                if (subList.value!!.size < MAX_SUBTASK_AMOUNT && subTaskTitle != "") {
                                     viewModel.updateSubTaskList(list); subTaskTitle = ""
                                 } else if (subTaskTitle == "") {
                                     Toast.makeText(
