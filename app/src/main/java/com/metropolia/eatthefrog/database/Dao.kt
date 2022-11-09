@@ -36,6 +36,17 @@ interface TaskDao {
     @Query("SELECT COUNT(uid) FROM task WHERE task.deadline = :date")
     fun getDateTaskCount(date: String): LiveData<Int>
 
+    @Query("SELECT COUNT(uid) FROM task WHERE task.completed = 1")
+    fun getClosedTasks(): LiveData<Int>
+
+    @Query("SELECT COUNT(uid) FROM task WHERE task.completed = 1 AND task.isFrog = 1")
+    fun getFrogsEaten(): LiveData<Int>
+
+    @Query("SELECT COUNT(uid) FROM task WHERE task.completed = 0")
+    fun getActiveTasks(): LiveData<Int>
+
+    @Query("SELECT COUNT(uid) FROM task")
+    fun getTotalTaskCount(): LiveData<Int>
 }
 
 @Dao

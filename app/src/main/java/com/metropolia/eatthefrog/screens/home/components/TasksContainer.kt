@@ -46,6 +46,8 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
 
     val currentDateFilter = homeScreenViewModel.selectedFilter.observeAsState()
     val tasks = homeScreenViewModel.getTasks().observeAsState(listOf())
+    val tasksFiltered = (tasks.value.filter { it.deadline == today }).filter { it.isFrog }
+    homeScreenViewModel.dailyFrogSelected.postValue(tasksFiltered.isNotEmpty())
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -90,7 +92,7 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
 
         items(items = items, itemContent = { item ->
             Box(Modifier.padding(10.dp)) {
-                SingleTaskContainer(item, homeScreenViewModel)
+                SingleTaskContainer(item, items, homeScreenViewModel)
             }
         })
     }

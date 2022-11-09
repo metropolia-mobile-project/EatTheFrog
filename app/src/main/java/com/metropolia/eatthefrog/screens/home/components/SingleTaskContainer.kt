@@ -32,7 +32,7 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SingleTaskContainer(task: Task, vm: HomeScreenViewModel) {
+fun SingleTaskContainer(task: Task, tasks: List<Task>, vm: HomeScreenViewModel) {
     val backgroundColor = if (task.isFrog) MaterialTheme.colors.primaryVariant else Color.White
     val taskNameTextColor = if (task.isFrog) Color.White else Color.Black
     val subtaskTextColor = if (task.isFrog) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
