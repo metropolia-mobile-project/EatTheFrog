@@ -23,8 +23,6 @@ import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.activities.MainActivity
 import com.metropolia.eatthefrog.database.Task
-import com.metropolia.eatthefrog.placeholder_data.PlaceholderTask
-import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 /**
