@@ -1,6 +1,7 @@
 package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
@@ -10,6 +11,7 @@ import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.services.APIService
+import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.launch
 
 enum class DateFilter {
@@ -42,8 +44,10 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     fun getSubtasksAmount(id: Long) = database.subtaskDao().getSubtasksAmount(id)
 
     init {
-        viewModelScope.launch {
-            quote = service.getRandomMotivationalQuote()[0]
+        if (quote.q.isEmpty()) {
+            viewModelScope.launch {
+                quote = service.getRandomMotivationalQuote()[0]
+            }
         }
     }
 
@@ -77,13 +81,14 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         showTaskDoneConfirmWindow.value = true
     }
 
-    fun toggleTaskCompleted(t: Task?) {
+    fun toggleTaskCompleted(task: Task?) {
         viewModelScope.launch {
             database.taskDao().toggleTask(highlightedTaskId.value)
             closeTaskConfirmWindow()
 
-            if ((t?.isFrog == true && !showQuoteToast.value) && !t.completed) {
-                Toast.makeText(getApplication(), "\"${quote.q}\"\n\n-${quote.a}", Toast.LENGTH_LONG).show()
+            if ((task?.isFrog == true && !showQuoteToast.value) && !task.completed) {
+                Log.d("TOASTING", "NOW")
+                Toasty.success(getApplication(), "\"${quote.q}\"\n\n-${quote.a}", Toast.LENGTH_LONG).show()
                 showQuoteToast.value = true
             }
         }

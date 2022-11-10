@@ -27,5 +27,3 @@ object APIService {
 
     val service: Service = retrofit.create(Service::class.java)
 }
-
-
