@@ -46,7 +46,12 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     init {
         if (quote.q.isEmpty()) {
             viewModelScope.launch {
-                quote = service.getRandomMotivationalQuote()[0]
+                quote = try {
+                    service.getRandomMotivationalQuote()[0]
+                } catch (e: Exception) {
+                    Log.d("API fetch failed", e.message.toString())
+                    APIService.Result("JUST DO IT!", "Shia LaBeouf", "")
+                }
             }
         }
     }
