@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 import com.metropolia.eatthefrog.constants.USERNAME_KEY
+import com.metropolia.eatthefrog.notification.createNotificationChannel
 import com.metropolia.eatthefrog.screens.MainScreen
 import com.metropolia.eatthefrog.screens.WelcomeScreen
 import com.metropolia.eatthefrog.ui.theme.EatTheFrogTheme
@@ -22,6 +23,7 @@ open class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        createNotificationChannel(this)
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         val sharedPreferences = this.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)

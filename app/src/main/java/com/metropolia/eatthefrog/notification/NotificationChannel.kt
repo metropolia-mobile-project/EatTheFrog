@@ -7,7 +7,9 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.os.Build
 import com.metropolia.eatthefrog.constants.CHANNEL_ID
 
-private fun createNotificationChannel(context: Context) {
+// Taking context as a parameter as the function is outside of the MainActivity
+// Otherwise cannot use the getSystemService()
+fun createNotificationChannel(context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val channel = NotificationChannel(
             CHANNEL_ID,
