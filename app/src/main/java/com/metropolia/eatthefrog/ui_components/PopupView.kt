@@ -1,14 +1,7 @@
-package com.metropolia.eatthefrog
+package com.metropolia.eatthefrog.ui_components
 
 import android.annotation.SuppressLint
-import android.renderscript.RenderScript
-import android.util.Log
-import androidx.compose.animation.*
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -16,14 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.MutableLiveData
-import com.metropolia.eatthefrog.activities.MainActivity
 import kotlinx.coroutines.launch
 
 /**
@@ -32,19 +22,33 @@ import kotlinx.coroutines.launch
 @SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalMaterialApi
 @Composable
-fun PopupView(display: Boolean, callback: () -> Unit, content: @Composable () -> Unit) {
+fun PopupView(display: MutableLiveData<Boolean>, callback: () -> Unit, content: @Composable () -> Unit) {
 
     val modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val modalBottomSheetScope = rememberCoroutineScope()
+    val state = display.observeAsState()
 
-    if (display) {
+    if (state.value == true){
         modalBottomSheetScope.launch {
             modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
-            callback()
+        }
+    } else {
+
+        modalBottomSheetScope.launch {
+            modalBottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
+        }
+    }
+
+    if (modalBottomSheetState.currentValue != ModalBottomSheetValue.Hidden) {
+        DisposableEffect(Unit) {
+            onDispose {
+                callback()
+            }
         }
     }
 
     ModalBottomSheetLayout(
+        modifier = if (state.value == false) Modifier.alpha(0f) else Modifier,
         sheetBackgroundColor = Color.Transparent,
         sheetElevation = 0.dp,
         sheetState = modalBottomSheetState,
@@ -76,15 +80,29 @@ fun PopupView(display: Boolean, callback: () -> Unit, content: @Composable () ->
 @SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalMaterialApi
 @Composable
-fun PopupView(display: Boolean, callback: () -> Unit, headerContent: @Composable () -> Unit, content: @Composable () -> Unit) {
+fun PopupView(display: MutableLiveData<Boolean>, callback: () -> Unit, headerContent: @Composable () -> Unit, content: @Composable () -> Unit) {
 
     val modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val modalBottomSheetScope = rememberCoroutineScope()
 
-    if (display) {
+    val state = display.observeAsState()
+
+    if (state.value == true){
         modalBottomSheetScope.launch {
             modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
-            callback()
+        }
+    } else {
+
+        modalBottomSheetScope.launch {
+            modalBottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
+        }
+    }
+
+    if (modalBottomSheetState.currentValue != ModalBottomSheetValue.Hidden) {
+        DisposableEffect(Unit) {
+            onDispose {
+                callback()
+            }
         }
     }
 

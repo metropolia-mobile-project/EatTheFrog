@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,8 +18,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.metropolia.eatthefrog.PopupView
+import androidx.navigation.NavController
+import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
@@ -30,13 +33,20 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
  */
 @ExperimentalMaterialApi
 @Composable
-fun TaskScreen(vm: HomeScreenViewModel) {
+fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
 
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
     val dailyFrogSelected = vm.dailyFrogSelected.observeAsState()
 
-    PopupView(vm.popupVisible.value, callback = {vm.resetPopupStatus()}) {
+    navController.addOnDestinationChangedListener { _, destination, _->
+        if (destination.route != NavigationItem.Home.route) {
+            vm.resetPopupStatus()
+            Log.d("Navigated to another view", "another view")
+        }
+    }
+
+    PopupView(vm.popupVisible, callback = {vm.resetPopupStatus()}) {
 
         Box(
             Modifier

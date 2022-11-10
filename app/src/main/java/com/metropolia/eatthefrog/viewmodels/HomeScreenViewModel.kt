@@ -1,7 +1,6 @@
 package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
@@ -28,7 +27,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     private val service = APIService.service
 
     val selectedFilter = MutableLiveData(DateFilter.TODAY)
-    var popupVisible = mutableStateOf(false)
+    var popupVisible = MutableLiveData(false)
     var highlightedTaskId = mutableStateOf(0L)
     var showTaskDoneConfirmWindow = mutableStateOf(false)
     var showFrogConfirmWindow = mutableStateOf(false)
