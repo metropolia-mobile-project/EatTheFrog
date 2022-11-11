@@ -1,10 +1,13 @@
 package com.metropolia.eatthefrog.ui_components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 
 /**
@@ -14,15 +17,29 @@ import androidx.compose.runtime.Composable
  * @param description: The text displayed on the window.
  */
 @Composable
-fun ConfirmWindow(confirmCallback: () -> Any, dismissCallback: () -> Any, description: String) {
-    AlertDialog(onDismissRequest = { dismissCallback() },
+fun ConfirmWindow(confirmCallback: (() -> Any?)?, dismissCallback: (() -> Any?)?,
+                  description: String,
+                  modifier: Modifier = Modifier) {
+    AlertDialog(onDismissRequest = {
+        if (dismissCallback != null) {
+            dismissCallback()
+        }
+    }, modifier = modifier,
         dismissButton = {
-            Button(onClick = { dismissCallback() }) {
+            Button(onClick = {
+                if (dismissCallback != null) {
+                    dismissCallback()
+                }
+            }) {
                 Text("Cancel")
             }
         },
         confirmButton = {
-            Button(onClick = { confirmCallback() }) {
+            Button(onClick = {
+                if (confirmCallback != null) {
+                    confirmCallback()
+                }
+            }) {
                 Text("Confirm")
             }
         },

@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,16 +14,18 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.metropolia.eatthefrog.PopupView
+import androidx.navigation.NavController
+import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
+
 
 /**
  * Popup window which displays the selected Task object and its data. Enables the user to set Sub-tasks as complete, as well as
@@ -30,13 +33,20 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
  */
 @ExperimentalMaterialApi
 @Composable
-fun TaskScreen(vm: HomeScreenViewModel) {
+fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
 
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
     val dailyFrogSelected = vm.dailyFrogSelected.observeAsState()
 
-    PopupView(vm.popupVisible.value, callback = {vm.resetPopupStatus()}) {
+    navController.addOnDestinationChangedListener { _, destination, _->
+        if (destination.route != NavigationItem.Home.route) {
+            vm.resetPopupStatus()
+            Log.d("Navigated to another view", "another view")
+        }
+    }
+
+    PopupView(vm.popupVisible, callback = {vm.resetPopupStatus()}) {
 
         Box(
             Modifier
@@ -155,7 +165,7 @@ fun TaskScreen(vm: HomeScreenViewModel) {
         val desc = stringResource(
             if (task.value?.completed == false) R.string.close_task else R.string.open_task,
             task.value?.name ?: "")
-        ConfirmWindow({ vm.toggleTaskCompleted() },{vm.closeTaskConfirmWindow()}, desc)
+        ConfirmWindow({ vm.toggleTaskCompleted(task.value) },{vm.closeTaskConfirmWindow()}, desc)
     }
 
     if (vm.showFrogConfirmWindow.value) {

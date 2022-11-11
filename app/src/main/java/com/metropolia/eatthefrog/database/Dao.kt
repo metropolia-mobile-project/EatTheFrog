@@ -14,10 +14,7 @@ interface TaskDao {
     @Update
     suspend fun update(item: Task)
 
-    @Query("UPDATE task SET frog = (CASE WHEN uid = :id THEN :f ELSE 0 END)")
-    suspend fun updateDailyFrog(f: Boolean, id: Long)
-
-    @Query("UPDATE task SET frog = (CASE WHEN frog = 0 THEN 1 ELSE 0 END) WHERE task.uid = :id")
+    @Query("UPDATE task SET frog = (CASE WHEN frog = 0 AND uid = :id THEN 1 ELSE 0 END)")
     suspend fun toggleFrog(id: Long)
 
     @Query("UPDATE task SET completed = (CASE WHEN completed = 0 THEN 1 ELSE 0 END) WHERE task.uid = :id")
