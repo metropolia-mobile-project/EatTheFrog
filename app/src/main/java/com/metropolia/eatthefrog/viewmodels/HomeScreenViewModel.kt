@@ -3,10 +3,13 @@ package com.metropolia.eatthefrog.viewmodels
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
@@ -93,7 +96,15 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
             if ((task?.isFrog == true && !showQuoteToast.value) && !task.completed) {
                 Log.d("TOASTING", "NOW")
-                Toasty.success(getApplication(), "\"${quote.q}\"\n\n-${quote.a}", Toast.LENGTH_LONG).show()
+
+                Toasty.custom(getApplication(),
+                    "\"${quote.q}\"\n\n-${quote.a}",
+                    R.drawable.edit_24,
+                    R.color.yale_blue,
+                    Toast.LENGTH_LONG,
+                    false,
+                    true).show()
+
                 showQuoteToast.value = true
             }
         }
