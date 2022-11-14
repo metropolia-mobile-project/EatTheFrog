@@ -34,11 +34,12 @@
     <string name="confirm_window">Confirmation window</string>
     <string name="open_task">Open %1$s?</string>
     <string name="close_task">Close %1$s?</string>
-    <string name="closed">Closed</string>
+    <string name="close">Close</string>
     <string name="open">Open</string>
     <string name="set_frog">Set %1$s as daily frog?</string>
     <string name="remove_frog">Remove daily frog from %1$s?</string>
     <string name="no_tasks_for_today">No tasks for today yet.</string>
+    <string name="no_tasks_found">No tasks found.</string>
     <string name="no_tasks_for_this_week">No tasks for this week yet.</string>
     <string name="no_tasks_for_this_month">No tasks for this month yet.</string>
     <string name="go_to_add_task">Go to \'Add task\' tab to get started!</string>

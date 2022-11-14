@@ -59,11 +59,17 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
 
     when(currentDateFilter.value) {
         DateFilter.TODAY -> {
-            emptyTasksText = stringResource(id = R.string.no_tasks_for_today)
+            emptyTasksText = if (searchVisible.value == false) {
+                stringResource(R.string.no_tasks_for_today)
+            } else stringResource(R.string.no_tasks_found)
+
             taskItems = tasks.value.filter { it.deadline == today }
         }
         DateFilter.WEEK -> {
-            emptyTasksText = stringResource(id = R.string.no_tasks_for_this_week)
+            emptyTasksText = if (searchVisible.value == false) {
+                stringResource(id = R.string.no_tasks_for_this_week)
+            } else stringResource(R.string.no_tasks_found)
+
             taskItems = tasks.value.filter {
                 val deadlineDate = SimpleDateFormat(DATE_FORMAT).parse(it.deadline)
                 calendar.time = deadlineDate
@@ -71,7 +77,10 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
             }
         }
         DateFilter.MONTH -> {
-            emptyTasksText = stringResource(id = R.string.no_tasks_for_this_month)
+            emptyTasksText = if (searchVisible.value == false) {
+                stringResource(id = R.string.no_tasks_for_this_month)
+            } else stringResource(R.string.no_tasks_found)
+
             taskItems = tasks.value.filter {
                 val deadlineArray = it.deadline.split(".")
                 val todayArray = today.split(".")
@@ -145,7 +154,9 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
         ) {
             Image(painter = painterResource(id = R.drawable.ic_add_task), modifier = Modifier.padding(top = 30.dp).size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(MaterialTheme.colors.surface))
             Text(text = emptyTasksText, Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
-            Text(text = stringResource(id = R.string.go_to_add_task), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
+            if (searchVisible.value != true) {
+                Text(text = stringResource(id = R.string.go_to_add_task), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
+            }
         }
     }
 
