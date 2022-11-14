@@ -1,7 +1,9 @@
 package com.metropolia.eatthefrog.screens.home.components
 
 import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -85,20 +87,31 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
         .background(MaterialTheme.colors.secondary)) {
         Column {
 
-            Row(modifier = Modifier.padding(20.dp).fillMaxWidth().height(50.dp)) {
-                AnimatedVisibility(visible = !(searchVisible.value as Boolean)) {
-                    Row {
-                        Text(text = stringResource(id = R.string.tasks), color = Color.White, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
-                        Text(text = " | ", color = Color.Black, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
-                        Text(text = LocalDate.now().format(formatter), color = Color.Black, fontSize = 15.sp, modifier = Modifier.align(Alignment.CenterVertically))
+            Box(modifier = Modifier.padding(15.dp).fillMaxWidth().height(60.dp)) {
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = !(searchVisible.value as Boolean),
+                    enter = fadeIn(),
+                    exit = fadeOut()) {
+                    Box(Modifier.fillMaxSize()) {
+                        Row(Modifier.align(Alignment.CenterStart)) {
+                            Text(text = stringResource(id = R.string.tasks), color = Color.White, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
+                            Text(text = " | ", color = Color.Black, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
+                            Text(text = LocalDate.now().format(formatter), color = Color.Black, fontSize = 15.sp, modifier = Modifier.align(Alignment.CenterVertically))
+                        }
                         Image(
                             painter = painterResource(R.drawable.ic_baseline_search_36),
                             modifier = Modifier
+                                .align(Alignment.CenterEnd)
                                 .clickable { homeScreenViewModel.showSearch() },
-                            contentDescription = "open search button")
+                            contentDescription = "open search button",
+                        )
                     }
                 }
-                AnimatedVisibility(visible = searchVisible.value ?: false) {
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = searchVisible.value ?: false,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
                     SearchContainer(homeScreenViewModel)
                 }
             }

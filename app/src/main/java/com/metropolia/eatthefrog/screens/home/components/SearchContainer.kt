@@ -6,7 +6,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -30,6 +33,7 @@ fun SearchContainer(vm: HomeScreenViewModel) {
             .clip(RoundedCornerShape(30.dp))
             .background(Color.Transparent),
         value = vm.searchInput.value,
+        label = {Text("Search")},
         onValueChange = { vm.updateSearchInput(it) },
         singleLine = true,
         keyboardActions = KeyboardActions(
@@ -49,6 +53,12 @@ fun SearchContainer(vm: HomeScreenViewModel) {
             modifier = Modifier
                 .clickable { focusManager.clearFocus() },
             contentDescription = "search button") },
+        colors = TextFieldDefaults.textFieldColors(
+            focusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            backgroundColor = MaterialTheme.colors.surface,
+        )
     )
 }
 
