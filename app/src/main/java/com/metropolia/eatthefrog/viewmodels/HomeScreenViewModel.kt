@@ -10,12 +10,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.services.APIService
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 enum class DateFilter {
     TODAY,
@@ -30,6 +33,9 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     private val database = InitialDB.get(application)
     private val service = APIService.service
+
+    private val sdf = SimpleDateFormat(DATE_FORMAT)
+    val today: String = sdf.format(Date())
 
     val selectedFilter = MutableLiveData(DateFilter.TODAY)
     var popupVisible = MutableLiveData(false)
@@ -120,7 +126,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun toggleTaskFrog() {
         viewModelScope.launch {
-            database.taskDao().toggleFrog(highlightedTaskId.value)
+            database.taskDao().toggleFrog(today, highlightedTaskId.value)
             closeFrogConfirmWindow()
         }
     }

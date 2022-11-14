@@ -98,20 +98,23 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                     item {
                         Text(task.value?.description ?: "", Modifier.padding(bottom = 15.dp))
 
-                        Row(
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(stringResource(R.string.daily_frog))
-                            Checkbox(
-                                checked = task.value?.isFrog ?: false,
-                                onCheckedChange = { vm.openFrogConfirmWindow() }
-                            )
+                        if (vm.selectedFilter.value == DateFilter.TODAY) {
+                            Row(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp),
+                                horizontalArrangement = Arrangement.End,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(stringResource(R.string.daily_frog))
+                                Checkbox(
+                                    checked = task.value?.isFrog ?: false,
+                                    onCheckedChange = { vm.openFrogConfirmWindow() }
+                                )
+                            }
                         }
                     }
+
                     if (subtasks.value.isNotEmpty()) {
                         itemsIndexed(subtasks.value) { i, st ->
                             Row {

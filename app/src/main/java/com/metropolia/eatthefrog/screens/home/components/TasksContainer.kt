@@ -40,8 +40,8 @@ import java.util.*
  */
 @Composable
 fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
-    val sdf = SimpleDateFormat(DATE_FORMAT)
-    val today = sdf.format(Date())
+
+    val today = homeScreenViewModel.today
     val formatter = DateTimeFormatter.ofPattern("dd MMMM, uuuu")
     val calendar = Calendar.getInstance()
 
