@@ -1,6 +1,9 @@
 package com.metropolia.eatthefrog.screens.home.components
 
 import android.util.Log
+import androidx.compose.animation.*
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -47,6 +50,7 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
 
     val currentDateFilter = homeScreenViewModel.selectedFilter.observeAsState()
     val tasks = homeScreenViewModel.getTasks().observeAsState(listOf())
+    val searchVisible = homeScreenViewModel.searchVisible.observeAsState()
     val tasksFiltered = (tasks.value.filter { it.deadline == today }).filter { it.isFrog }
     homeScreenViewModel.dailyFrogSelected.postValue(tasksFiltered.isNotEmpty())
 
@@ -55,11 +59,17 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
 
     when(currentDateFilter.value) {
         DateFilter.TODAY -> {
-            emptyTasksText = stringResource(id = R.string.no_tasks_for_today)
+            emptyTasksText = if (searchVisible.value == false) {
+                stringResource(R.string.no_tasks_for_today)
+            } else stringResource(R.string.no_tasks_found)
+
             taskItems = tasks.value.filter { it.deadline == today }
         }
         DateFilter.WEEK -> {
-            emptyTasksText = stringResource(id = R.string.no_tasks_for_this_week)
+            emptyTasksText = if (searchVisible.value == false) {
+                stringResource(id = R.string.no_tasks_for_this_week)
+            } else stringResource(R.string.no_tasks_found)
+
             taskItems = tasks.value.filter {
                 val deadlineDate = SimpleDateFormat(DATE_FORMAT).parse(it.deadline)
                 calendar.time = deadlineDate
@@ -67,7 +77,10 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
             }
         }
         DateFilter.MONTH -> {
-            emptyTasksText = stringResource(id = R.string.no_tasks_for_this_month)
+            emptyTasksText = if (searchVisible.value == false) {
+                stringResource(id = R.string.no_tasks_for_this_month)
+            } else stringResource(R.string.no_tasks_found)
+
             taskItems = tasks.value.filter {
                 val deadlineArray = it.deadline.split(".")
                 val todayArray = today.split(".")
@@ -81,12 +94,37 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
         .fillMaxWidth()
         .clip(RoundedCornerShape(topStart = 50.dp))
         .background(MaterialTheme.colors.secondary)) {
-        Column() {
-            Row(modifier = Modifier.padding(20.dp)) {
-                Text(text = stringResource(id = R.string.tasks), color = Color.White, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
-                Text(text = " | ", color = Color.Black, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
-                Text(text = LocalDate.now().format(formatter), color = Color.Black, fontSize = 15.sp, modifier = Modifier.align(Alignment.CenterVertically))
+        Column {
+
+            Box(modifier = Modifier.padding(15.dp).fillMaxWidth().height(60.dp)) {
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = !(searchVisible.value as Boolean),
+                    enter = fadeIn(),
+                    exit = fadeOut()) {
+                    Box(Modifier.fillMaxSize()) {
+                        Row(Modifier.align(Alignment.CenterStart)) {
+                            Text(text = stringResource(id = R.string.tasks), color = Color.White, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
+                            Text(text = " | ", color = Color.Black, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
+                            Text(text = LocalDate.now().format(formatter), color = Color.Black, fontSize = 15.sp, modifier = Modifier.align(Alignment.CenterVertically))
+                        }
+                        Image(
+                            painter = painterResource(R.drawable.ic_baseline_search_36),
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .clickable { homeScreenViewModel.showSearch() },
+                            contentDescription = "open search button",
+                        )
+                    }
+                }
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = searchVisible.value ?: false,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    SearchContainer(homeScreenViewModel)
+                }
             }
+
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                 DateFilterButton(type = DateFilter.TODAY, homeScreenViewModel = homeScreenViewModel)
                 DateFilterButton(type = DateFilter.WEEK, homeScreenViewModel = homeScreenViewModel)
@@ -116,7 +154,9 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
         ) {
             Image(painter = painterResource(id = R.drawable.ic_add_task), modifier = Modifier.padding(top = 30.dp).size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(MaterialTheme.colors.surface))
             Text(text = emptyTasksText, Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
-            Text(text = stringResource(id = R.string.go_to_add_task), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
+            if (searchVisible.value != true) {
+                Text(text = stringResource(id = R.string.go_to_add_task), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
+            }
         }
     }
 

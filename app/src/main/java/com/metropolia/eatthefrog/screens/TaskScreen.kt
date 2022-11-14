@@ -70,8 +70,8 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                     ),
                 )
                 Text(
-                    if (task.value?.completed == true)
-                    stringResource(R.string.closed)
+                    if (task.value?.completed == false)
+                    stringResource(R.string.close)
                     else stringResource(R.string.open))
             }
 
@@ -155,8 +155,9 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        Text(st.name, modifier = Modifier.padding(start = 10.dp))
+                                        Text(st.name, modifier = Modifier.padding(start = 10.dp).fillMaxWidth(0.8f))
                                         Checkbox(
+                                            modifier = Modifier.fillMaxWidth(),
                                             checked = st.completed,
                                             onCheckedChange = { vm.updateSubTask(st, it) })
                                     }
