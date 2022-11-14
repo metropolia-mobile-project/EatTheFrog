@@ -14,10 +14,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.R
@@ -85,74 +88,86 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally) {
 
                 Text(task.value?.name ?: "", Modifier.padding(bottom = 15.dp), fontWeight = FontWeight.Bold)
-                Text(task.value?.description ?: "", Modifier.padding(bottom = 15.dp))
-
-                if (vm.selectedFilter.value == DateFilter.TODAY && (dailyFrogSelected.value == false || task.value?.isFrog == true)) {
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(stringResource(R.string.daily_frog))
-                        Checkbox(
-                            checked = task.value?.isFrog ?: false,
-                            onCheckedChange = { vm.openFrogConfirmWindow() }
-                        )
-                    }
-                }
 
                 LazyColumn(
                     Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(1f)
+                        .padding(top = 20.dp)
                 ) {
+                    item {
+                        Text(task.value?.description ?: "", Modifier.padding(bottom = 15.dp))
 
-                    itemsIndexed(subtasks.value) { i, st ->
-                        Row {
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(stringResource(R.string.daily_frog))
+                            Checkbox(
+                                checked = task.value?.isFrog ?: false,
+                                onCheckedChange = { vm.openFrogConfirmWindow() }
+                            )
+                        }
+                    }
+                    if (subtasks.value.isNotEmpty()) {
+                        itemsIndexed(subtasks.value) { i, st ->
+                            Row {
 
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Image(
-                                    painter = if (!st.completed) {
-                                        painterResource(R.drawable.radio_btn_checked)
-                                    } else {
-                                        painterResource(R.drawable.radio_btn_unchecked)
-                                    },
-                                    contentDescription = ""
-                                )
-
-                                if (i < subtasks.value.size - 1) {
-                                    Spacer(Modifier.padding(2.dp))
-                                    Divider(
-                                        modifier = Modifier
-                                            .height(80.dp)
-                                            .width(2.dp), color = MaterialTheme.colors.primary
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Image(
+                                        painter = if (!st.completed) {
+                                            painterResource(R.drawable.radio_btn_checked)
+                                        } else {
+                                            painterResource(R.drawable.radio_btn_unchecked)
+                                        },
+                                        contentDescription = ""
                                     )
-                                    Spacer(Modifier.padding(2.dp))
+
+                                    if (i < subtasks.value.size - 1) {
+                                        Spacer(Modifier.padding(2.dp))
+                                        Divider(
+                                            modifier = Modifier
+                                                .height(80.dp)
+                                                .width(2.dp), color = MaterialTheme.colors.primary
+                                        )
+                                        Spacer(Modifier.padding(2.dp))
+                                    }
+                                }
+
+                                Spacer(Modifier.width(5.dp))
+
+                                Card(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(15.dp))
+                                        .wrapContentSize(), elevation = 25.dp
+                                ) {
+                                    Row(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .padding(5.dp)
+                                            .background(MaterialTheme.colors.background),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Text(st.name, modifier = Modifier.padding(start = 10.dp))
+                                        Checkbox(
+                                            checked = st.completed,
+                                            onCheckedChange = { vm.updateSubTask(st, it) })
+                                    }
                                 }
                             }
-
-                            Spacer(Modifier.width(5.dp))
-
-                            Card(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(15.dp))
-                                    .wrapContentSize(), elevation = 25.dp
-                            ) {
-                                Row(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .padding(5.dp)
-                                        .background(MaterialTheme.colors.background),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween
-                                ) {
-                                    Text(st.name, modifier = Modifier.padding(start = 10.dp))
-                                    Checkbox(
-                                        checked = st.completed,
-                                        onCheckedChange = { vm.updateSubTask(st, it) })
-                                }
+                        }
+                    } else {
+                        item {
+                            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                                Image(painter = painterResource(id = R.drawable.ic_add_task),
+                                    modifier = Modifier
+                                        .padding(top = 30.dp)
+                                        .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(MaterialTheme.colors.surface))
+                                Text(text = stringResource(id = R.string.no_subtasks), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
                             }
                         }
                     }
