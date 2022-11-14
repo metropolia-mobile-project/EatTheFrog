@@ -45,10 +45,10 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     var showFrogConfirmWindow = mutableStateOf(false)
     var showQuoteToast = mutableStateOf(false)
     val dailyFrogSelected = MutableLiveData(false)
-    var searchInput = mutableStateOf("Placeholder input")
+    var searchInput = mutableStateOf("")
     private var quote = APIService.Result("", "", "")
 
-    fun getTasks() = database.taskDao().getAllTasks()
+    fun getTasks() = database.taskDao().getAllTasks("%${searchInput.value}")
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
     fun getDateTaskCount(date: String) = database.taskDao().getDateTaskCount(date)
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
@@ -85,10 +85,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun closeSearch() {
         searchVisible.value = false
-    }
-
-    fun doSearch() {
-
+        searchInput.value = ""
     }
 
     fun updateSearchInput(input: String) {
@@ -119,8 +116,6 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
             closeTaskConfirmWindow()
 
             if ((task?.isFrog == true && !showQuoteToast.value) && !task.completed) {
-                Log.d("TOASTING", "NOW")
-
                 Toasty.custom(getApplication(),
                     "\"${quote.q}\"\n\n-${quote.a}",
                     R.drawable.edit_24,

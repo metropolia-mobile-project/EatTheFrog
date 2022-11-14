@@ -21,8 +21,8 @@ interface TaskDao {
     suspend fun toggleTask(id: Long)
 
     // Query
-    @Query("SELECT * FROM task ORDER BY frog DESC")
-    fun getAllTasks(): LiveData<List<Task>>
+    @Query("SELECT * FROM task WHERE task_name LIKE '%' || :pattern || '%' ORDER BY frog DESC")
+    fun getAllTasks(pattern: String): LiveData<List<Task>>
 
     @Query("SELECT * FROM task WHERE task.uid = :id")
     fun getSpecificTask(id: Long): LiveData<Task>

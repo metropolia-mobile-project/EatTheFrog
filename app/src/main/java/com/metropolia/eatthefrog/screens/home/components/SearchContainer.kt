@@ -5,11 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
@@ -17,6 +21,9 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 @Composable
 fun SearchContainer(vm: HomeScreenViewModel) {
+
+    val focusManager = LocalFocusManager.current
+
     TextField(
         modifier = Modifier
             .fillMaxSize()
@@ -25,6 +32,9 @@ fun SearchContainer(vm: HomeScreenViewModel) {
         value = vm.searchInput.value,
         onValueChange = { vm.updateSearchInput(it) },
         singleLine = true,
+        keyboardActions = KeyboardActions(
+            onDone = { focusManager.clearFocus() }
+        ),
         leadingIcon = {
 
             Image(
@@ -37,7 +47,8 @@ fun SearchContainer(vm: HomeScreenViewModel) {
             Image(
             painter = painterResource(R.drawable.ic_baseline_search_36),
             modifier = Modifier
-                .clickable { vm.doSearch() },
+                .clickable { focusManager.clearFocus() },
             contentDescription = "search button") },
     )
 }
+
