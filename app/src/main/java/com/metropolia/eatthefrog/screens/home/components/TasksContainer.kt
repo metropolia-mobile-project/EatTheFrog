@@ -1,15 +1,13 @@
 package com.metropolia.eatthefrog.screens.home.components
 
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -19,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key.Companion.D
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,6 +45,7 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
 
     val currentDateFilter = homeScreenViewModel.selectedFilter.observeAsState()
     val tasks = homeScreenViewModel.getTasks().observeAsState(listOf())
+    val searchVisible = homeScreenViewModel.searchVisible.observeAsState()
     val tasksFiltered = (tasks.value.filter { it.deadline == today }).filter { it.isFrog }
     homeScreenViewModel.dailyFrogSelected.postValue(tasksFiltered.isNotEmpty())
 
@@ -53,12 +53,26 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
         .fillMaxWidth()
         .clip(RoundedCornerShape(topStart = 50.dp))
         .background(MaterialTheme.colors.secondary)) {
-        Column() {
-            Row(modifier = Modifier.padding(20.dp)) {
-                Text(text = stringResource(id = R.string.tasks), color = Color.White, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
-                Text(text = " | ", color = Color.Black, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
-                Text(text = LocalDate.now().format(formatter), color = Color.Black, fontSize = 15.sp, modifier = Modifier.align(Alignment.CenterVertically))
+        Column {
+
+            Row(modifier = Modifier.padding(20.dp).fillMaxWidth().height(50.dp)) {
+                AnimatedVisibility(visible = !(searchVisible.value as Boolean)) {
+                    Row {
+                        Text(text = stringResource(id = R.string.tasks), color = Color.White, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
+                        Text(text = " | ", color = Color.Black, fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterVertically))
+                        Text(text = LocalDate.now().format(formatter), color = Color.Black, fontSize = 15.sp, modifier = Modifier.align(Alignment.CenterVertically))
+                        Image(
+                            painter = painterResource(R.drawable.ic_baseline_search_36),
+                            modifier = Modifier
+                                .clickable { homeScreenViewModel.showSearch() },
+                            contentDescription = "open search button")
+                    }
+                }
+                AnimatedVisibility(visible = searchVisible.value ?: false) {
+                    SearchContainer(homeScreenViewModel)
+                }
             }
+
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                 DateFilterButton(type = DateFilter.TODAY, homeScreenViewModel = homeScreenViewModel)
                 DateFilterButton(type = DateFilter.WEEK, homeScreenViewModel = homeScreenViewModel)

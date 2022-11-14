@@ -33,11 +33,13 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     val selectedFilter = MutableLiveData(DateFilter.TODAY)
     var popupVisible = MutableLiveData(false)
+    var searchVisible = MutableLiveData(false)
     var highlightedTaskId = mutableStateOf(0L)
     var showTaskDoneConfirmWindow = mutableStateOf(false)
     var showFrogConfirmWindow = mutableStateOf(false)
     var showQuoteToast = mutableStateOf(false)
     val dailyFrogSelected = MutableLiveData(false)
+    var searchInput = mutableStateOf("Placeholder input")
     private var quote = APIService.Result("", "", "")
 
     fun getTasks() = database.taskDao().getAllTasks()
@@ -69,6 +71,22 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun resetPopupStatus() {
         popupVisible.value = false
+    }
+
+    fun showSearch() {
+        searchVisible.value = true
+    }
+
+    fun closeSearch() {
+        searchVisible.value = false
+    }
+
+    fun doSearch() {
+
+    }
+
+    fun updateSearchInput(input: String) {
+        searchInput.value = input
     }
 
     fun updateHighlightedTask(t: Task) {
