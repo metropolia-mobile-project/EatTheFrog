@@ -1,11 +1,14 @@
 package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.metropolia.eatthefrog.constants.PROFILE_IMAGE_KEY
+import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
@@ -16,9 +19,13 @@ import java.util.*
 
 class AddTaskScreenViewModel(application: Application) : AndroidViewModel(application) {
 
+    val app = application
     private val database = InitialDB.get(application)
 
-
+    fun loadProfilePicture() : String? {
+        val sharedPreferences = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+        return sharedPreferences.getString(PROFILE_IMAGE_KEY, null)
+    }
 
     var subTaskList = MutableLiveData<List<Subtask>>(listOf())
 

@@ -31,7 +31,7 @@ fun ProfileScreen(username: String, application: Application) {
 
     ) {
 
-        ProfileGalleryPickerContainer()
+        ProfileGalleryPickerContainer(profileScreenViewModel)
 
         Text(
             text = username,
