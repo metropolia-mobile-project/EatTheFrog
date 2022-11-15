@@ -49,12 +49,12 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
     val calendar = Calendar.getInstance()
 
     val currentDateFilter = homeScreenViewModel.selectedFilter.observeAsState()
-    val tasks = homeScreenViewModel.getTasks().observeAsState(listOf())
+    val tasks = homeScreenViewModel.getTasks().observeAsState(null)
     val searchVisible = homeScreenViewModel.searchVisible.observeAsState()
-    val tasksFiltered = (tasks.value.filter { it.deadline == today }).filter { it.isFrog }
-    homeScreenViewModel.dailyFrogSelected.postValue(tasksFiltered.isNotEmpty())
+    val tasksFiltered = (tasks.value?.filter { it.deadline == today })?.filter { it.isFrog }
+    homeScreenViewModel.dailyFrogSelected.postValue(tasksFiltered?.isNotEmpty())
 
-    var taskItems: List<Task> = listOf()
+    var taskItems: List<Task>? = listOf()
     val emptyTasksText: String
 
     when(currentDateFilter.value) {
@@ -63,14 +63,14 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
                 stringResource(R.string.no_tasks_for_today)
             } else stringResource(R.string.no_tasks_found)
 
-            taskItems = tasks.value.filter { it.deadline == today }
+            taskItems = tasks.value?.filter { it.deadline == today }
         }
         DateFilter.WEEK -> {
             emptyTasksText = if (searchVisible.value == false) {
                 stringResource(id = R.string.no_tasks_for_this_week)
             } else stringResource(R.string.no_tasks_found)
 
-            taskItems = tasks.value.filter {
+            taskItems = tasks.value?.filter {
                 val deadlineDate = SimpleDateFormat(DATE_FORMAT).parse(it.deadline)
                 calendar.time = deadlineDate
                 calendar.get(Calendar.WEEK_OF_YEAR) == currentWeek
@@ -81,7 +81,7 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
                 stringResource(id = R.string.no_tasks_for_this_month)
             } else stringResource(R.string.no_tasks_found)
 
-            taskItems = tasks.value.filter {
+            taskItems = tasks.value?.filter {
                 val deadlineArray = it.deadline.split(".")
                 val todayArray = today.split(".")
                 deadlineArray[1] == todayArray[1] && deadlineArray[2] == todayArray[2]
@@ -96,7 +96,10 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
         .background(MaterialTheme.colors.secondary)) {
         Column {
 
-            Box(modifier = Modifier.padding(15.dp).fillMaxWidth().height(60.dp)) {
+            Box(modifier = Modifier
+                .padding(15.dp)
+                .fillMaxWidth()
+                .height(60.dp)) {
                 androidx.compose.animation.AnimatedVisibility(
                     visible = !(searchVisible.value as Boolean),
                     enter = fadeIn(),
@@ -132,18 +135,34 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
             }
         }
     }
-    if (taskItems.isNotEmpty()) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.secondary)
-        ) {
-
-            items(items = taskItems, itemContent = { item ->
-                Box(Modifier.padding(10.dp)) {
-                    SingleTaskContainer(item, homeScreenViewModel)
+    if (taskItems != null) {
+         if (taskItems.isNotEmpty()) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.secondary)
+            ) {
+                items(items = taskItems, itemContent = { item ->
+                    Box(Modifier.padding(10.dp)) {
+                        SingleTaskContainer(item, homeScreenViewModel)
+                    }
+                })
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.secondary),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(painter = painterResource(id = R.drawable.ic_add_task), modifier = Modifier
+                    .padding(top = 30.dp)
+                    .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(MaterialTheme.colors.surface))
+                Text(text = emptyTasksText, Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
+                if (searchVisible.value != true) {
+                    Text(text = stringResource(id = R.string.go_to_add_task), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
                 }
-            })
+            }
         }
     } else {
         Column(
@@ -152,11 +171,11 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
                 .background(MaterialTheme.colors.secondary),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(painter = painterResource(id = R.drawable.ic_add_task), modifier = Modifier.padding(top = 30.dp).size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(MaterialTheme.colors.surface))
-            Text(text = emptyTasksText, Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
-            if (searchVisible.value != true) {
-                Text(text = stringResource(id = R.string.go_to_add_task), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
-            }
+            CircularProgressIndicator(
+                modifier = Modifier.size(100.dp).padding(top = 50.dp),
+                color = MaterialTheme.colors.primaryVariant,
+                strokeWidth = 10.dp
+            )
         }
     }
 
