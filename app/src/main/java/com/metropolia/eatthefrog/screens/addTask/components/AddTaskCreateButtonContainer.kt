@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -25,9 +26,10 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 fun AddTaskCreateButtonContainer(
     viewModel: AddTaskScreenViewModel,
     navHost: NavHostController,
-    newTask: Task
+    newTask: Task,
+    isEditMode: Boolean?
 ) {
-
+    Log.d("TESTING", isEditMode.toString())
     val context = LocalContext.current
 
     Column(
@@ -58,7 +60,11 @@ fun AddTaskCreateButtonContainer(
                 .width(200.dp)
                 .padding(top = 50.dp)
         ) {
-            Text(text = stringResource(id = R.string.create_task))
+            if(isEditMode == true){
+                Text(text = "Edit task")
+            } else {
+                Text(text = stringResource(id = R.string.create_task))
+            }
         }
     }
 }

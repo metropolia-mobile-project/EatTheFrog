@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -28,7 +29,14 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AddTaskDescAndTypeContainer(viewModel: AddTaskScreenViewModel, description: String, onDescChange: (String) -> Unit, onTaskChange: (TaskType) -> Unit) {
+fun AddTaskDescAndTypeContainer(
+    viewModel: AddTaskScreenViewModel,
+    description: String,
+    onDescChange: (String) -> Unit,
+    onTaskChange: (TaskType) -> Unit,
+    isEditMode: Boolean, ) {
+
+
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -38,6 +46,7 @@ fun AddTaskDescAndTypeContainer(viewModel: AddTaskScreenViewModel, description: 
     val disabledValue = ""
     val taskTypeList = listOf(TaskType.PLANNING, TaskType.MEETING, TaskType.DEVELOPMENT)
     var taskType by remember { mutableStateOf(taskTypeList[0]) }
+
     onTaskChange(taskType)
 
     Column(

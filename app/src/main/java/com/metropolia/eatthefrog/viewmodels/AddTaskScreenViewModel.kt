@@ -23,6 +23,8 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
     var subTaskList = MutableLiveData<List<Subtask>>(listOf())
 
 
+    fun getSelectedTask(id: Long) = database.taskDao().getSpecificTask(id)
+
     fun updateSubTaskList(list: List<Subtask>) {
         val oldList = subTaskList.value
         subTaskList.value = oldList!! + list

@@ -18,8 +18,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.metropolia.eatthefrog.PopupView
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
@@ -30,7 +32,7 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
  */
 @ExperimentalMaterialApi
 @Composable
-fun TaskScreen(vm: HomeScreenViewModel) {
+fun TaskScreen(vm: HomeScreenViewModel, navHostController: NavHostController) {
 
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
@@ -67,7 +69,7 @@ fun TaskScreen(vm: HomeScreenViewModel) {
                 painter = painterResource(R.drawable.edit_24),
                 modifier = Modifier
                     .align(alignment = Alignment.TopEnd)
-                    .clickable { /* Open up CreateTaskScreen with the task*/ },
+                    .clickable { navHostController.navigate("add_task/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}") },
                 contentDescription = "edit button")
 
             Column(
@@ -165,4 +167,5 @@ fun TaskScreen(vm: HomeScreenViewModel) {
         ConfirmWindow({ vm.toggleTaskFrog() },{vm.closeFrogConfirmWindow()}, desc)
     }
 }
+
 

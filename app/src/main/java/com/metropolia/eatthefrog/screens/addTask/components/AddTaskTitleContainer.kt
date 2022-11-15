@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -11,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -25,6 +27,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 
 /**
@@ -36,11 +39,14 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 fun AddTaskTitleContainer(
     viewModel: AddTaskScreenViewModel,
     taskTitle: String,
-    onNameChange: (String) -> Unit
+    onNameChange: (String) -> Unit,
+    isEditMode: Boolean,
 ) {
 
+    Log.d("TESTING ISEDITMODE AT TITLECONTAINER", isEditMode.toString())
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
 
     Row(
         modifier = Modifier
@@ -63,9 +69,12 @@ fun AddTaskTitleContainer(
             modifier = Modifier
                 .padding(15.dp, 0.dp, 0.dp, 0.dp),
         ) {
+
             Text(
                 text = stringResource(id = R.string.task_name)
             )
+
+
             Box(
                 modifier = Modifier
                     .padding(0.dp),
