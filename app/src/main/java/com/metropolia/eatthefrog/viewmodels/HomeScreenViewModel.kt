@@ -1,6 +1,7 @@
 package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.material.MaterialTheme
@@ -11,6 +12,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.constants.PROFILE_IMAGE_KEY
+import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
@@ -31,6 +34,7 @@ enum class DateFilter {
  */
 class HomeScreenViewModel(application: Application) : AndroidViewModel(application) {
 
+    val app = application
     private val database = InitialDB.get(application)
     private val service = APIService.service
 
@@ -142,5 +146,10 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
             database.taskDao().toggleFrog(today, highlightedTaskId.value)
             closeFrogConfirmWindow()
         }
+    }
+
+    fun loadProfilePicture() : String? {
+        val sharedPreferences = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+        return sharedPreferences.getString(PROFILE_IMAGE_KEY, null)
     }
 }
