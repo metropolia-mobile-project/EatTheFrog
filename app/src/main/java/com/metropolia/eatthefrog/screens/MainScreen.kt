@@ -36,7 +36,7 @@ fun MainScreen(username: String, application: Application) {
     },
     backgroundColor = MaterialTheme.colors.surface)
 
-    NotificationManagerCompat.from(LocalContext.current).notify(0, builder)
+    //NotificationManagerCompat.from(LocalContext.current).notify(0, builder)
     /*with(NotificationManagerCompat.from(LocalContext.current)) {
         notify(0, builder)
     }*/

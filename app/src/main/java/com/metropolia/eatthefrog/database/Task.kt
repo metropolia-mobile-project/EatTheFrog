@@ -4,8 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
-@Entity
+@Entity (tableName = "task")
 data class Task(
     @PrimaryKey(autoGenerate = true) val uid: Long = 0,
     @ColumnInfo(name = "task_name") val name: String,
@@ -15,7 +16,7 @@ data class Task(
     @ColumnInfo(name = "time") val time: String?,
     @ColumnInfo(name = "completed") val completed: Boolean = false,
     @ColumnInfo(name = "frog") val isFrog: Boolean
-)
+) : Serializable
 
 @Entity(
     tableName = "subtask",
