@@ -32,4 +32,5 @@ fun HomeScreen(username: String, application: Application, navController: NavCon
         TasksContainer(homeScreenViewModel, currentWeek)
     }
     TaskScreen(homeScreenViewModel, navController)
+    FrogCompletedScreen(homeScreenViewModel)
 }

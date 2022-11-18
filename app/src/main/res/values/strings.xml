@@ -38,6 +38,7 @@
     <string name="close_task">Close %1$s?</string>
     <string name="close">Close</string>
     <string name="open">Open</string>
+    <string name="good_job">Good job!</string>
     <string name="set_frog">Set %1$s as daily frog?</string>
     <string name="remove_frog">Remove daily frog from %1$s?</string>
     <string name="no_tasks_for_today">No tasks for today yet.</string>

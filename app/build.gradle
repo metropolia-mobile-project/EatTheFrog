@@ -54,6 +54,9 @@ dependencies {
     def room_version = "2.4.3"
     def retrofit_version = '2.9.0'
 
+    // Vector animations
+    implementation("androidx.compose.animation:animation-graphics:1.1.0-alpha01")
+
     // Toasty
     implementation "com.github.GrenderG:Toasty:1.5.2"
 
