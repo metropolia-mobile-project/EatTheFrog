@@ -21,7 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
-import com.metropolia.eatthefrog.constants.TIME_FORMAT
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,7 +28,13 @@ import java.util.*
  * UI and functionality to set deadlines (date and time) to task
  */
 @Composable
-fun AddTaskDateAndTimeContainer(onDateChange: (String) -> Unit, onTimeChange: (String) -> Unit) {
+fun AddTaskDateAndTimeContainer(
+    onDateChange: (String) -> Unit,
+    onTimeChange: (String) -> Unit,
+    isEditMode: Boolean,
+    dateDeadline: String,
+    timeDeadline: String
+) {
 
 
     val context = LocalContext.current
@@ -42,8 +47,8 @@ fun AddTaskDateAndTimeContainer(onDateChange: (String) -> Unit, onTimeChange: (S
     val mHour = sCalendar.get(Calendar.HOUR_OF_DAY)
     val mMinute = sCalendar.get(Calendar.MINUTE)
 
-    val sDate = remember { mutableStateOf(currentDate) }
-    val sTime = remember { mutableStateOf("16.00") }
+    val sDate = remember { mutableStateOf( if(isEditMode){dateDeadline} else {currentDate}) }
+    val sTime = remember { mutableStateOf(if(isEditMode){timeDeadline} else {"16.00"}) }
 
     onDateChange(sDate.value.toString())
     onTimeChange(sTime.value)

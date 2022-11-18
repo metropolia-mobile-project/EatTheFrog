@@ -28,12 +28,14 @@ import java.util.*
 fun AddTaskBuildScreenContainer(
     viewModel: AddTaskScreenViewModel,
     navHost: NavHostController,
+    editTaskId: Long,
     isEditMode: Boolean,
     editTitle: String?,
     editDesc: String?,
-    dateDeadline: String?,
-    timeDeadline: String?
+    dateDeadline: String,
+    timeDeadline: String
 ) {
+
 
 
     val taskTypeList = listOf(TaskType.PLANNING, TaskType.MEETING, TaskType.DEVELOPMENT)
@@ -46,7 +48,7 @@ fun AddTaskBuildScreenContainer(
     var sTime by remember { mutableStateOf(if(isEditMode) {timeDeadline} else {"16.00"}) }
     val newTask =
         Task(0, taskTitle ?: "", description ?: "", taskType, sDate ?: currentDate, sTime, completed = false, isFrog = false)
-
+    val editTask = Task(editTaskId, taskTitle ?: "", description ?: "", taskType, sDate ?: currentDate, sTime, completed = false, isFrog = false)
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -59,9 +61,9 @@ fun AddTaskBuildScreenContainer(
 
         AddTaskTitleContainer(viewModel, taskTitle ?: "", onNameChange = { taskTitle = it }, isEditMode)
         AddTaskDescAndTypeContainer(viewModel = viewModel, description ?: "", onDescChange = { description = it }, onTaskChange = { taskType = it }, isEditMode)
-        AddTaskDateAndTimeContainer(onDateChange = { sDate = it }, onTimeChange = { sTime = it })
-        AddTaskLazyColumnContainer(viewModel = viewModel)
+        AddTaskDateAndTimeContainer(onDateChange = { sDate = it }, onTimeChange = { sTime = it }, isEditMode, dateDeadline, timeDeadline)
+        AddTaskLazyColumnContainer(viewModel = viewModel, isEditMode)
         AddTaskCreateSubsContainer(viewModel = viewModel)
-        AddTaskCreateButtonContainer(viewModel = viewModel, navHost = navHost, newTask, isEditMode)
+        AddTaskCreateButtonContainer(viewModel = viewModel, navHost = navHost, newTask, isEditMode, editTask)
     }
 }

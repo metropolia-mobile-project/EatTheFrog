@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.screens.HomeScreen
 import com.metropolia.eatthefrog.screens.ProfileScreen
 import com.metropolia.eatthefrog.screens.addTask.AddTaskScreen
@@ -19,7 +20,11 @@ fun Navigation(navController: NavHostController, username: String, application: 
         composable(NavigationItem.Home.route) {
             HomeScreen(username, application, navController)
         }
-        composable("add_task/{isEdit}/{taskTitle}/{taskDesc}/{dateDeadline}/{timeDeadline}", arguments = listOf(
+        composable("add_task/{taskUid}/{isEdit}/{taskTitle}/{taskDesc}/{dateDeadline}/{timeDeadline}", arguments = listOf(
+            navArgument(name = "taskUid"){
+                type = NavType.LongType
+                defaultValue = 0
+            },
             navArgument(name = "isEdit") {
                 type = NavType.BoolType
                 defaultValue = false
@@ -42,15 +47,20 @@ fun Navigation(navController: NavHostController, username: String, application: 
             }
         )
         ) { navBackStackEntry ->
-            AddTaskScreen(
-                application = application, navHost = navController,
-                isEditMode = navBackStackEntry.arguments!!.getBoolean("isEdit"),
-                editTitle = navBackStackEntry.arguments!!.getString("taskTitle"),
-                editDesc = navBackStackEntry.arguments!!.getString("taskDesc"),
-                dateDeadline = navBackStackEntry.arguments!!.getString("dateDeadline"),
-                timeDeadline = navBackStackEntry.arguments!!.getString("timeDeadline"),
+            navBackStackEntry.arguments!!.getString("dateDeadline")?.let {
+                navBackStackEntry.arguments!!.getString("timeDeadline")?.let { it1 ->
+                    AddTaskScreen(
+                        application = application, navHost = navController,
+                        editTaskID = navBackStackEntry.arguments!!.getLong("taskUid"),
+                        isEditMode = navBackStackEntry.arguments!!.getBoolean("isEdit"),
+                        editTitle = navBackStackEntry.arguments!!.getString("taskTitle"),
+                        editDesc = navBackStackEntry.arguments!!.getString("taskDesc"),
+                        dateDeadline = it,
+                        timeDeadline = it1,
 
-            )
+                        )
+                }
+            }
         }
         composable(NavigationItem.Profile.route) {
             ProfileScreen(username, application)

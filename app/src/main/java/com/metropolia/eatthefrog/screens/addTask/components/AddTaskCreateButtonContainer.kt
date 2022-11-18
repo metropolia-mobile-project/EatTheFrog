@@ -27,7 +27,8 @@ fun AddTaskCreateButtonContainer(
     viewModel: AddTaskScreenViewModel,
     navHost: NavHostController,
     newTask: Task,
-    isEditMode: Boolean?
+    isEditMode: Boolean?,
+    editTask: Task
 ) {
     Log.d("TESTING", isEditMode.toString())
     val context = LocalContext.current
@@ -39,23 +40,30 @@ fun AddTaskCreateButtonContainer(
     ) {
         Button(
             onClick = {
-                if (newTask.name == "" && newTask.description == "") {
-                    Toast.makeText(
-                        context,
-                        "Task needs name and description",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                } else if (newTask.name == "") {
-                    Toast.makeText(context, "Give task a name", Toast.LENGTH_SHORT).show()
-                } else if (newTask.description == "") {
-                    Toast.makeText(context, "Give task a description", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    viewModel.insertTask(newTask)
-                    viewModel.insertSubTask()
-                    navHost.navigate(NavigationItem.Home.route)
-                }
+
+                    if (newTask.name == "" && newTask.description == "") {
+                        Toast.makeText(
+                            context,
+                            "Task needs name and description",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    } else if (newTask.name == "") {
+                        Toast.makeText(context, "Give task a name", Toast.LENGTH_SHORT).show()
+                    } else if (newTask.description == "") {
+                        Toast.makeText(context, "Give task a description", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        if(isEditMode == false) {
+                            viewModel.insertTask(newTask)
+                            viewModel.insertSubTask()
+                            navHost.navigate(NavigationItem.Home.route)
+                        } else {
+                            viewModel.updateTask(editTask)
+                            navHost.navigate(NavigationItem.Home.route)
+                        }
+                    }
+
             }, modifier = Modifier
                 .width(200.dp)
                 .padding(top = 50.dp)

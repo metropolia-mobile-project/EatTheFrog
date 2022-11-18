@@ -16,11 +16,12 @@ lateinit var addTaskScreenViewModel: AddTaskScreenViewModel
 fun AddTaskScreen(
     application: Application,
     navHost: NavHostController,
+    editTaskID: Long,
     isEditMode: Boolean,
     editTitle: String?,
     editDesc: String?,
-    dateDeadline: String?,
-    timeDeadline: String?,
+    dateDeadline: String,
+    timeDeadline: String,
 ) {
 
 
@@ -32,7 +33,7 @@ fun AddTaskScreen(
             .verticalScroll(rememberScrollState())
             .background(Color.White)
     ) {
-        AddTaskBuildScreenContainer(viewModel = addTaskScreenViewModel, navHost = navHost, isEditMode, editTitle, editDesc, dateDeadline, timeDeadline)
+        AddTaskBuildScreenContainer(viewModel = addTaskScreenViewModel, navHost = navHost, editTaskID, isEditMode, editTitle, editDesc, dateDeadline, timeDeadline)
     }
 }
 
