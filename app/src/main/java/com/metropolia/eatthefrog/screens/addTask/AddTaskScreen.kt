@@ -1,6 +1,7 @@
 package com.metropolia.eatthefrog.screens.addTask
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*

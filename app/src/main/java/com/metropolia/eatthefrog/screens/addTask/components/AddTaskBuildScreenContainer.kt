@@ -46,8 +46,7 @@ fun AddTaskBuildScreenContainer(
     var taskType: TaskType by remember { mutableStateOf(taskTypeList[0]) }
     var sDate by remember { mutableStateOf(if(isEditMode) {dateDeadline} else {currentDate}) }
     var sTime by remember { mutableStateOf(if(isEditMode) {timeDeadline} else {"16.00"}) }
-    val newTask =
-        Task(0, taskTitle ?: "", description ?: "", taskType, sDate ?: currentDate, sTime, completed = false, isFrog = false)
+    val newTask = Task(0, taskTitle ?: "", description ?: "", taskType, sDate ?: currentDate, sTime, completed = false, isFrog = false)
     val editTask = Task(editTaskId, taskTitle ?: "", description ?: "", taskType, sDate ?: currentDate, sTime, completed = false, isFrog = false)
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
