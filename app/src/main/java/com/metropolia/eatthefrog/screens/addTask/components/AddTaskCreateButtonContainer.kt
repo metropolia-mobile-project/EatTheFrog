@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +33,6 @@ fun AddTaskCreateButtonContainer(
 ) {
     Log.d("TESTING", isEditMode.toString())
     val context = LocalContext.current
-
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -60,6 +60,7 @@ fun AddTaskCreateButtonContainer(
                             navHost.navigate(NavigationItem.Home.route)
                         } else {
                             viewModel.updateTask(editTask)
+                            viewModel.insertEditedTasks()
                             navHost.navigate(NavigationItem.Home.route)
                         }
                     }

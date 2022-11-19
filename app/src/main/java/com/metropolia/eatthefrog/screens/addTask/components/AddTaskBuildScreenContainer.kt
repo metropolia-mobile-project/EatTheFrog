@@ -1,8 +1,10 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -11,6 +13,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.NavHostController
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.screens.addTask.*
@@ -36,7 +39,13 @@ fun AddTaskBuildScreenContainer(
     timeDeadline: String
 ) {
 
+    val subs = viewModel.getHighlightedSubtasks(editTaskId).observeAsState()
+    var subList = emptyList<Subtask>()
+    if(subs.value != null){
+       subList = subs.value!!.toList()
+    }
 
+    Log.d("SUBTASKS", subs.value.toString())
 
     val taskTypeList = listOf(TaskType.PLANNING, TaskType.MEETING, TaskType.DEVELOPMENT)
     val sdf = SimpleDateFormat(DATE_FORMAT)
@@ -61,8 +70,8 @@ fun AddTaskBuildScreenContainer(
         AddTaskTitleContainer(viewModel, taskTitle ?: "", onNameChange = { taskTitle = it }, isEditMode)
         AddTaskDescAndTypeContainer(viewModel = viewModel, description ?: "", onDescChange = { description = it }, onTaskChange = { taskType = it }, isEditMode)
         AddTaskDateAndTimeContainer(onDateChange = { sDate = it }, onTimeChange = { sTime = it }, isEditMode, dateDeadline, timeDeadline)
-        AddTaskLazyColumnContainer(viewModel = viewModel, isEditMode)
-        AddTaskCreateSubsContainer(viewModel = viewModel)
+        AddTaskLazyColumnContainer(viewModel = viewModel, isEditMode, subList)
+        AddTaskCreateSubsContainer(viewModel = viewModel, isEditMode, editTaskId)
         AddTaskCreateButtonContainer(viewModel = viewModel, navHost = navHost, newTask, isEditMode, editTask)
     }
 }

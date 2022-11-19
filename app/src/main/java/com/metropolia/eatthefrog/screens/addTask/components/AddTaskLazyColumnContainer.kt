@@ -20,15 +20,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 
 /**
  * This container shows created subtasks in lazyColumn.
  */
 @Composable
-fun AddTaskLazyColumnContainer(viewModel: AddTaskScreenViewModel, isEditMode: Boolean) {
-
+fun AddTaskLazyColumnContainer(viewModel: AddTaskScreenViewModel, isEditMode: Boolean, subTasks: List<Subtask>) {
+    //TODO ADD subtasks to viewmodel sublist?
     val subList = viewModel.subTaskList.observeAsState()
+    Log.d("TESTING SUBTASKS", subTasks.toString())
+    viewModel.updateEditSubTaskList(subTasks)
+    val editSubList = viewModel.editedSubTaskList.observeAsState()
 
     Column(
         Modifier.heightIn(0.dp, 350.dp)
@@ -45,36 +49,77 @@ fun AddTaskLazyColumnContainer(viewModel: AddTaskScreenViewModel, isEditMode: Bo
                 .fillMaxWidth()
                 .padding(30.dp, 0.dp, 0.dp, 0.dp)
         ) {
-            itemsIndexed(subList.value!!.toList()) { index, sub ->
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Top,
-                    modifier = Modifier
-                        .wrapContentWidth()
-                ) {
-                    Text(
-                        text = (index + 1).toString() + ". " + if (sub.name.length > 13) {
-                            sub.name.substring(0, 13) + "..."
-                        } else {
-                            sub.name
-                        }, modifier = Modifier
-                            .padding(0.dp, 3.dp)
-                            .width(185.dp)
-                    )
-                    Icon(
-                        painterResource(id = R.drawable.ic_add),
-                        contentDescription = "Delete Subtask from list",
+            if(isEditMode){
+                if(subTasks.isNotEmpty()){
+                    itemsIndexed(editSubList.value!!.toList()) { index, sub ->
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.Top,
+                            modifier = Modifier
+                                .wrapContentWidth()
+                        ) {
+                            Text(
+                                text = (index + 1).toString() + ". " + if (sub.name.length > 13) {
+                                    sub.name.substring(0, 13) + "..."
+                                } else {
+                                    sub.name
+                                }, modifier = Modifier
+                                    .padding(0.dp, 3.dp)
+                                    .width(185.dp)
+                            )
+                            Icon(
+                                painterResource(id = R.drawable.ic_add),
+                                contentDescription = "Delete Subtask from list",
+                                modifier = Modifier
+                                    .rotate(45F)
+                                    .size(20.dp)
+                                    .clip(CircleShape)
+                                    .border(1.dp, Color.Black, CircleShape)
+                                    .clickable {
+                                        viewModel.deleteSubTaskFromDatabase(sub.uid)
+                                        viewModel.deleteEditedSubTask(index)
+                                    }
+                            )
+                        }
+                    }
+                }
+            } else {
+                itemsIndexed(subList.value!!.toList()) { index, sub ->
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Top,
                         modifier = Modifier
-                            .rotate(45F)
-                            .size(20.dp)
-                            .clip(CircleShape)
-                            .border(1.dp, Color.Black, CircleShape)
-                            .clickable {
-                                viewModel.deleteSubTask(index)
-                            }
-                    )
+                            .wrapContentWidth()
+                    ) {
+                        Text(
+                            text = (index + 1).toString() + ". " + if (sub.name.length > 13) {
+                                sub.name.substring(0, 13) + "..."
+                            } else {
+                                sub.name
+                            }, modifier = Modifier
+                                .padding(0.dp, 3.dp)
+                                .width(185.dp)
+                        )
+                        Icon(
+                            painterResource(id = R.drawable.ic_add),
+                            contentDescription = "Delete Subtask from list",
+                            modifier = Modifier
+                                .rotate(45F)
+                                .size(20.dp)
+                                .clip(CircleShape)
+                                .border(1.dp, Color.Black, CircleShape)
+                                .clickable {
+                                    viewModel.deleteSubTask(index)
+                                }
+                        )
+                    }
                 }
             }
+
         }
     }
 }
+
+
+
+

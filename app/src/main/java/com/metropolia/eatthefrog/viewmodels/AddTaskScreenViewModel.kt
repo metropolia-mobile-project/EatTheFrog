@@ -5,26 +5,36 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
-import com.metropolia.eatthefrog.database.TaskType
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 
 class AddTaskScreenViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = InitialDB.get(application)
 
-
-
     var subTaskList = MutableLiveData<List<Subtask>>(listOf())
+    var editedSubTaskList = MutableLiveData<List<Subtask>>(listOf())
 
+    fun updateEditSubTaskList(list: List<Subtask>) {
+        val oldList = editedSubTaskList.value
+        editedSubTaskList.value = oldList!! + list
+    }
+    fun deleteEditedSubTask(ind: Int) {
+        val newList: MutableList<Subtask> = editedSubTaskList.value!!.toMutableList()
+        newList.removeAt(ind)
+        editedSubTaskList.value = newList
+    }
+    fun deleteSubTaskFromDatabase(task_id: Long){
+        CoroutineScope(Dispatchers.IO).launch {
+        database.subtaskDao().deleteSubTask(task_id)
+        }
+    }
 
-    /*fun getSelectedTask(id: Long) = database.taskDao().getSpecificTask(id)
-    fun getSubtasks(id: Long) = database.subtaskDao().getSubtasks(id)*/
+    fun getHighlightedSubtasks(id: Long) = database.subtaskDao().getSubtasks(id)
 
     fun updateTask(task: Task) {
         viewModelScope.launch {
@@ -60,9 +70,19 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
             }
         }
     }
+    fun insertEditedTasks() {
+        viewModelScope.launch {
+            val subTaskList = editedSubTaskList.value ?: emptyList()
+            for (subTask in subTaskList) {
+                database.subtaskDao().insertSubtask(subTask)
+            }
+        }
+    }
 
     fun getLastTask(): LiveData<Task> = database.taskDao().getLastTask()
 
 }
+
+
 
 
