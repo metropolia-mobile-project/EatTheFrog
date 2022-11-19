@@ -1,16 +1,24 @@
 package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
-import androidx.compose.runtime.livedata.observeAsState
+import android.widget.Toast
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.constants.PROFILE_IMAGE_KEY
+import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
+import com.metropolia.eatthefrog.services.APIService
+import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,20 +34,42 @@ enum class DateFilter {
  */
 class HomeScreenViewModel(application: Application) : AndroidViewModel(application) {
 
+    val app = application
     private val database = InitialDB.get(application)
+    private val service = APIService.service
+
+    private val sdf = SimpleDateFormat(DATE_FORMAT)
+    val today: String = sdf.format(Date())
 
     val selectedFilter = MutableLiveData(DateFilter.TODAY)
-    var popupVisible = mutableStateOf(false)
+    var popupVisible = MutableLiveData(false)
+    var searchVisible = MutableLiveData(false)
     var highlightedTaskId = mutableStateOf(0L)
     var showTaskDoneConfirmWindow = mutableStateOf(false)
     var showFrogConfirmWindow = mutableStateOf(false)
+    var showQuoteToast = mutableStateOf(false)
     val dailyFrogSelected = MutableLiveData(false)
+    var searchInput = mutableStateOf("")
+    private var quote = APIService.Result("", "", "")
 
-    fun getTasks() = database.taskDao().getAllTasks()
+    fun getTasks() = database.taskDao().getAllTasks("%${searchInput.value}")
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
     fun getDateTaskCount(date: String) = database.taskDao().getDateTaskCount(date)
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
     fun getSubtasksAmount(id: Long) = database.subtaskDao().getSubtasksAmount(id)
+
+    init {
+        if (quote.q.isEmpty()) {
+            viewModelScope.launch {
+                quote = try {
+                    service.getRandomMotivationalQuote()[0]
+                } catch (e: Exception) {
+                    Log.d("API fetch failed", e.message.toString())
+                    APIService.Result("JUST DO IT!", "Shia LaBeouf", "")
+                }
+            }
+        }
+    }
 
     fun selectDateFilter(dateFilter: DateFilter) {
         selectedFilter.postValue(dateFilter)
@@ -51,6 +81,19 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun resetPopupStatus() {
         popupVisible.value = false
+    }
+
+    fun showSearch() {
+        searchVisible.value = true
+    }
+
+    fun closeSearch() {
+        searchVisible.value = false
+        searchInput.value = ""
+    }
+
+    fun updateSearchInput(input: String) {
+        searchInput.value = input
     }
 
     fun updateHighlightedTask(t: Task) {
@@ -71,10 +114,22 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         showTaskDoneConfirmWindow.value = true
     }
 
-    fun toggleTaskCompleted() {
+    fun toggleTaskCompleted(task: Task?) {
         viewModelScope.launch {
             database.taskDao().toggleTask(highlightedTaskId.value)
             closeTaskConfirmWindow()
+
+            if ((task?.isFrog == true && !showQuoteToast.value) && !task.completed) {
+                Toasty.custom(getApplication(),
+                    "\"${quote.q}\"\n\n-${quote.a}",
+                    R.drawable.edit_24,
+                    R.color.yale_blue,
+                    Toast.LENGTH_LONG,
+                    false,
+                    true).show()
+
+                showQuoteToast.value = true
+            }
         }
     }
 
@@ -88,9 +143,13 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun toggleTaskFrog() {
         viewModelScope.launch {
-            database.taskDao().toggleFrog(highlightedTaskId.value)
+            database.taskDao().toggleFrog(today, highlightedTaskId.value)
             closeFrogConfirmWindow()
         }
     }
 
+    fun loadProfilePicture() : String? {
+        val sharedPreferences = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+        return sharedPreferences.getString(PROFILE_IMAGE_KEY, null)
+    }
 }

@@ -14,18 +14,15 @@ interface TaskDao {
     @Update
     suspend fun update(item: Task)
 
-    @Query("UPDATE task SET frog = (CASE WHEN uid = :id THEN :f ELSE 0 END)")
-    suspend fun updateDailyFrog(f: Boolean, id: Long)
-
-    @Query("UPDATE task SET frog = (CASE WHEN frog = 0 THEN 1 ELSE 0 END) WHERE task.uid = :id")
-    suspend fun toggleFrog(id: Long)
+    @Query("UPDATE task SET frog = (CASE WHEN frog = 0 AND uid = :id THEN 1 ELSE 0 END) WHERE task.deadline = :deadline")
+    suspend fun toggleFrog(deadline: String, id: Long)
 
     @Query("UPDATE task SET completed = (CASE WHEN completed = 0 THEN 1 ELSE 0 END) WHERE task.uid = :id")
     suspend fun toggleTask(id: Long)
 
     // Query
-    @Query("SELECT * FROM task ORDER BY frog DESC")
-    fun getAllTasks(): LiveData<List<Task>>
+    @Query("SELECT * FROM task WHERE task_name LIKE '%' || :pattern || '%' ORDER BY frog DESC")
+    fun getAllTasks(pattern: String): LiveData<List<Task>>
 
     @Query("SELECT * FROM task WHERE task.uid = :id")
     fun getSpecificTask(id: Long): LiveData<Task>

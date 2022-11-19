@@ -34,8 +34,14 @@
     <string name="confirm_window">Vahvistusikkuna</string>
     <string name="open_task">Avaa %1$s?</string>
     <string name="close_task">Sulje %1$s?</string>
-    <string name="closed">Suljettu</string>
-    <string name="open">Avoin</string>
+    <string name="close">Sulje</string>
+    <string name="open">Avaa</string>
     <string name="set_frog">Aseta %1$s päivän sammakoksi?</string>
     <string name="remove_frog">Poista päivän sammakko: %1$s?</string>
+    <string name="no_tasks_for_today">Ei vielä tehtäviä tälle päivälle.</string>
+    <string name="no_tasks_found">Tehtäviä ei löytynyt.</string>
+    <string name="no_tasks_for_this_week">Ei vielä tehtäviä tälle viikolle.</string>
+    <string name="no_tasks_for_this_month">Ei vielä tehtäviä tälle kuukaudelle.</string>
+    <string name="go_to_add_task">Mene \'Lisää tehtävä\' välilehdelle aloittaaksesi!</string>
+    <string name="no_subtasks">Ei alitehtäviä.</string>
 </resources>

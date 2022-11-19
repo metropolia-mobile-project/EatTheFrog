@@ -8,7 +8,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
+
+import androidx.navigation.NavController
 import com.metropolia.eatthefrog.screens.home.components.ProfileContainer
 import com.metropolia.eatthefrog.screens.home.components.TasksContainer
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
@@ -16,7 +17,8 @@ import java.util.*
 
 @ExperimentalMaterialApi
 @Composable
-fun HomeScreen(username: String, application: Application, navController: NavHostController) {
+
+fun HomeScreen(username: String, application: Application, navController: NavController) {
     val homeScreenViewModel = HomeScreenViewModel(application)
     val calendar = Calendar.getInstance()
     calendar.time = Date()

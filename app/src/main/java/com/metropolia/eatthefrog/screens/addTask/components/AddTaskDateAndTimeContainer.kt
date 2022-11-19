@@ -63,7 +63,7 @@ fun AddTaskDateAndTimeContainer(
         context,
         { _, hour: Int, minute: Int ->
             sTime.value = String.format("%02d:%02d", hour, minute)
-        }, mHour, mMinute, false
+        }, mHour, mMinute, true
     )
 
 
