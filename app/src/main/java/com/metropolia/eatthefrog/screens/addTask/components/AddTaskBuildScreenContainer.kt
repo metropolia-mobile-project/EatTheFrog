@@ -44,6 +44,7 @@ fun AddTaskBuildScreenContainer(
     if(subs.value != null){
        subList = subs.value!!.toList()
     }
+    viewModel.updateEditSubTaskList(subList)
 
     Log.d("SUBTASKS", subs.value.toString())
 

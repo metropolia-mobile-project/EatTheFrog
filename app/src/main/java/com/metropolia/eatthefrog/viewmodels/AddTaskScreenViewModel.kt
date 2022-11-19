@@ -46,6 +46,9 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
         val oldList = subTaskList.value
         subTaskList.value = oldList!! + list
     }
+    fun clearEditSubtaskList() {
+        editedSubTaskList.value = emptyList<Subtask>()
+    }
 
     fun clearSubTaskList() {
         subTaskList.value = emptyList<Subtask>()

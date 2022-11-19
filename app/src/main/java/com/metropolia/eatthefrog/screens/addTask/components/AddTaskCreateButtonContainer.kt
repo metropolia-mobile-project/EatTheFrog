@@ -61,6 +61,7 @@ fun AddTaskCreateButtonContainer(
                         } else {
                             viewModel.updateTask(editTask)
                             viewModel.insertEditedTasks()
+                            viewModel.clearEditSubtaskList()
                             navHost.navigate(NavigationItem.Home.route)
                         }
                     }
