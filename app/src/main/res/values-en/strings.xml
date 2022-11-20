@@ -25,6 +25,7 @@
     <string name="you_have">You have</string>
     <string name="tasks_today">tasks today</string>
     <string name="subtasks">subtasks</string>
+    <string name="subtasks_header">Subtasks</string>
     <string name="subtask">subtask</string>
     <string name="tasks">Tasks</string>
     <string name="today">Today</string>
@@ -36,6 +37,7 @@
     <string name="close_task">Close %1$s?</string>
     <string name="close">Close</string>
     <string name="open">Open</string>
+    <string name="good_job">Good job!</string>
     <string name="set_frog">Set %1$s as daily frog?</string>
     <string name="remove_frog">Remove daily frog from %1$s?</string>
     <string name="no_tasks_for_today">No tasks for today yet.</string>
@@ -44,4 +46,6 @@
     <string name="no_tasks_for_this_month">No tasks for this month yet.</string>
     <string name="go_to_add_task">Go to \'Add task\' tab to get started!</string>
     <string name="no_subtasks">No subtasks.</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 </resources>
