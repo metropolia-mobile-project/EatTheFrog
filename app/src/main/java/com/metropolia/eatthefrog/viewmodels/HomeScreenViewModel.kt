@@ -79,7 +79,6 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun closeFrogCompletedScreen() {
         showFrogCompletedScreen.value = false
-        popupVisible.value = false
     }
 
     private fun openFrogCompletedScreen() {
@@ -131,6 +130,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
             closeTaskConfirmWindow()
 
             if ((task?.isFrog == true && !showQuoteToast.value) && !task.completed) {
+                popupVisible.value = false
                 openFrogCompletedScreen()
                 showQuoteToast.value = true
             }
