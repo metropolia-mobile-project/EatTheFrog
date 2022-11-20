@@ -79,6 +79,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun closeFrogCompletedScreen() {
         showFrogCompletedScreen.value = false
+        popupVisible.value = false
     }
 
     private fun openFrogCompletedScreen() {
