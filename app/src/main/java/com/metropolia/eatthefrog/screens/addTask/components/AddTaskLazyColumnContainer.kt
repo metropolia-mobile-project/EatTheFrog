@@ -30,7 +30,6 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 fun AddTaskLazyColumnContainer(
     viewModel: AddTaskScreenViewModel,
     isEditMode: Boolean,
-    subList: List<Subtask>,
 ) {
 
     val subList = viewModel.subTaskList.observeAsState()

@@ -45,7 +45,6 @@ fun AddTaskTitleContainer(
     vm: AddTaskScreenViewModel,
     taskTitle: String,
     onNameChange: (String) -> Unit,
-    isEditMode: Boolean,
 ) {
 
 

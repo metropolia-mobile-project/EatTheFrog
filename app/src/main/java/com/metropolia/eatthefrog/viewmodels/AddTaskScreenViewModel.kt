@@ -17,11 +17,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AddTaskScreenViewModel(application: Application, editID: Long) : AndroidViewModel(application) {
+class AddTaskScreenViewModel(application: Application) : AndroidViewModel(application) {
 
     val app = application
     private val database = InitialDB.get(application)
-    var haettu: Boolean = false
 
     var subTaskList = MutableLiveData<List<Subtask>>(listOf())
     var editedSubTaskList = MutableLiveData<List<Subtask>>(listOf())

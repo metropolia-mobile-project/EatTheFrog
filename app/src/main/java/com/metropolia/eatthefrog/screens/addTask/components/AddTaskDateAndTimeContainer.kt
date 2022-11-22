@@ -47,8 +47,24 @@ fun AddTaskDateAndTimeContainer(
     val mHour = sCalendar.get(Calendar.HOUR_OF_DAY)
     val mMinute = sCalendar.get(Calendar.MINUTE)
 
-    val sDate = remember { mutableStateOf( if(isEditMode){dateDeadline} else {currentDate}) }
-    val sTime = remember { mutableStateOf(if(isEditMode){timeDeadline} else {"16.00"}) }
+    val sDate = remember {
+        mutableStateOf(
+            if (isEditMode) {
+                dateDeadline
+            } else {
+                currentDate
+            }
+        )
+    }
+    val sTime = remember {
+        mutableStateOf(
+            if (isEditMode) {
+                timeDeadline
+            } else {
+                "16.00"
+            }
+        )
+    }
 
     onDateChange(sDate.value.toString())
     onTimeChange(sTime.value)

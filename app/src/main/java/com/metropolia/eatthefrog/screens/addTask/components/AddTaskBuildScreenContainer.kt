@@ -40,7 +40,7 @@ fun AddTaskBuildScreenContainer(
 ) {
 
 
-    var subList = emptyList<Subtask>()
+    val subList: List<Subtask>
     val subs = viewModel.getHighlightedSubtasks(editTaskId).observeAsState()
 
     if(subs.value != null && viewModel.editedSubTaskList.value!!.isEmpty()) {
@@ -51,13 +51,19 @@ fun AddTaskBuildScreenContainer(
     val taskTypeList = listOf(TaskType.PLANNING, TaskType.MEETING, TaskType.DEVELOPMENT)
     val sdf = SimpleDateFormat(DATE_FORMAT)
     val currentDate = sdf.format(Date())
-    var description by remember { mutableStateOf(if(isEditMode) {editDesc} else {""}) }
-    var taskTitle by remember { mutableStateOf(if(isEditMode) {editTitle} else {""}) }
+
+    var description by remember { mutableStateOf( if(isEditMode) {editDesc} else {""}) }
+    var taskTitle by remember { mutableStateOf( if(isEditMode) {editTitle} else {""}) }
     var taskType: TaskType by remember { mutableStateOf(taskTypeList[0]) }
-    var sDate by remember { mutableStateOf(if(isEditMode) {dateDeadline} else {currentDate}) }
-    var sTime by remember { mutableStateOf(if(isEditMode) {timeDeadline} else {"16.00"}) }
-    val newTask = Task(0, taskTitle ?: "", description ?: "", taskType, sDate ?: currentDate, sTime, completed = false, isFrog = false)
-    val editTask = Task(editTaskId, taskTitle ?: "", description ?: "", taskType, sDate ?: currentDate, sTime, completed = false, isFrog = false)
+    var sDate by remember { mutableStateOf( if(isEditMode) {dateDeadline} else {currentDate}) }
+    var sTime by remember { mutableStateOf( if(isEditMode) {timeDeadline} else {"16.00"}) }
+
+    val newTask = Task(0, taskTitle ?: "", description ?: "",
+        taskType, sDate ?: currentDate, sTime, completed = false, isFrog = false)
+
+    val editTask = Task(editTaskId, taskTitle ?: "", description ?: "", taskType,
+        sDate ?: currentDate, sTime, completed = false, isFrog = false)
+
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -68,11 +74,32 @@ fun AddTaskBuildScreenContainer(
             .clickable { keyboardController?.hide(); focusManager.clearFocus() }
     ) {
 
-        AddTaskTitleContainer(viewModel, taskTitle ?: "", onNameChange = { taskTitle = it }, isEditMode)
-        AddTaskDescAndTypeContainer(viewModel = viewModel, description ?: "", onDescChange = { description = it }, onTaskChange = { taskType = it }, isEditMode, editTaskType)
-        AddTaskDateAndTimeContainer(onDateChange = { sDate = it }, onTimeChange = { sTime = it }, isEditMode, dateDeadline, timeDeadline)
-        AddTaskLazyColumnContainer(viewModel = viewModel, isEditMode, subList)
-        AddTaskCreateSubsContainer(viewModel = viewModel, isEditMode, editTaskId)
-        AddTaskCreateButtonContainer(viewModel = viewModel, navHost = navHost, newTask, isEditMode, editTask)
+        AddTaskTitleContainer(viewModel,
+            taskTitle ?: "",
+            onNameChange = { taskTitle = it })
+
+        AddTaskDescAndTypeContainer( description ?: "",
+            onDescChange = { description = it },
+            onTaskChange = { taskType = it },
+            isEditMode,
+            editTaskType)
+
+        AddTaskDateAndTimeContainer(onDateChange = { sDate = it },
+            onTimeChange = { sTime = it },
+            isEditMode,
+            dateDeadline,
+            timeDeadline)
+
+        AddTaskLazyColumnContainer(viewModel = viewModel, isEditMode)
+
+        AddTaskCreateSubsContainer(viewModel = viewModel,
+            isEditMode,
+            editTaskId)
+
+        AddTaskCreateButtonContainer(viewModel = viewModel,
+            navHost = navHost,
+            newTask,
+            isEditMode,
+            editTask)
     }
 }

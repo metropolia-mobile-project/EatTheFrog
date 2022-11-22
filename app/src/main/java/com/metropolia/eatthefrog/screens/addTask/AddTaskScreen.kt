@@ -26,14 +26,24 @@ fun AddTaskScreen(
 ) {
 
 
-    addTaskScreenViewModel = AddTaskScreenViewModel(application, editTaskID)
+    addTaskScreenViewModel = AddTaskScreenViewModel(application)
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(Color.White)
     ) {
-        AddTaskBuildScreenContainer(viewModel = addTaskScreenViewModel, navHost = navHost, editTaskID, isEditMode, editTitle, editDesc, dateDeadline, timeDeadline, editTaskType)
+        AddTaskBuildScreenContainer(
+            viewModel = addTaskScreenViewModel,
+            navHost = navHost,
+            editTaskID,
+            isEditMode,
+            editTitle,
+            editDesc,
+            dateDeadline,
+            timeDeadline,
+            editTaskType
+        )
     }
 }
 
