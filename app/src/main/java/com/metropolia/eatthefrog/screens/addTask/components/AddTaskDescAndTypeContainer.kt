@@ -8,7 +8,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -34,15 +33,21 @@ fun AddTaskDescAndTypeContainer(
     description: String,
     onDescChange: (String) -> Unit,
     onTaskChange: (TaskType) -> Unit,
-    isEditMode: Boolean, ) {
+    isEditMode: Boolean,
+    editTaskType: String?, ) {
 
-
+    val editTaskTypeIndex = when(editTaskType){
+    "PLANNING" -> 0
+    "MEETING" -> 1
+    "DEVELOPMENT" -> 2
+        else -> {0}
+    }
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("Planning", "Meeting", "Development")
-    var selectedIndex by remember { mutableStateOf(0) }
+    var selectedIndex by remember { mutableStateOf(if(isEditMode){editTaskTypeIndex} else {0}) }
     val disabledValue = ""
     val taskTypeList = listOf(TaskType.PLANNING, TaskType.MEETING, TaskType.DEVELOPMENT)
     var taskType by remember { mutableStateOf(taskTypeList[0]) }

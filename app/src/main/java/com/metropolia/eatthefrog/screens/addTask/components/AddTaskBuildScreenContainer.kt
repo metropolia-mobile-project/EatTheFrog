@@ -1,6 +1,5 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.*
@@ -36,7 +35,8 @@ fun AddTaskBuildScreenContainer(
     editTitle: String?,
     editDesc: String?,
     dateDeadline: String,
-    timeDeadline: String
+    timeDeadline: String,
+    editTaskType: String?
 ) {
 
 
@@ -69,7 +69,7 @@ fun AddTaskBuildScreenContainer(
     ) {
 
         AddTaskTitleContainer(viewModel, taskTitle ?: "", onNameChange = { taskTitle = it }, isEditMode)
-        AddTaskDescAndTypeContainer(viewModel = viewModel, description ?: "", onDescChange = { description = it }, onTaskChange = { taskType = it }, isEditMode)
+        AddTaskDescAndTypeContainer(viewModel = viewModel, description ?: "", onDescChange = { description = it }, onTaskChange = { taskType = it }, isEditMode, editTaskType)
         AddTaskDateAndTimeContainer(onDateChange = { sDate = it }, onTimeChange = { sTime = it }, isEditMode, dateDeadline, timeDeadline)
         AddTaskLazyColumnContainer(viewModel = viewModel, isEditMode, subList)
         AddTaskCreateSubsContainer(viewModel = viewModel, isEditMode, editTaskId)

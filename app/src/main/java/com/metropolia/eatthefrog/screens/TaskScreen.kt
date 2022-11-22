@@ -83,7 +83,7 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                 painter = painterResource(R.drawable.edit_24),
                 modifier = Modifier
                     .align(alignment = Alignment.TopEnd)
-                    .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}")},
+                    .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}")},
                 contentDescription = "edit button")
 
             Column(

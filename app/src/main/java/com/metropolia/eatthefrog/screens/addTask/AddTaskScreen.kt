@@ -1,13 +1,11 @@
 package com.metropolia.eatthefrog.screens.addTask
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.metropolia.eatthefrog.screens.addTask.components.AddTaskBuildScreenContainer
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
@@ -24,6 +22,7 @@ fun AddTaskScreen(
     editDesc: String?,
     dateDeadline: String,
     timeDeadline: String,
+    editTaskType: String?,
 ) {
 
 
@@ -34,7 +33,7 @@ fun AddTaskScreen(
             .verticalScroll(rememberScrollState())
             .background(Color.White)
     ) {
-        AddTaskBuildScreenContainer(viewModel = addTaskScreenViewModel, navHost = navHost, editTaskID, isEditMode, editTitle, editDesc, dateDeadline, timeDeadline)
+        AddTaskBuildScreenContainer(viewModel = addTaskScreenViewModel, navHost = navHost, editTaskID, isEditMode, editTitle, editDesc, dateDeadline, timeDeadline, editTaskType)
     }
 }
 
