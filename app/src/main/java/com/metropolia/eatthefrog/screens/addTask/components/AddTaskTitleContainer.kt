@@ -48,7 +48,7 @@ fun AddTaskTitleContainer(
     isEditMode: Boolean,
 ) {
 
-    Log.d("TESTING ISEDITMODE AT TITLECONTAINER", isEditMode.toString())
+
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val imageUri by remember { mutableStateOf<Uri?>(vm.loadProfilePicture()?.toUri()) }

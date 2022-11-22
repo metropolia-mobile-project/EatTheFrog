@@ -39,14 +39,14 @@ fun AddTaskBuildScreenContainer(
     timeDeadline: String
 ) {
 
-    val subs = viewModel.getHighlightedSubtasks(editTaskId).observeAsState()
-    var subList = emptyList<Subtask>()
-    if(subs.value != null){
-       subList = subs.value!!.toList()
-    }
-    viewModel.updateEditSubTaskList(subList)
 
-    Log.d("SUBTASKS", subs.value.toString())
+    var subList = emptyList<Subtask>()
+    val subs = viewModel.getHighlightedSubtasks(editTaskId).observeAsState()
+
+    if(subs.value != null && viewModel.editedSubTaskList.value!!.isEmpty()) {
+        subList = subs.value!!.toList()
+        viewModel.updateEditSubTaskList(subList)
+    }
 
     val taskTypeList = listOf(TaskType.PLANNING, TaskType.MEETING, TaskType.DEVELOPMENT)
     val sdf = SimpleDateFormat(DATE_FORMAT)

@@ -2,6 +2,8 @@ package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,11 +17,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AddTaskScreenViewModel(application: Application) : AndroidViewModel(application) {
+class AddTaskScreenViewModel(application: Application, editID: Long) : AndroidViewModel(application) {
 
     val app = application
     private val database = InitialDB.get(application)
-
+    var haettu: Boolean = false
 
     var subTaskList = MutableLiveData<List<Subtask>>(listOf())
     var editedSubTaskList = MutableLiveData<List<Subtask>>(listOf())
@@ -47,7 +49,10 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
 
         }
 
-        fun getHighlightedSubtasks(id: Long) = database.subtaskDao().getSubtasks(id)
+        fun getHighlightedSubtasks(id: Long) =
+                database.subtaskDao().getSubtasks(id)
+
+
 
         fun updateTask(task: Task) {
             viewModelScope.launch {

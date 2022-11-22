@@ -31,7 +31,6 @@ fun AddTaskCreateButtonContainer(
     isEditMode: Boolean?,
     editTask: Task
 ) {
-    Log.d("TESTING", isEditMode.toString())
     val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -65,7 +64,6 @@ fun AddTaskCreateButtonContainer(
                             navHost.navigate(NavigationItem.Home.route)
                         }
                     }
-
             }, modifier = Modifier
                 .width(200.dp)
                 .padding(top = 50.dp)
