@@ -1,10 +1,12 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,11 +27,11 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 fun AddTaskCreateButtonContainer(
     viewModel: AddTaskScreenViewModel,
     navHost: NavHostController,
-    newTask: Task
+    newTask: Task,
+    isEditMode: Boolean?,
+    editTask: Task
 ) {
-
     val context = LocalContext.current
-
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -37,6 +39,7 @@ fun AddTaskCreateButtonContainer(
     ) {
         Button(
             onClick = {
+
                 if (newTask.name == "" && newTask.description == "") {
                     Toast.makeText(
                         context,
@@ -50,15 +53,26 @@ fun AddTaskCreateButtonContainer(
                     Toast.makeText(context, "Give task a description", Toast.LENGTH_SHORT)
                         .show()
                 } else {
-                    viewModel.insertTask(newTask)
-                    viewModel.insertSubTask()
-                    navHost.navigate(NavigationItem.Home.route)
+                    if (isEditMode == false) {
+                        viewModel.insertTask(newTask)
+                        viewModel.insertSubTask()
+                        navHost.navigate(NavigationItem.Home.route)
+                    } else {
+                        viewModel.updateTask(editTask)
+                        viewModel.insertEditedTasks()
+                        viewModel.clearEditSubtaskList()
+                        navHost.navigate(NavigationItem.Home.route)
+                    }
                 }
             }, modifier = Modifier
                 .width(200.dp)
                 .padding(top = 50.dp)
         ) {
-            Text(text = stringResource(id = R.string.create_task))
+            if (isEditMode == true) {
+                Text(text = "Edit task")
+            } else {
+                Text(text = stringResource(id = R.string.create_task))
+            }
         }
     }
 }

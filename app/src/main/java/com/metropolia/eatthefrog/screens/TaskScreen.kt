@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.metropolia.eatthefrog.ui_components.PopupView
@@ -36,7 +37,9 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
  */
 @ExperimentalMaterialApi
 @Composable
+
 fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
+
 
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
@@ -54,6 +57,7 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
             Modifier
                 .fillMaxSize()
                 .padding(20.dp)) {
+
 
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -84,7 +88,7 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                     Image(
                         painter = painterResource(R.drawable.edit_24),
                         modifier = Modifier
-                            .clickable { /* Open up CreateTaskScreen with the task*/ },
+                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}") },
                         contentDescription = "edit button")
                 }
 
@@ -231,4 +235,5 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
         )
     }
 }
+
 
