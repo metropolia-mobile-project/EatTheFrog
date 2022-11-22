@@ -2,11 +2,13 @@ package com.metropolia.eatthefrog.screens.history.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -43,11 +45,12 @@ fun HistoryScreenContainer(vm: HistoryScreenViewModel) {
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.primaryVariant),
+                    .background(MaterialTheme.colors.background),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 HistorySearchContainer(vm)
+                TaskTypeSelectorContainer(vm)
             }
         },
     ) {
@@ -69,8 +72,8 @@ fun HistoryTabs(tabs: List<HistoryTabItem>, pagerState: PagerState) {
     val scope = rememberCoroutineScope()
     TabRow(
         selectedTabIndex = pagerState.currentPage,
-        backgroundColor = MaterialTheme.colors.primaryVariant,
-        contentColor = Color.White,
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colors.primaryVariant,
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(
                 Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
@@ -94,7 +97,11 @@ fun HistoryTabs(tabs: List<HistoryTabItem>, pagerState: PagerState) {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HistoryTabContent(tabs: List<HistoryTabItem>, pagerState: PagerState) {
-    HorizontalPager(state = pagerState, count = tabs.size, modifier = Modifier.background(MaterialTheme.colors.secondary)) { page ->
+    HorizontalPager(
+        state = pagerState,
+        count = tabs.size,
+        modifier = Modifier
+            .background(MaterialTheme.colors.secondary)) { page ->
         tabs[page].screen()
     }
 }

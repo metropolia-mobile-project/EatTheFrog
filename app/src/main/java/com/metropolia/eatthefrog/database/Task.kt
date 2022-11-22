@@ -35,5 +35,10 @@ data class Subtask(
 enum class TaskType {
     MEETING,
     PLANNING,
-    DEVELOPMENT
+    DEVELOPMENT,
+    TYPE4,
+    TYPE5,
+    TYPE6,
+    TYPE7,
+    TYPE8
 }

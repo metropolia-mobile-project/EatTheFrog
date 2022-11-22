@@ -51,4 +51,6 @@
     <string name="cancel">Cancel</string>
     <string name="complete">Complete</string>
     <string name="incomplete">Incomplete</string>
+    <string name="search">Search</string>
+    <string name="all">All</string>
 </resources>

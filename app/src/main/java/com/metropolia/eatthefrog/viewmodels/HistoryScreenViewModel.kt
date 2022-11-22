@@ -1,13 +1,18 @@
 package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
+import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
+import com.metropolia.eatthefrog.database.TaskType
 import kotlinx.coroutines.launch
 
 
@@ -19,6 +24,7 @@ class HistoryScreenViewModel(application: Application) : AndroidViewModel(applic
     private val database = InitialDB.get(application)
 
     val selectedFilter = MutableLiveData(DateFilter.TODAY)
+    var selectedTypes = MutableLiveData(listOf("All"))
     var popupVisible = MutableLiveData(false)
     var highlightedTaskId = mutableStateOf(0L)
     var showTaskDoneConfirmWindow = mutableStateOf(false)
@@ -30,6 +36,9 @@ class HistoryScreenViewModel(application: Application) : AndroidViewModel(applic
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
     fun getSubtasksAmount(id: Long) = database.subtaskDao().getSubtasksAmount(id)
 
+    // TODO: Change implementation to fetch from db/wherever the custom TaskTypes are stored.
+    fun getAllTaskTypes() = TaskType.values()
+
     fun updateSearchInput(string: String) {
         searchInput.value = string
     }
@@ -37,6 +46,29 @@ class HistoryScreenViewModel(application: Application) : AndroidViewModel(applic
     fun clearInput() {
         searchInput.value = ""
     }
+
+    fun toggleSelectedType(type: String) {
+
+        val all = "All"
+        var newList : MutableList<String> = selectedTypes.value?.toMutableList() ?: mutableListOf()
+
+        if (type == all) {
+            selectedTypes.value = listOf(all)
+            return
+        } else {
+            if (selectedTypes.value?.contains(type) == true) {
+                newList.remove(type)
+            } else {
+                newList.add(type)
+            }
+        }
+
+        if (newList.isEmpty()) newList.add(all)
+        else newList.remove(all)
+
+        selectedTypes.value = newList.toList()
+    }
+
 
     fun showPopup() {
         popupVisible.value = true

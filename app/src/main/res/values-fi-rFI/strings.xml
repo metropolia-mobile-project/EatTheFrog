@@ -51,4 +51,6 @@
     <string name="cancel">Peru</string>
     <string name="complete">Suoritettu</string>
     <string name="incomplete">Suorittamatta</string>
+    <string name="search">Etsi</string>
+    <string name="all">Kaikki</string>
 </resources>
