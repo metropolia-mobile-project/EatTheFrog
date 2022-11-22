@@ -4,6 +4,7 @@
     <string name="home">Etusivu</string>
     <string name="add_task">Lisää tehtävä</string>
     <string name="profile">Profiili</string>
+    <string name="history">Historia</string>
     <string name="save">Tallenna</string>
     <string name="welcome_back">Tervetuloa takaisin</string>
     <string name="welcome">Tervetuloa</string>
@@ -48,4 +49,6 @@
     <string name="no_subtasks">Ei alitehtäviä.</string>
     <string name="confirm">Vahvista</string>
     <string name="cancel">Peru</string>
+    <string name="complete">Suoritettu</string>
+    <string name="incomplete">Suorittamatta</string>
 </resources>

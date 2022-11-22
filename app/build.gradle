@@ -82,6 +82,8 @@ dependencies {
     // Accompanist
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
     implementation "com.google.accompanist:accompanist-insets:0.22.0-rc"
+    implementation "com.google.accompanist:accompanist-pager:0.25.0"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.25.0"
 
     // Room
     implementation 'androidx.room:room-common:2.4.3'
