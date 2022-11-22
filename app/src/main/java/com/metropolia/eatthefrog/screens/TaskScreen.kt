@@ -43,7 +43,6 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
 
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
-    val dailyFrogSelected = vm.dailyFrogSelected.observeAsState()
 
     navController.addOnDestinationChangedListener { _, destination, _->
         if (destination.route != NavigationItem.Home.route) {
@@ -59,38 +58,39 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                 .fillMaxSize()
                 .padding(20.dp)) {
 
-            Row(
-                Modifier
-                .align(alignment = Alignment.TopStart),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Switch(
-                    checked = task.value?.completed ?: false,
-                    onCheckedChange = { vm.openTaskConfirmWindow() },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colors.primaryVariant
-                    ),
-                )
-                Text(
-                    if (task.value?.completed == false)
-                    stringResource(R.string.close)
-                    else stringResource(R.string.open))
-            }
-
-
-            Image(
-                painter = painterResource(R.drawable.edit_24),
-                modifier = Modifier
-                    .align(alignment = Alignment.TopEnd)
-                    .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}")},
-                contentDescription = "edit button")
 
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally) {
 
-                Text(task.value?.name ?: "", Modifier.padding(bottom = 15.dp), fontWeight = FontWeight.Bold)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Switch(
+                            checked = task.value?.completed ?: false,
+                            onCheckedChange = { vm.openTaskConfirmWindow() },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = MaterialTheme.colors.primaryVariant
+                            ),
+                        )
+                        Text(if (task.value?.completed == false)
+                                stringResource(R.string.close)
+                            else stringResource(R.string.open))
+                    }
+
+                    Image(
+                        painter = painterResource(R.drawable.edit_24),
+                        modifier = Modifier
+                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}") },
+                        contentDescription = "edit button")
+                }
 
                 LazyColumn(
                     Modifier
@@ -99,49 +99,63 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                         .padding(top = 20.dp)
                 ) {
                     item {
+                        Text(
+                            text = task.value?.name ?: "",
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 15.dp),
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center)
+
                         Text(task.value?.description ?: "", Modifier.padding(bottom = 15.dp))
 
                         if (vm.selectedFilter.value == DateFilter.TODAY) {
                             Row(
                                 Modifier
                                     .fillMaxWidth()
-                                    .padding(10.dp),
-                                horizontalArrangement = Arrangement.End,
+                                    .padding(vertical = 10.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(stringResource(R.string.daily_frog))
-                                Checkbox(
-                                    checked = task.value?.isFrog ?: false,
-                                    onCheckedChange = { vm.openFrogConfirmWindow() }
+
+                                Text(
+                                    if (subtasks.value.isNotEmpty()) stringResource(R.string.subtasks_header)
+                                    else "",
                                 )
+
+                                Row(
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        stringResource(R.string.daily_frog),
+                                    )
+                                    Switch(
+                                        checked = task.value?.isFrog ?: false,
+                                        onCheckedChange = { vm.openFrogConfirmWindow() },
+                                        colors = SwitchDefaults.colors(
+                                            checkedThumbColor = MaterialTheme.colors.primaryVariant
+                                        )
+                                    )
+                                }
+
+
                             }
                         }
                     }
 
                     if (subtasks.value.isNotEmpty()) {
                         itemsIndexed(subtasks.value) { i, st ->
-                            Row {
+                            Row(
+                                Modifier
+                                    .padding(bottom = if (i < subtasks.value.size - 1) 10.dp else 0.dp
+                                )) {
 
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Image(
-                                        painter = if (!st.completed) {
-                                            painterResource(R.drawable.radio_btn_checked)
-                                        } else {
-                                            painterResource(R.drawable.radio_btn_unchecked)
-                                        },
-                                        contentDescription = ""
-                                    )
-
-                                    if (i < subtasks.value.size - 1) {
-                                        Spacer(Modifier.padding(2.dp))
-                                        Divider(
-                                            modifier = Modifier
-                                                .height(80.dp)
-                                                .width(2.dp), color = MaterialTheme.colors.primary
-                                        )
-                                        Spacer(Modifier.padding(2.dp))
-                                    }
-                                }
+                                Image(
+                                    painter =
+                                    if (st.completed) painterResource(id = R.drawable.ic_baseline_task_alt_24)
+                                    else painterResource(id = R.drawable.ic_baseline_task_alt_24_gray),
+                                    contentDescription = "completed sign")
 
                                 Spacer(Modifier.width(5.dp))
 
@@ -158,11 +172,22 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        Text(st.name, modifier = Modifier.padding(start = 10.dp).fillMaxWidth(0.8f))
-                                        Checkbox(
-                                            modifier = Modifier.fillMaxWidth(),
+
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            Text(st.name, modifier = Modifier.padding(start = 10.dp).fillMaxWidth(0.8f))
+                                        }
+
+                                        Switch(
                                             checked = st.completed,
-                                            onCheckedChange = { vm.updateSubTask(st, it) })
+                                            onCheckedChange = { vm.updateSubTask(st, it) },
+                                            colors = SwitchDefaults.colors(
+                                                checkedThumbColor = MaterialTheme.colors.primaryVariant
+                                            ),
+                                        )
+
                                     }
                                 }
                             }
@@ -187,14 +212,27 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
         val desc = stringResource(
             if (task.value?.completed == false) R.string.close_task else R.string.open_task,
             task.value?.name ?: "")
-        ConfirmWindow({ vm.toggleTaskCompleted(task.value) },{vm.closeTaskConfirmWindow()}, desc)
+        ConfirmWindow(
+            {vm.toggleTaskCompleted(task.value)},
+            {vm.closeTaskConfirmWindow()},
+            desc,
+            modifier = Modifier.clip(
+                RoundedCornerShape(20.dp))
+        )
+
     }
 
     if (vm.showFrogConfirmWindow.value) {
         val desc = stringResource(
             if (task.value?.isFrog == false) R.string.set_frog else R.string.remove_frog,
             task.value?.name ?: "")
-        ConfirmWindow({ vm.toggleTaskFrog() },{vm.closeFrogConfirmWindow()}, desc)
+        ConfirmWindow(
+            {vm.toggleTaskFrog()},
+            {vm.closeFrogConfirmWindow()},
+            desc,
+            modifier = Modifier.clip(
+                RoundedCornerShape(20.dp))
+        )
     }
 }
 

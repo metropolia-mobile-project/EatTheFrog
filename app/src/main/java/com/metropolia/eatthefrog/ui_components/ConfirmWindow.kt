@@ -2,12 +2,17 @@ package com.metropolia.eatthefrog.ui_components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.metropolia.eatthefrog.R
 
 
 /**
@@ -26,21 +31,28 @@ fun ConfirmWindow(confirmCallback: (() -> Any?)?, dismissCallback: (() -> Any?)?
         }
     }, modifier = modifier,
         dismissButton = {
-            Button(onClick = {
+            TextButton(
+                modifier = Modifier
+                    .height(40.dp),
+                onClick = {
                 if (dismissCallback != null) {
                     dismissCallback()
                 }
             }) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         },
         confirmButton = {
-            Button(onClick = {
+            Button(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(100.dp))
+                    .height(40.dp),
+                onClick = {
                 if (confirmCallback != null) {
                     confirmCallback()
                 }
             }) {
-                Text("Confirm")
+                Text(stringResource(R.string.confirm))
             }
         },
         text = {

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
@@ -49,8 +50,9 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     var showFrogConfirmWindow = mutableStateOf(false)
     var showQuoteToast = mutableStateOf(false)
     val dailyFrogSelected = MutableLiveData(false)
+    var showFrogCompletedScreen = MutableLiveData(false)
     var searchInput = mutableStateOf("")
-    private var quote = APIService.Result("", "", "")
+    var quote = APIService.Result("", "", "")
 
     fun getTasks() = database.taskDao().getAllTasks("%${searchInput.value}")
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
@@ -73,6 +75,14 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun selectDateFilter(dateFilter: DateFilter) {
         selectedFilter.postValue(dateFilter)
+    }
+
+    fun closeFrogCompletedScreen() {
+        showFrogCompletedScreen.value = false
+    }
+
+    private fun openFrogCompletedScreen() {
+        showFrogCompletedScreen.value = true
     }
 
     fun showPopup() {
@@ -120,14 +130,8 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
             closeTaskConfirmWindow()
 
             if ((task?.isFrog == true && !showQuoteToast.value) && !task.completed) {
-                Toasty.custom(getApplication(),
-                    "\"${quote.q}\"\n\n-${quote.a}",
-                    R.drawable.edit_24,
-                    R.color.yale_blue,
-                    Toast.LENGTH_LONG,
-                    false,
-                    true).show()
-
+                popupVisible.value = false
+                openFrogCompletedScreen()
                 showQuoteToast.value = true
             }
         }
