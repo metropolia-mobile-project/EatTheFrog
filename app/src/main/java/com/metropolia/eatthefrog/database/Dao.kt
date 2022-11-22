@@ -59,4 +59,9 @@ interface SubtaskDao {
 
     @Query("SELECT * FROM subtask WHERE subtask.task_id = :id")
     fun getSubtasks(id: Long): LiveData<List<Subtask>>
+
+    @Query("DELETE FROM subtask WHERE subtask.uid = :id")
+    fun deleteSubTask(id: Long)
+
+
 }

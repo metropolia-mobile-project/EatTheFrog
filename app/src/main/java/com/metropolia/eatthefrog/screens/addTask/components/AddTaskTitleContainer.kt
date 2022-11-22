@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
+import android.util.Log
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -31,6 +32,7 @@ import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 
 /**
@@ -42,12 +44,14 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 fun AddTaskTitleContainer(
     vm: AddTaskScreenViewModel,
     taskTitle: String,
-    onNameChange: (String) -> Unit
+    onNameChange: (String) -> Unit,
 ) {
+
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val imageUri by remember { mutableStateOf<Uri?>(vm.loadProfilePicture()?.toUri()) }
+
 
     Row(
         modifier = Modifier
@@ -90,9 +94,12 @@ fun AddTaskTitleContainer(
             modifier = Modifier
                 .padding(15.dp, 0.dp, 0.dp, 0.dp),
         ) {
+
             Text(
                 text = stringResource(id = R.string.task_name)
             )
+
+
             Box(
                 modifier = Modifier
                     .padding(0.dp),

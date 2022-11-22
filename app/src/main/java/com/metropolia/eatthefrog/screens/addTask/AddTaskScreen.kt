@@ -13,17 +13,37 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 lateinit var addTaskScreenViewModel: AddTaskScreenViewModel
 
 @Composable
-fun AddTaskScreen(application: Application, navHost: NavHostController) {
+fun AddTaskScreen(
+    application: Application,
+    navHost: NavHostController,
+    editTaskID: Long,
+    isEditMode: Boolean,
+    editTitle: String?,
+    editDesc: String?,
+    dateDeadline: String,
+    timeDeadline: String,
+    editTaskType: String?,
+) {
+
 
     addTaskScreenViewModel = AddTaskScreenViewModel(application)
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(Color.White)
     ) {
-        AddTaskBuildScreenContainer(viewModel = addTaskScreenViewModel, navHost = navHost)
+        AddTaskBuildScreenContainer(
+            viewModel = addTaskScreenViewModel,
+            navHost = navHost,
+            editTaskID,
+            isEditMode,
+            editTitle,
+            editDesc,
+            dateDeadline,
+            timeDeadline,
+            editTaskType
+        )
     }
 }
 

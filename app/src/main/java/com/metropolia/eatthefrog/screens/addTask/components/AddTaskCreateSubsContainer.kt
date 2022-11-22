@@ -36,10 +36,15 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun AddTaskCreateSubsContainer(viewModel: AddTaskScreenViewModel) {
+fun AddTaskCreateSubsContainer(
+    viewModel: AddTaskScreenViewModel,
+    isEditMode: Boolean,
+    editTaskId: Long
+) {
 
     val lastTask = viewModel.getLastTask().observeAsState()
     val subList = viewModel.subTaskList.observeAsState()
+    val editSubList = viewModel.editedSubTaskList.observeAsState()
     var subTaskTitle by remember { mutableStateOf("") }
     var subTaskId: Long by remember { mutableStateOf(0) }
     val subTaskDone by remember { mutableStateOf(false) }
@@ -89,27 +94,54 @@ fun AddTaskCreateSubsContainer(viewModel: AddTaskScreenViewModel) {
                         contentDescription = "",
                         modifier = Modifier
                             .clickable {
-                                subTaskId = if (lastTask.value == null) {
-                                    1
-                                } else lastTask.value!!.uid + 1
-                                val list =
-                                    listOf(Subtask(0, subTaskId, subTaskTitle, subTaskDone))
-                                if (subList.value!!.size < MAX_SUBTASK_AMOUNT && subTaskTitle != "") {
-                                    viewModel.updateSubTaskList(list); subTaskTitle = ""
-                                } else if (subTaskTitle == "") {
-                                    Toast.makeText(
-                                        context,
-                                        "Subtask must have title",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                } else {
-                                    Toast.makeText(
-                                        context,
-                                        "Maximum amount of subtasks reached",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                if (!isEditMode) {
+                                    subTaskId = if (lastTask.value == null) {
+                                        1
+                                    } else lastTask.value!!.uid + 1
+                                    val list =
+                                        listOf(Subtask(0, subTaskId, subTaskTitle, subTaskDone))
+                                    if (subList.value!!.size < MAX_SUBTASK_AMOUNT && subTaskTitle != "") {
+                                        viewModel.updateSubTaskList(list); subTaskTitle = ""
+                                    } else if (subTaskTitle == "") {
+                                        Toast.makeText(
+                                            context,
+                                            "Subtask must have title",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "Maximum amount of subtasks reached",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
 
+                                } else {
+                                    val list =
+                                        listOf(
+                                            Subtask(
+                                                0,
+                                                editTaskId,
+                                                subTaskTitle,
+                                                subTaskDone
+                                            )
+                                        )
+                                    if (editSubList.value!!.size < MAX_SUBTASK_AMOUNT && subTaskTitle != "") {
+                                        viewModel.updateEditSubTaskList(list); subTaskTitle = ""
+                                    } else if (subTaskTitle == "") {
+                                        Toast.makeText(
+                                            context,
+                                            "Subtask must have title",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "Maximum amount of subtasks reached",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
                             })
                 }
             )
