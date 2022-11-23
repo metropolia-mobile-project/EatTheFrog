@@ -46,7 +46,7 @@ fun SingleTaskContainer(task: Task, vm: TasksViewModel) {
     val closedSubtaskAmount = subtasks.value?.filter { it.completed }?.size ?: 0
     val subtaskText = if (subtaskAmount.value == 0) stringResource(id = R.string.no_subtasks)
                       else "$closedSubtaskAmount/${subtaskAmount.value} ${stringResource(id = if (subtaskAmount.value == 1) R.string.subtask else R.string.subtasks)} ${stringResource(id = R.string.done)}"
-    val typeText = task.taskTypeOld.toString().lowercase().capitalize()
+    val typeText = task.taskType.toString().lowercase().capitalize()
     val deadlineText = if (vm.selectedFilter.value == DateFilter.TODAY) "${stringResource(id = R.string.at)} ${task.time}" else "${task.deadline} ${stringResource(id = R.string.at)} ${task.time}"
 
     Card(

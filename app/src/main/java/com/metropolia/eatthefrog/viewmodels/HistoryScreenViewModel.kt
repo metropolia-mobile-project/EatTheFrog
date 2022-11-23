@@ -33,7 +33,7 @@ class HistoryScreenViewModel(application: Application) : TasksViewModel(applicat
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
 
     // TODO: Change implementation to fetch from db/wherever the custom TaskTypes are stored.
-    fun getAllTaskTypes() = TaskTypeOld.values()
+    fun getAllTaskTypes() = TaskType.values()
 
     fun updateSearchInput(string: String) {
         searchInput.value = string

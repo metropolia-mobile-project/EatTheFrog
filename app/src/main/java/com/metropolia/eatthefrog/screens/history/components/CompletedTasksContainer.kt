@@ -44,7 +44,7 @@ fun CompletedTasksContainer(vm: HistoryScreenViewModel) {
 
             itemsIndexed(tasks.value) { index, task ->
 
-                if (selectedType.value.contains(task.taskTypeOld.name) || selectedType.value.contains(all)) {
+                if (selectedType.value.contains(task.taskType.name) || selectedType.value.contains(all)) {
 
                     if (index == 0) {
                         Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))

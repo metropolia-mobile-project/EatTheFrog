@@ -44,7 +44,7 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
 
             itemsIndexed(tasks.value) { index, task ->
 
-                if (selectedType.value.contains(task.taskTypeOld.name) || selectedType.value.contains(all)) {
+                if (selectedType.value.contains(task.taskType.name) || selectedType.value.contains(all)) {
 
                     val before = Calendar.getInstance()
                     before.add(Calendar.DATE, -1)
