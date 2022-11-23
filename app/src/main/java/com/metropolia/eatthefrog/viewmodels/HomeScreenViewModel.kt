@@ -59,6 +59,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     fun getDateTaskCount(date: String) = database.taskDao().getDateTaskCount(date)
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
     fun getSubtasksAmount(id: Long) = database.subtaskDao().getSubtasksAmount(id)
+    fun getSubtasks(id: Long) = database.subtaskDao().getSubtasks(id)
 
     init {
         if (quote.q.isEmpty()) {
