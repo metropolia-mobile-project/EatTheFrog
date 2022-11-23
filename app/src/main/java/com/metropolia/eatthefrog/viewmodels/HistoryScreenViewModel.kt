@@ -12,24 +12,18 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.metropolia.eatthefrog.R
-import com.metropolia.eatthefrog.database.InitialDB
-import com.metropolia.eatthefrog.database.Subtask
-import com.metropolia.eatthefrog.database.Task
-import com.metropolia.eatthefrog.database.TaskType
+import com.metropolia.eatthefrog.database.*
 import kotlinx.coroutines.launch
 
 
 /**
  * ViewModel for HistoryScreen
  */
-class HistoryScreenViewModel(application: Application) : AndroidViewModel(application) {
+class HistoryScreenViewModel(application: Application) : TasksViewModel(application) {
 
     private val database = InitialDB.get(application)
     private val all = application.getString(R.string.all)
-    val selectedFilter = MutableLiveData(DateFilter.TODAY)
     var selectedTypes = MutableLiveData(listOf(all))
-    var popupVisible = MutableLiveData(false)
-    var highlightedTaskId = mutableStateOf(0L)
     var showTaskDoneConfirmWindow = mutableStateOf(false)
     var searchInput = mutableStateOf("")
 
@@ -37,10 +31,9 @@ class HistoryScreenViewModel(application: Application) : AndroidViewModel(applic
     fun getIncompleteTasks() = database.taskDao().getAllIncompleteTasksOrderedByDate("%${searchInput.value}")
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
-    fun getSubtasksAmount(id: Long) = database.subtaskDao().getSubtasksAmount(id)
 
     // TODO: Change implementation to fetch from db/wherever the custom TaskTypes are stored.
-    fun getAllTaskTypes() = TaskType.values()
+    fun getAllTaskTypes() = TaskTypeOld.values()
 
     fun updateSearchInput(string: String) {
         searchInput.value = string
@@ -71,17 +64,8 @@ class HistoryScreenViewModel(application: Application) : AndroidViewModel(applic
         selectedTypes.value = newList.toList()
     }
 
-
-    fun showPopup() {
-        popupVisible.value = true
-    }
-
     fun resetPopupStatus() {
         popupVisible.value = false
-    }
-
-    fun updateHighlightedTask(t: Task) {
-        this.highlightedTaskId.value = t.uid
     }
 
     fun updateSubTask(st: Subtask, status: Boolean) {

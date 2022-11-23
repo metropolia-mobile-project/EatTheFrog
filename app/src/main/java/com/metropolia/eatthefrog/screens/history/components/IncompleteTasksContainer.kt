@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.screens.home.components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,7 +44,7 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
 
             itemsIndexed(tasks.value) { index, task ->
 
-                if (selectedType.value.contains(task.taskType.name) || selectedType.value.contains(all)) {
+                if (selectedType.value.contains(task.taskTypeOld.name) || selectedType.value.contains(all)) {
 
                     val before = Calendar.getInstance()
                     before.add(Calendar.DATE, -1)
@@ -65,7 +66,7 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            HistoryScreenTaskContainer(task, vm)
+                            SingleTaskContainer(task, vm)
                         }
                     }
                 } else if (index >= tasks.value.size -1) {
