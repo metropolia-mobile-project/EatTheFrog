@@ -48,4 +48,6 @@
     <string name="no_subtasks">Ei alitehtäviä.</string>
     <string name="confirm">Vahvista</string>
     <string name="cancel">Peru</string>
+    <string name="done">valmis</string>
+    <string name="at">klo</string>
 </resources>
