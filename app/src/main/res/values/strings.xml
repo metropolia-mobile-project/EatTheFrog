@@ -50,4 +50,6 @@
     <string name="no_subtasks">No subtasks.</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="done">done</string>
+    <string name="at">at</string>
 </resources>
