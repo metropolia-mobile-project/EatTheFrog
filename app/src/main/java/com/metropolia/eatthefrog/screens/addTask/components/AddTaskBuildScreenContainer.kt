@@ -14,8 +14,7 @@ import androidx.navigation.NavHostController
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
-import com.metropolia.eatthefrog.database.TaskType
-import com.metropolia.eatthefrog.screens.addTask.*
+import com.metropolia.eatthefrog.database.TaskTypeOld
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -48,20 +47,20 @@ fun AddTaskBuildScreenContainer(
         viewModel.updateEditSubTaskList(subList)
     }
 
-    val taskTypeList = listOf(TaskType.PLANNING, TaskType.MEETING, TaskType.DEVELOPMENT)
+    val taskTypeOldLists = listOf(TaskTypeOld.PLANNING, TaskTypeOld.MEETING, TaskTypeOld.DEVELOPMENT)
     val sdf = SimpleDateFormat(DATE_FORMAT)
     val currentDate = sdf.format(Date())
 
     var description by remember { mutableStateOf( if(isEditMode) {editDesc} else {""}) }
     var taskTitle by remember { mutableStateOf( if(isEditMode) {editTitle} else {""}) }
-    var taskType: TaskType by remember { mutableStateOf(taskTypeList[0]) }
+    var taskTypeOld: TaskTypeOld by remember { mutableStateOf(taskTypeOldLists[0]) }
     var sDate by remember { mutableStateOf( if(isEditMode) {dateDeadline} else {currentDate}) }
     var sTime by remember { mutableStateOf( if(isEditMode) {timeDeadline} else {"16.00"}) }
 
     val newTask = Task(0, taskTitle ?: "", description ?: "",
-        taskType, sDate ?: currentDate, sTime, completed = false, isFrog = false)
+        taskTypeOld, sDate ?: currentDate, sTime, completed = false, isFrog = false)
 
-    val editTask = Task(editTaskId, taskTitle ?: "", description ?: "", taskType,
+    val editTask = Task(editTaskId, taskTitle ?: "", description ?: "", taskTypeOld,
         sDate ?: currentDate, sTime, completed = false, isFrog = false)
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -80,9 +79,11 @@ fun AddTaskBuildScreenContainer(
 
         AddTaskDescAndTypeContainer( description ?: "",
             onDescChange = { description = it },
-            onTaskChange = { taskType = it },
+            onTaskChange = { taskTypeOld = it },
             isEditMode,
-            editTaskType)
+            editTaskType,
+            viewModel
+        )
 
         AddTaskDateAndTimeContainer(onDateChange = { sDate = it },
             onTimeChange = { sTime = it },

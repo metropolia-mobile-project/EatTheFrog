@@ -48,4 +48,9 @@
     <string name="no_subtasks">Ei alitehtäviä.</string>
     <string name="confirm">Vahvista</string>
     <string name="cancel">Peru</string>
+    <string name="meeting">Tapaaminen</string>
+    <string name="planning">Suunnittelu</string>
+    <string name="development">Kehitystyö</string>
+    <string name="more">Lisää</string>
+    <string name="add_type">Lisää tyyppi</string>
 </resources>

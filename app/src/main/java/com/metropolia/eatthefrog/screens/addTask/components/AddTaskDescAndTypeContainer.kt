@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.database.TaskType
+import com.metropolia.eatthefrog.database.TaskTypeOld
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 
 /**
@@ -31,9 +33,10 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 fun AddTaskDescAndTypeContainer(
     description: String,
     onDescChange: (String) -> Unit,
-    onTaskChange: (TaskType) -> Unit,
+    onTaskChange: (TaskTypeOld) -> Unit,
     isEditMode: Boolean,
     editTaskType: String?,
+    viewModel: AddTaskScreenViewModel
 ) {
 
     val editTaskTypeIndex = when (editTaskType) {
@@ -48,7 +51,9 @@ fun AddTaskDescAndTypeContainer(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     var expanded by remember { mutableStateOf(false) }
-    val items = listOf("Planning", "Meeting", "Development")
+    val taskTypes = viewModel.getTaskTypes().observeAsState(listOf())
+    val more = TaskType(name = "${stringResource(id = R.string.more)}...", icon = null)
+    val items = if (taskTypes.value.size < 3) taskTypes.value.plus(more) else taskTypes.value.take(3).plus(more)
     var selectedIndex by remember {
         mutableStateOf(
             if (isEditMode) {
@@ -59,8 +64,8 @@ fun AddTaskDescAndTypeContainer(
         )
     }
     val disabledValue = ""
-    val taskTypeList = listOf(TaskType.PLANNING, TaskType.MEETING, TaskType.DEVELOPMENT)
-    var taskType by remember { mutableStateOf(taskTypeList[0]) }
+    val taskTypeOldLists = listOf(TaskTypeOld.PLANNING, TaskTypeOld.MEETING, TaskTypeOld.DEVELOPMENT)
+    var taskType by remember { mutableStateOf(taskTypeOldLists[0]) }
 
     onTaskChange(taskType)
 
@@ -82,7 +87,7 @@ fun AddTaskDescAndTypeContainer(
                     .padding(start = 110.dp, end = 30.dp)
             ) {
                 Text(
-                    items[selectedIndex],
+                    items[selectedIndex].name,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(onClick = { expanded = true })
@@ -101,16 +106,21 @@ fun AddTaskDescAndTypeContainer(
                 ) {
                     items.forEachIndexed { index, s ->
                         DropdownMenuItem(onClick = {
-                            selectedIndex = index
-                            expanded = false
-                            taskType = taskTypeList[selectedIndex]
+                            if (index != items.size -1) {
+                                selectedIndex = index
+                                expanded = false
+                                taskType = taskTypeOldLists[selectedIndex]
+                            } else {
+                                expanded = false
+                                viewModel.typeDialogVisible.postValue(true)
+                            }
                         }) {
-                            val disabledText = if (s == disabledValue) {
+                            val disabledText = if (s.name == disabledValue) {
                                 " (Disabled)"
                             } else {
                                 ""
                             }
-                            Text(text = s + disabledText)
+                            Text(text = s.name + disabledText)
                         }
                     }
                 }
@@ -139,5 +149,6 @@ fun AddTaskDescAndTypeContainer(
                 .fillMaxWidth()
                 .padding(0.dp, 0.dp, 30.dp, 15.dp)
         )
+        AddTaskTypeDialog(viewModel = viewModel)
     }
 }
