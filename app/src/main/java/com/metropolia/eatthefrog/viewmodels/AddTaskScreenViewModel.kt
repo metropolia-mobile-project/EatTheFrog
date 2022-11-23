@@ -115,6 +115,12 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
+    fun deleteTaskType(id: Long) {
+        viewModelScope.launch {
+            database.taskTypeDao().deleteTasktype(id)
+        }
+    }
+
 }
 
 

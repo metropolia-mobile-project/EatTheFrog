@@ -54,5 +54,8 @@
     <string name="planning">Planning</string>
     <string name="development">Development</string>
     <string name="more">More</string>
-    <string name="add_type">Add type</string>
+    <string name="add_type">Add task type</string>
+    <string name="add_task_type_name">Please add a name for the task type!</string>
+    <string name="task_type_name">Task type name</string>
+    <string name="new_task_type">New task type</string>
 </resources>

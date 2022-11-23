@@ -74,4 +74,8 @@ interface TaskTypeDao {
     // Query
     @Query("SELECT * from tasktype")
     fun getTaskTypes(): LiveData<List<TaskType>>
+
+    // Delete
+    @Query("DELETE FROM tasktype WHERE tasktype.uid = :id")
+    suspend fun deleteTasktype(id: Long)
 }

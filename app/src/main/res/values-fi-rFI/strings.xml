@@ -52,5 +52,8 @@
     <string name="planning">Suunnittelu</string>
     <string name="development">Kehitystyö</string>
     <string name="more">Lisää</string>
-    <string name="add_type">Lisää tyyppi</string>
+    <string name="add_type">Lisää tehtävätyyppi</string>
+    <string name="add_task_type_name">Lisää nimi tehtävätyypille!</string>
+    <string name="task_type_name">Tehtävätyypin nimi</string>
+    <string name="new_task_type">Uusi tehtävätyyppi</string>
 </resources>
