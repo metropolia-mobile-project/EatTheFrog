@@ -4,6 +4,7 @@ package com.metropolia.eatthefrog.screens
 import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,32 +22,42 @@ import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
 @Composable
 fun ProfileScreen(username: String, application: Application) {
     val profileScreenViewModel = ProfileScreenViewModel(application)
-    Column(
+
+    LazyColumn(
         Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.secondary)
-            .padding(0.dp, 45.dp, 0.dp, 0.dp),
+            .padding(10.dp, 45.dp, 10.dp, 10.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
 
-        ProfileGalleryPickerContainer(profileScreenViewModel)
+        item {
+            ProfileGalleryPickerContainer(profileScreenViewModel)
+        }
 
-        Text(
-            text = username,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(15.dp),
-            textAlign = TextAlign.Center,
-            fontSize = 25.sp,
-        )
-        ProfileTaskDetailsContainer(profileScreenViewModel)
-        ProfileTaskSwitchContainer()
+        item {
+            Text(
+                text = username,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                modifier = Modifier
+                    .padding(15.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 25.sp,
+            )
+
+            ProfileTaskSwitchContainer(profileScreenViewModel)
+            ProfileTaskDetailsContainer(profileScreenViewModel)
+        }
+
 
     }
+
+
+
+
+
 }
 
 

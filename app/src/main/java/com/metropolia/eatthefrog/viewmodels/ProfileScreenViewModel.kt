@@ -27,6 +27,10 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
     private val sharedPreferences: SharedPreferences = application.getSharedPreferences(
         SHARED_PREF_KEY, Context.MODE_PRIVATE)
 
+    var darkmode = MutableLiveData(false)
+    var showDeadline = MutableLiveData(true)
+    var showConfirmWindow = MutableLiveData(true)
+
     fun getClosedTasks() = database.taskDao().getClosedTasks()
     fun getActiveTasks() = database.taskDao().getActiveTasks()
     fun getFrogsEaten() = database.taskDao().getFrogsEaten()
@@ -50,6 +54,16 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
     fun loadProfilePicture() : String? {
         val sharedPreferences = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         return sharedPreferences.getString(PROFILE_IMAGE_KEY, null)
+    }
+
+    fun toggleDarkMode() {
+        darkmode.value = !darkmode.value!!
+    }
+    fun toggleDeadline() {
+        showDeadline.value = !showDeadline.value!!
+    }
+    fun toggleConfirmWindow() {
+        showConfirmWindow.value = !showConfirmWindow.value!!
     }
 
     /**
