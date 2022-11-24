@@ -1,4 +1,4 @@
-package com.metropolia.eatthefrog.screens
+package com.metropolia.eatthefrog.screens.history.components
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,32 +20,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
+import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.viewmodels.DateFilter
+import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
-
 
 /**
  * Popup window which displays the selected Task object and its data. Enables the user to set Sub-tasks as complete, as well as
  * edit the Task object in CreateTaskScreen.
  */
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-
-fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
-
+fun HistoryScreenTaskPopup(vm: HistoryScreenViewModel, navController: NavController) {
 
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
 
     navController.addOnDestinationChangedListener { _, destination, _->
-        if (destination.route != NavigationItem.Home.route) {
+        if (destination.route != NavigationItem.History.route) {
             vm.resetPopupStatus()
             Log.d("Navigated to another view", "another view")
         }
@@ -57,7 +54,6 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
             Modifier
                 .fillMaxSize()
                 .padding(20.dp)) {
-
 
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -81,14 +77,15 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                             ),
                         )
                         Text(if (task.value?.completed == false)
-                                stringResource(R.string.close)
-                            else stringResource(R.string.open))
+                            stringResource(R.string.close)
+                        else stringResource(R.string.open)
+                        )
                     }
 
                     Image(
                         painter = painterResource(R.drawable.edit_24),
                         modifier = Modifier
-                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}") },
+                            .clickable { /* Open up CreateTaskScreen with the task*/ },
                         contentDescription = "edit button")
                 }
 
@@ -114,7 +111,7 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                 Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 10.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
+                                horizontalArrangement = Arrangement.Start,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
 
@@ -122,24 +119,6 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                     if (subtasks.value.isNotEmpty()) stringResource(R.string.subtasks_header)
                                     else "",
                                 )
-
-                                Row(
-                                    horizontalArrangement = Arrangement.Center,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        stringResource(R.string.daily_frog),
-                                    )
-                                    Switch(
-                                        checked = task.value?.isFrog ?: false,
-                                        onCheckedChange = { vm.openFrogConfirmWindow() },
-                                        colors = SwitchDefaults.colors(
-                                            checkedThumbColor = MaterialTheme.colors.primaryVariant
-                                        )
-                                    )
-                                }
-
-
                             }
                         }
                     }
@@ -149,7 +128,7 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                             Row(
                                 Modifier
                                     .padding(bottom = if (i < subtasks.value.size - 1) 10.dp else 0.dp
-                                )) {
+                                    )) {
 
                                 Image(
                                     painter =
@@ -198,7 +177,8 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                 Image(painter = painterResource(id = R.drawable.ic_add_task),
                                     modifier = Modifier
                                         .padding(top = 30.dp)
-                                        .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(MaterialTheme.colors.surface))
+                                        .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(
+                                        MaterialTheme.colors.surface))
                                 Text(text = stringResource(id = R.string.no_subtasks), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
                             }
                         }
@@ -213,27 +193,13 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
             if (task.value?.completed == false) R.string.close_task else R.string.open_task,
             task.value?.name ?: "")
         ConfirmWindow(
-            {vm.toggleTaskCompleted(task.value)},
+            {vm.toggleTaskCompleted()},
             {vm.closeTaskConfirmWindow()},
             desc,
             modifier = Modifier.clip(
-                RoundedCornerShape(20.dp))
+                RoundedCornerShape(20.dp)
+            )
         )
 
-    }
-
-    if (vm.showFrogConfirmWindow.value) {
-        val desc = stringResource(
-            if (task.value?.isFrog == false) R.string.set_frog else R.string.remove_frog,
-            task.value?.name ?: "")
-        ConfirmWindow(
-            {vm.toggleTaskFrog()},
-            {vm.closeFrogConfirmWindow()},
-            desc,
-            modifier = Modifier.clip(
-                RoundedCornerShape(20.dp))
-        )
     }
 }
-
-

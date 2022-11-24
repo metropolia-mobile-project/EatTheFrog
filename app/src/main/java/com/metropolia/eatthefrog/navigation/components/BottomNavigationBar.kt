@@ -15,17 +15,23 @@ import com.metropolia.eatthefrog.navigation.NavigationItem
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
-        NavigationItem.Home,
         NavigationItem.AddTask,
-        NavigationItem.Profile
+        NavigationItem.Profile,
+        NavigationItem.Home,
+        NavigationItem.History
     )
     BottomNavigation(backgroundColor = MaterialTheme.colors.surface) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
-        items.forEach { item -> 
+        items.forEach { item ->
             BottomNavigationItem(
-                icon =  { Icon(painterResource(id = item.icon), contentDescription = stringResource(id = item.title))},
-                label = { Text(text = stringResource(id = item.title))},
+                icon = {
+                    Icon(
+                        painterResource(id = item.icon),
+                        contentDescription = stringResource(id = item.title)
+                    )
+                },
+                label = { Text(text = stringResource(id = item.title)) },
                 selectedContentColor = MaterialTheme.colors.primaryVariant,
                 unselectedContentColor = MaterialTheme.colors.secondary,
                 alwaysShowLabel = true,
@@ -46,9 +52,8 @@ fun BottomNavigationBar(navController: NavController) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun BottomNavigationBarPreview() {
-    // BottomNavigationBar()
-}
+
+
+
+
 

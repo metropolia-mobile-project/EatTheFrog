@@ -33,7 +33,7 @@ fun ProfileTaskSwitchContainer() {
     ) {
         SwitchRow(stringResource(id = R.string.dark_mode))
         SwitchRow(stringResource(id = R.string.deadline_rem))
-        SwitchRow(desc = "Confirmation window")
+        SwitchRow(stringResource(R.string.confirm_window))
     }
 }
 

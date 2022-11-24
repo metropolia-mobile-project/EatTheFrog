@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,15 +20,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 
 /**
  * This container shows created subtasks in lazyColumn.
  */
 @Composable
-fun AddTaskLazyColumnContainer(viewModel: AddTaskScreenViewModel) {
+fun AddTaskLazyColumnContainer(
+    viewModel: AddTaskScreenViewModel,
+    isEditMode: Boolean,
+) {
 
     val subList = viewModel.subTaskList.observeAsState()
+    val editSubList = viewModel.editedSubTaskList.observeAsState()
+
 
     Column(
         Modifier.heightIn(0.dp, 350.dp)
@@ -44,7 +51,14 @@ fun AddTaskLazyColumnContainer(viewModel: AddTaskScreenViewModel) {
                 .fillMaxWidth()
                 .padding(30.dp, 0.dp, 0.dp, 0.dp)
         ) {
-            itemsIndexed(subList.value!!.toList()) { index, sub ->
+
+            itemsIndexed(
+                if (isEditMode) {
+                    editSubList.value!!.toList()
+                } else {
+                    subList.value!!.toList()
+                }
+            ) { index, sub ->
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top,
@@ -69,7 +83,12 @@ fun AddTaskLazyColumnContainer(viewModel: AddTaskScreenViewModel) {
                             .clip(CircleShape)
                             .border(1.dp, Color.Black, CircleShape)
                             .clickable {
-                                viewModel.deleteSubTask(index)
+                                if (isEditMode) {
+                                    viewModel.deleteSubTaskFromDatabase(sub.uid)
+                                    viewModel.deleteEditedSubTask(index)
+                                } else {
+                                    viewModel.deleteSubTask(index)
+                                }
                             }
                     )
                 }
@@ -77,3 +96,8 @@ fun AddTaskLazyColumnContainer(viewModel: AddTaskScreenViewModel) {
         }
     }
 }
+
+
+
+
+

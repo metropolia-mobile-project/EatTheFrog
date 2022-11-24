@@ -28,16 +28,40 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AddTaskDescAndTypeContainer(viewModel: AddTaskScreenViewModel, description: String, onDescChange: (String) -> Unit, onTaskChange: (TaskType) -> Unit) {
+fun AddTaskDescAndTypeContainer(
+    description: String,
+    onDescChange: (String) -> Unit,
+    onTaskChange: (TaskType) -> Unit,
+    isEditMode: Boolean,
+    editTaskType: String?,
+) {
+
+    val editTaskTypeIndex = when (editTaskType) {
+        "PLANNING" -> 0
+        "MEETING" -> 1
+        "DEVELOPMENT" -> 2
+        else -> {
+            0
+        }
+    }
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("Planning", "Meeting", "Development")
-    var selectedIndex by remember { mutableStateOf(0) }
+    var selectedIndex by remember {
+        mutableStateOf(
+            if (isEditMode) {
+                editTaskTypeIndex
+            } else {
+                0
+            }
+        )
+    }
     val disabledValue = ""
     val taskTypeList = listOf(TaskType.PLANNING, TaskType.MEETING, TaskType.DEVELOPMENT)
     var taskType by remember { mutableStateOf(taskTypeList[0]) }
+
     onTaskChange(taskType)
 
     Column(

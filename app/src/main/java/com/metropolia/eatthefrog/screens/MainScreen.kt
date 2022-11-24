@@ -12,6 +12,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.compose.rememberNavController
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.CHANNEL_ID
+import androidx.navigation.compose.rememberNavController
 import com.metropolia.eatthefrog.navigation.Navigation
 import com.metropolia.eatthefrog.navigation.components.BottomNavigationBar
 

@@ -4,6 +4,7 @@
     <string name="home">Home</string>
     <string name="add_task">Add task</string>
     <string name="profile">Profile</string>
+    <string name="history">History</string>
     <string name="save">Save</string>
     <string name="welcome_back">Welcome back</string>
     <string name="welcome">Welcome</string>
@@ -25,6 +26,7 @@
     <string name="you_have">You have</string>
     <string name="tasks_today">tasks today</string>
     <string name="subtasks">subtasks</string>
+    <string name="subtasks_header">Subtasks</string>
     <string name="subtask">subtask</string>
     <string name="tasks">Tasks</string>
     <string name="today">Today</string>
@@ -34,8 +36,23 @@
     <string name="confirm_window">Confirmation window</string>
     <string name="open_task">Open %1$s?</string>
     <string name="close_task">Close %1$s?</string>
-    <string name="closed">Closed</string>
+    <string name="close">Close</string>
     <string name="open">Open</string>
+    <string name="good_job">Good job!</string>
     <string name="set_frog">Set %1$s as daily frog?</string>
     <string name="remove_frog">Remove daily frog from %1$s?</string>
+    <string name="no_tasks_for_today">No tasks for today yet.</string>
+    <string name="no_tasks_found">No tasks found.</string>
+    <string name="no_tasks_for_this_week">No tasks for this week yet.</string>
+    <string name="no_tasks_for_this_month">No tasks for this month yet.</string>
+    <string name="go_to_add_task">Go to \'Add task\' tab to get started!</string>
+    <string name="no_subtasks">No subtasks.</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="complete">Complete</string>
+    <string name="incomplete">Incomplete</string>
+    <string name="search">Search</string>
+    <string name="all">All</string>
+    <string name="done">done</string>
+    <string name="at">at</string>
 </resources>
