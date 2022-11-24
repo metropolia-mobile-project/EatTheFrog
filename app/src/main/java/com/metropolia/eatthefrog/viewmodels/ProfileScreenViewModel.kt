@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.PROFILE_IMAGE_KEY
 import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 import com.metropolia.eatthefrog.constants.USERNAME_KEY
@@ -26,10 +27,12 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
     private val app = application
     private val sharedPreferences: SharedPreferences = application.getSharedPreferences(
         SHARED_PREF_KEY, Context.MODE_PRIVATE)
+    private val all = application.getString(R.string.all)
 
     var darkmode = MutableLiveData(false)
     var showDeadline = MutableLiveData(true)
     var showConfirmWindow = MutableLiveData(true)
+    var selectedTypes = MutableLiveData(listOf("Test"))
 
     fun getClosedTasks() = database.taskDao().getClosedTasks()
     fun getActiveTasks() = database.taskDao().getActiveTasks()
@@ -46,6 +49,30 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
             apply()
         }
     }
+
+    /**
+     * Toggles the selected graph filter values
+     */
+    fun toggleSelectedType(type: String) {
+        var newList : MutableList<String> = selectedTypes.value?.toMutableList() ?: mutableListOf()
+
+        if (type == all) {
+            selectedTypes.value = listOf(all)
+            return
+        } else {
+            if (selectedTypes.value?.contains(type) == true) {
+                newList.remove(type)
+            } else {
+                newList.add(type)
+            }
+        }
+
+        if (newList.isEmpty()) newList.add(all)
+        else newList.remove(all)
+
+        selectedTypes.value = newList.toList()
+    }
+
 
     /**
      * Loads the uri of the current saved profile picture from shared preferences

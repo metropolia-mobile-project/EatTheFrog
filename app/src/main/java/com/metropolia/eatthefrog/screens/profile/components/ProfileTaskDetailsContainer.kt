@@ -10,11 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
@@ -31,14 +29,14 @@ fun ProfileTaskDetailsContainer(vm: ProfileScreenViewModel) {
     val totalTasks = vm.getTotalTaskCount().observeAsState(0)
 
     ProfileTaskDetailsRow(stringResource(id = R.string.closed_tasks), closedTasks.value, R.drawable.ic_baseline_task_alt_24,
-        stringResource(id = R.string.frogs_eaten), frogsEaten.value, R.drawable.ic_frog_cropped)
+        stringResource(id = R.string.frogs_eaten), frogsEaten.value, R.drawable.ic_frog_cropped, true)
     ProfileTaskDetailsRow(stringResource(id = R.string.active_tasks), activeTasks.value, R.drawable.ic_chart,
-        stringResource(id = R.string.total_tasks), totalTasks.value, R.drawable.ic_done_all)
+        stringResource(id = R.string.total_tasks), totalTasks.value, R.drawable.ic_done_all, false)
 }
 
 @Composable
 fun ProfileTaskDetailsRow(firstTaskTitle: String, firstTaskAmount: Int, firstTaskIcon: Int,
-                          secondTaskTitle: String, secondTaskAmount: Int, secondTaskIcon: Int) {
+                          secondTaskTitle: String, secondTaskAmount: Int, secondTaskIcon: Int, upperRow: Boolean) {
     Row(
         modifier = Modifier
             .padding(top = 10.dp)
@@ -53,7 +51,7 @@ fun ProfileTaskDetailsRow(firstTaskTitle: String, firstTaskAmount: Int, firstTas
                 .fillMaxWidth(0.5f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TaskInfoContainer(firstTaskTitle, firstTaskAmount.toString(), firstTaskIcon)
+            TaskInfoContainer(firstTaskTitle, firstTaskAmount.toString(), firstTaskIcon, upperRow)
         }
         Column(
             modifier = Modifier
@@ -62,18 +60,18 @@ fun ProfileTaskDetailsRow(firstTaskTitle: String, firstTaskAmount: Int, firstTas
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-            TaskInfoContainer(secondTaskTitle, secondTaskAmount.toString(), secondTaskIcon)
+            TaskInfoContainer(secondTaskTitle, secondTaskAmount.toString(), secondTaskIcon, !upperRow)
         }
     }
 }
 
 @Composable
-fun TaskInfoContainer(title: String, info: String, icon: Int) {
+fun TaskInfoContainer(title: String, info: String, icon: Int, lightBackground: Boolean) {
     Card(
         modifier = Modifier
             .fillMaxSize(),
         shape = RoundedCornerShape(10.dp),
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = if (lightBackground) MaterialTheme.colors.surface else MaterialTheme.colors.background,
         elevation = 5.dp,
     ) {
         Column(

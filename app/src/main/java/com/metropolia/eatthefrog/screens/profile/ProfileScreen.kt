@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.screens.profile.components.ProfileGalleryPickerContainer
+import com.metropolia.eatthefrog.screens.profile.components.ProfileGraphContainer
 import com.metropolia.eatthefrog.screens.profile.components.ProfileTaskDetailsContainer
 import com.metropolia.eatthefrog.screens.profile.components.ProfileTaskSwitchContainer
 import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
@@ -49,6 +50,7 @@ fun ProfileScreen(username: String, application: Application) {
 
             ProfileTaskSwitchContainer(profileScreenViewModel)
             ProfileTaskDetailsContainer(profileScreenViewModel)
+            ProfileGraphContainer(profileScreenViewModel)
         }
 
 
