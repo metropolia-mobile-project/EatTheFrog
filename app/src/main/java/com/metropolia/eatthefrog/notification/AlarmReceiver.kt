@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.notification
 
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.PendingIntent.*
 import android.content.BroadcastReceiver
@@ -53,4 +54,15 @@ class AlarmReceiver : BroadcastReceiver() {
             }
         }
     }
+}
+
+private fun setAlarm(task: Task, context: Context?) {
+    val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmReceiver::class.java)
+    intent.putExtra("task", task)
+    val pendingIntent = getBroadcast(context, task.uid.toInt(), intent, FLAG_IMMUTABLE)
+    val mainActivityIntent = Intent(context, MainActivity::class.java)
+    val basicPendingIntent = getActivity(context, task.uid.toInt(), mainActivityIntent, FLAG_IMMUTABLE)
+    val clockInfoTest = task.time?.let { AlarmManager.AlarmClockInfo(it.toLong(), basicPendingIntent) }
+    alarmManager.setAlarmClock(clockInfoTest, pendingIntent)
 }
