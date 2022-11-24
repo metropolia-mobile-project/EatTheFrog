@@ -21,12 +21,12 @@ import com.metropolia.eatthefrog.navigation.components.BottomNavigationBar
 fun MainScreen(username: String, application: Application) {
 
     val navController = rememberNavController()
-    val builder = NotificationCompat.Builder(LocalContext.current, CHANNEL_ID)
+    /*val builder = NotificationCompat.Builder(LocalContext.current, CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_frog_cropped)
         .setContentTitle("This is the title")
         .setContentText("This is the text")
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        .build()
+        .build()*/
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) },
@@ -37,8 +37,8 @@ fun MainScreen(username: String, application: Application) {
     },
     backgroundColor = MaterialTheme.colors.surface)
 
-    //NotificationManagerCompat.from(LocalContext.current).notify(0, builder)
-    /*with(NotificationManagerCompat.from(LocalContext.current)) {
+    /*NotificationManagerCompat.from(LocalContext.current).notify(0, builder)
+    with(NotificationManagerCompat.from(LocalContext.current)) {
         notify(0, builder)
     }*/
 }

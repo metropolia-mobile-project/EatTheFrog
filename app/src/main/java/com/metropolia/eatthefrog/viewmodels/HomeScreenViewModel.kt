@@ -19,7 +19,6 @@ import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.services.APIService
-import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -57,6 +56,7 @@ class HomeScreenViewModel(application: Application) : TasksViewModel(application
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
     fun getDateTaskCount(date: String) = database.taskDao().getDateTaskCount(date)
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
+    fun getCertainTask(id: Long) = database.taskDao().getTest(id)
 
     init {
         if (quote.q.isEmpty()) {

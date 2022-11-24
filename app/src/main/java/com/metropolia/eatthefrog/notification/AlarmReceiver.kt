@@ -6,12 +6,14 @@ import android.app.PendingIntent.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.compose.runtime.State
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.activities.MainActivity
 import com.metropolia.eatthefrog.constants.CHANNEL_ID
 import com.metropolia.eatthefrog.database.Task
+import java.util.*
 
 /**
  * AlarmReceiver is in charge of contents of the notification when the call is made
@@ -56,13 +58,22 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 }
 
-private fun setAlarm(task: Task, context: Context?) {
+/**
+ * Function takes task as a parameter to use the tasks uid as a requestCode, which needs to be different for every alarm.
+ * The function will show an alarm when prompted and redirects user to MainActivity when the notification is clicked.
+ */
+fun setAlarm(task: Task, context: Context?) {
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
     intent.putExtra("task", task)
+
     val pendingIntent = getBroadcast(context, task.uid.toInt(), intent, FLAG_IMMUTABLE)
     val mainActivityIntent = Intent(context, MainActivity::class.java)
     val basicPendingIntent = getActivity(context, task.uid.toInt(), mainActivityIntent, FLAG_IMMUTABLE)
-    val clockInfoTest = task.time?.let { AlarmManager.AlarmClockInfo(it.toLong(), basicPendingIntent) }
+
+    val time = Date().time
+    val clockInfoTest = AlarmManager.AlarmClockInfo(time, basicPendingIntent)
     alarmManager.setAlarmClock(clockInfoTest, pendingIntent)
 }
+
+// TODO: Cancelling an alarm if task is completed beforehand

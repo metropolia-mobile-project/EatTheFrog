@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,14 +28,19 @@ import androidx.navigation.NavController
 import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.navigation.NavigationItem
+import com.metropolia.eatthefrog.notification.setAlarm
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
+import java.util.*
 
 
 /**
- * Popup window which displays the selected Task object and its data. Enables the user to set Sub-tasks as complete, as well as
- * edit the Task object in CreateTaskScreen.
+ * Popup window which displays the selected Task object and its data.
+ * Enables the user to set Sub-tasks as complete, as well as edit the Task object in CreateTaskScreen.
  */
 @ExperimentalMaterialApi
 @Composable
@@ -234,6 +241,20 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                 RoundedCornerShape(20.dp))
         )
     }
+
+    if (task.value != null) {
+        val context = LocalContext.current
+        val id = task.value?.uid
+        if (id != null) {
+            testingThis(id, vm, context)
+        }
+    }
 }
 
 
+fun testingThis(id: Long, vm: HomeScreenViewModel, context: Context) {
+    CoroutineScope(IO).launch {
+        val task = vm.getCertainTask(id)
+        setAlarm(task, context)
+    }
+}
