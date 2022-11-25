@@ -112,8 +112,6 @@ fun AddTaskBuildScreenContainer(
             onTitleChange = { taskTitle = it },
             onDescChange = { description = it},
             onTaskTypeChange = { taskType = it },
-            onDateChange = { sDate = it },
-            onTimeChange = { sTime = it },
             onFrogChange = { isFrog = it })
     }
 }

@@ -35,13 +35,10 @@ fun AddTaskCreateButtonContainer(
     onTitleChange: (String) -> Unit,
     onDescChange: (String) -> Unit,
     onTaskTypeChange: (TaskType) -> Unit,
-    onDateChange: (String) -> Unit,
-    onTimeChange: (String) -> Unit,
     onFrogChange: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
-    val sdf = SimpleDateFormat(DATE_FORMAT)
-    val currentDate = sdf.format(Date())
+
 
     Column(
         modifier = Modifier.fillMaxWidth(),
