@@ -29,6 +29,7 @@ import com.metropolia.eatthefrog.placeholder_data.PlaceholderTask
 import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
+import com.metropolia.eatthefrog.viewmodels.TasksViewModel
 import java.util.*
 
 /**
@@ -36,7 +37,7 @@ import java.util.*
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SingleTaskContainer(task: Task, vm: HomeScreenViewModel) {
+fun SingleTaskContainer(task: Task, vm: TasksViewModel) {
     val backgroundColor = if (task.isFrog) MaterialTheme.colors.primaryVariant else Color.White
     val taskNameTextColor = if (task.isFrog) Color.White else Color.Black
     val subtaskTextColor = if (task.isFrog) MaterialTheme.colors.secondary else MaterialTheme.colors.primary

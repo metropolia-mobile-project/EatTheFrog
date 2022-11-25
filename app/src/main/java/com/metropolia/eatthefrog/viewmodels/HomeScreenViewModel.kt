@@ -33,7 +33,7 @@ enum class DateFilter {
 /**
  * ViewModel for the Home screen
  */
-class HomeScreenViewModel(application: Application) : AndroidViewModel(application) {
+class HomeScreenViewModel(application: Application) : TasksViewModel(application) {
 
     val app = application
     private val database = InitialDB.get(application)
@@ -42,10 +42,9 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     private val sdf = SimpleDateFormat(DATE_FORMAT)
     val today: String = sdf.format(Date())
 
-    val selectedFilter = MutableLiveData(DateFilter.TODAY)
-    var popupVisible = MutableLiveData(false)
+
     var searchVisible = MutableLiveData(false)
-    var highlightedTaskId = mutableStateOf(0L)
+
     var showTaskDoneConfirmWindow = mutableStateOf(false)
     var showFrogConfirmWindow = mutableStateOf(false)
     var showQuoteToast = mutableStateOf(false)
@@ -58,8 +57,6 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
     fun getDateTaskCount(date: String) = database.taskDao().getDateTaskCount(date)
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
-    fun getSubtasksAmount(id: Long) = database.subtaskDao().getSubtasksAmount(id)
-    fun getSubtasks(id: Long) = database.subtaskDao().getSubtasks(id)
 
     init {
         if (quote.q.isEmpty()) {
@@ -86,10 +83,6 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         showFrogCompletedScreen.value = true
     }
 
-    fun showPopup() {
-        popupVisible.value = true
-    }
-
     fun resetPopupStatus() {
         popupVisible.value = false
     }
@@ -105,10 +98,6 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun updateSearchInput(input: String) {
         searchInput.value = input
-    }
-
-    fun updateHighlightedTask(t: Task) {
-        this.highlightedTaskId.value = t.uid
     }
 
     fun updateSubTask(st: Subtask, status: Boolean) {

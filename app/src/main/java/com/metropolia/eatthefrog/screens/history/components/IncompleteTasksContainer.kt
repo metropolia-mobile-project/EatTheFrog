@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.screens.home.components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,7 +66,7 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            HistoryScreenTaskContainer(task, vm)
+                            SingleTaskContainer(task, vm)
                         }
                     }
                 } else if (index >= tasks.value.size -1) {

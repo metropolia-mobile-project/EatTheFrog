@@ -33,13 +33,12 @@ fun AddTaskDateAndTimeContainer(
     onTimeChange: (String) -> Unit,
     isEditMode: Boolean,
     dateDeadline: String,
-    timeDeadline: String
+    timeDeadline: String,
+    sDate: String
 ) {
 
 
     val context = LocalContext.current
-    val sdf = SimpleDateFormat(DATE_FORMAT)
-    val currentDate = sdf.format(Date())
     val sCalendar = Calendar.getInstance()
     val mYear = sCalendar.get(Calendar.YEAR)
     val mMonth = sCalendar.get(Calendar.MONTH)
@@ -47,16 +46,16 @@ fun AddTaskDateAndTimeContainer(
     val mHour = sCalendar.get(Calendar.HOUR_OF_DAY)
     val mMinute = sCalendar.get(Calendar.MINUTE)
 
-    val sDate = remember {
+    val date = remember {
         mutableStateOf(
             if (isEditMode) {
                 dateDeadline
             } else {
-                currentDate
+                sDate
             }
         )
     }
-    val sTime = remember {
+    val time = remember {
         mutableStateOf(
             if (isEditMode) {
                 timeDeadline
@@ -66,23 +65,25 @@ fun AddTaskDateAndTimeContainer(
         )
     }
 
-    onDateChange(sDate.value.toString())
-    onTimeChange(sTime.value)
+
 
     val sDatePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-            sDate.value = "$mDayOfMonth.${mMonth + 1}.$mYear"
+            date.value = "$mDayOfMonth.${mMonth + 1}.$mYear"
         }, mYear, mMonth, mDay
     )
     val mTimePickerDialog = TimePickerDialog(
         context,
         { _, hour: Int, minute: Int ->
-            sTime.value = String.format("%02d:%02d", hour, minute)
+            time.value = String.format("%02d:%02d", hour, minute)
         }, mHour, mMinute, true
     )
 
 
+
+    onDateChange(date.value)
+    onTimeChange(time.value)
     Text(
         text = stringResource(id = R.string.task_deadline),
         Modifier.padding(30.dp, 15.dp, 0.dp, 10.dp),
@@ -107,7 +108,7 @@ fun AddTaskDateAndTimeContainer(
                         .padding(0.dp, 0.dp, 4.dp, 0.dp)
                 )
                 Text(
-                    text = sDate.value,
+                    text = date.value
                 )
 
             }
@@ -138,7 +139,7 @@ fun AddTaskDateAndTimeContainer(
                         .height(25.dp)
                 )
                 Text(
-                    text = sTime.value,
+                    text = time.value,
                     modifier = Modifier
                         .padding(0.dp, 0.dp, 0.dp, 0.dp)
                 )
