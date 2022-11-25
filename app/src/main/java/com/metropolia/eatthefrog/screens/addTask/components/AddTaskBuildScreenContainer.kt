@@ -57,9 +57,10 @@ fun AddTaskBuildScreenContainer(
     var taskType: TaskType by remember { mutableStateOf(taskTypeList[0]) }
     var sDate by remember { mutableStateOf( if(isEditMode) {dateDeadline} else {currentDate}) }
     var sTime by remember { mutableStateOf( if(isEditMode) {timeDeadline} else {"16.00"}) }
+    var isFrog by remember { mutableStateOf(false) }
 
     val newTask = Task(0, taskTitle ?: "", description ?: "",
-        taskType, sDate ?: currentDate, sTime, completed = false, isFrog = false)
+        taskType, sDate ?: currentDate, sTime, completed = false, isFrog = isFrog)
 
     val editTask = Task(editTaskId, taskTitle ?: "", description ?: "", taskType,
         sDate ?: currentDate, sTime, completed = false, isFrog = false)
@@ -84,13 +85,20 @@ fun AddTaskBuildScreenContainer(
             isEditMode,
             editTaskType)
 
-        AddTaskDateAndTimeContainer(onDateChange = { sDate = it },
+        AddTaskDateAndTimeContainer(
+            onDateChange = { sDate = it },
             onTimeChange = { sTime = it },
             isEditMode,
             dateDeadline,
-            timeDeadline)
+            timeDeadline,
+            sDate
+        )
 
-        AddTaskLazyColumnContainer(viewModel = viewModel, isEditMode)
+        AddTaskLazyColumnContainer(viewModel = viewModel,
+            isEditMode,
+            sDate,
+            isFrog,
+            onIsFrogChange = { isFrog = it })
 
         AddTaskCreateSubsContainer(viewModel = viewModel,
             isEditMode,
@@ -100,6 +108,10 @@ fun AddTaskBuildScreenContainer(
             navHost = navHost,
             newTask,
             isEditMode,
-            editTask)
+            editTask,
+            onTitleChange = { taskTitle = it },
+            onDescChange = { description = it},
+            onTaskTypeChange = { taskType = it },
+            onFrogChange = { isFrog = it })
     }
 }
