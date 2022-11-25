@@ -17,6 +17,9 @@ interface TaskDao {
     @Query("UPDATE task SET frog = (CASE WHEN frog = 0 AND uid = :id THEN 1 ELSE 0 END) WHERE task.deadline = :deadline")
     suspend fun toggleFrog(deadline: String, id: Long)
 
+    @Query("UPDATE task SET frog = 0 WHERE task.deadline = :deadline")
+    suspend fun toggleFrogsFalse(deadline: String)
+
     @Query("UPDATE task SET completed = (CASE WHEN completed = 0 THEN 1 ELSE 0 END) WHERE task.uid = :id")
     suspend fun toggleTask(id: Long)
 

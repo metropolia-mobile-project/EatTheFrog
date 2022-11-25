@@ -1,12 +1,10 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -14,9 +12,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.Task
+import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Create task button saves task to database if name and description is inserted to text fields.
@@ -29,9 +31,18 @@ fun AddTaskCreateButtonContainer(
     navHost: NavHostController,
     newTask: Task,
     isEditMode: Boolean?,
-    editTask: Task
+    editTask: Task,
+    onTitleChange: (String) -> Unit,
+    onDescChange: (String) -> Unit,
+    onTaskTypeChange: (TaskType) -> Unit,
+    onDateChange: (String) -> Unit,
+    onTimeChange: (String) -> Unit,
+    onFrogChange: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
+    val sdf = SimpleDateFormat(DATE_FORMAT)
+    val currentDate = sdf.format(Date())
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,9 +65,18 @@ fun AddTaskCreateButtonContainer(
                         .show()
                 } else {
                     if (isEditMode == false) {
+                        if(newTask.isFrog){
+                            viewModel.toggleFrogsFalse(newTask.deadline)
+                        }
                         viewModel.insertTask(newTask)
                         viewModel.insertSubTask()
-                        navHost.navigate(NavigationItem.Home.route)
+                        viewModel.clearSubTaskList()
+                        onTitleChange("")
+                        onDescChange("")
+                        onFrogChange(false)
+                        onTaskTypeChange(TaskType.PLANNING)
+
+                        
                     } else {
                         viewModel.updateTask(editTask)
                         viewModel.insertEditedTasks()
