@@ -15,18 +15,18 @@ import com.metropolia.eatthefrog.constants.CHANNEL_ID
 import androidx.navigation.compose.rememberNavController
 import com.metropolia.eatthefrog.navigation.Navigation
 import com.metropolia.eatthefrog.navigation.components.BottomNavigationBar
+import com.metropolia.eatthefrog.notification.Scheduler
+import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
+import com.metropolia.eatthefrog.viewmodels.NotificationsViewModel
+
+lateinit var notificationViewModel: NotificationsViewModel
 
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(username: String, application: Application) {
 
     val navController = rememberNavController()
-    /*val builder = NotificationCompat.Builder(LocalContext.current, CHANNEL_ID)
-        .setSmallIcon(R.drawable.ic_frog_cropped)
-        .setContentTitle("This is the title")
-        .setContentText("This is the text")
-        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        .build()*/
+    notificationViewModel = NotificationsViewModel(application)
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) },
@@ -37,8 +37,5 @@ fun MainScreen(username: String, application: Application) {
     },
     backgroundColor = MaterialTheme.colors.surface)
 
-    /*NotificationManagerCompat.from(LocalContext.current).notify(0, builder)
-    with(NotificationManagerCompat.from(LocalContext.current)) {
-        notify(0, builder)
-    }*/
+    Scheduler(viewModel = notificationViewModel)
 }

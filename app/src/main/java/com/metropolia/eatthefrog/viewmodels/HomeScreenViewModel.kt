@@ -32,7 +32,7 @@ enum class DateFilter {
 /**
  * ViewModel for the Home screen
  */
-class HomeScreenViewModel(application: Application) : TasksViewModel(application) {
+open class HomeScreenViewModel(application: Application) : TasksViewModel(application) {
 
     val app = application
     private val database = InitialDB.get(application)
@@ -40,7 +40,6 @@ class HomeScreenViewModel(application: Application) : TasksViewModel(application
 
     private val sdf = SimpleDateFormat(DATE_FORMAT)
     val today: String = sdf.format(Date())
-
 
     var searchVisible = MutableLiveData(false)
 
@@ -56,7 +55,6 @@ class HomeScreenViewModel(application: Application) : TasksViewModel(application
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
     fun getDateTaskCount(date: String) = database.taskDao().getDateTaskCount(date)
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
-    fun getCertainTask(id: Long) = database.taskDao().getTest(id)
 
     init {
         if (quote.q.isEmpty()) {
