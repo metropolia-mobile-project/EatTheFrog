@@ -6,6 +6,10 @@ import android.app.PendingIntent.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import androidx.compose.runtime.State
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -26,6 +30,18 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(p0: Context?, p1: Intent?) {
         val task = p1?.getSerializableExtra("task") as? Task
 
+        // Bold the notification title
+        val boldTitle: Spannable = SpannableString(task?.name)
+        val sb: Spannable = boldTitle
+        task?.name?.length?.let {
+            sb.setSpan(
+                StyleSpan(Typeface.BOLD),
+                0,
+                it,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+
         // FLAG_ACTIVITY_SINGLE_TOP used only when app has only one activity
         val onTap = Intent(p0, MainActivity::class.java)
         onTap.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -37,8 +53,8 @@ class AlarmReceiver : BroadcastReceiver() {
 
         val notification = p0?.let {
             NotificationCompat.Builder(it, CHANNEL_ID)
-                .setContentTitle(task?.name)
-                .setContentText(task?.description)
+                .setContentTitle(boldTitle)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(task?.description))
                 .setSmallIcon(R.drawable.ic_frog_cropped)
                 .setAutoCancel(true)                            // Whether the notification disappears onTap or not
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -69,7 +85,8 @@ fun setAlarm(task: Task, context: Context?) {
 
     val pendingIntent = getBroadcast(context, task.uid.toInt(), intent, FLAG_IMMUTABLE)
     val mainActivityIntent = Intent(context, MainActivity::class.java)
-    val basicPendingIntent = getActivity(context, task.uid.toInt(), mainActivityIntent, FLAG_IMMUTABLE)
+    val basicPendingIntent =
+        getActivity(context, task.uid.toInt(), mainActivityIntent, FLAG_IMMUTABLE)
 
     val time = Date().time
     val clockInfoTest = AlarmManager.AlarmClockInfo(time, basicPendingIntent)
