@@ -12,6 +12,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,7 +27,10 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -35,7 +42,7 @@ import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
  * so user can choose their own profile picture.
  */
 @Composable
-fun ProfileGalleryPickerContainer(vm: ProfileScreenViewModel) {
+fun ProfileGalleryPickerContainer(vm: ProfileScreenViewModel, username: String) {
 
     var imageUri by remember { mutableStateOf<Uri?>(vm.loadProfilePicture()?.toUri()) }
     val context = LocalContext.current
@@ -47,55 +54,85 @@ fun ProfileGalleryPickerContainer(vm: ProfileScreenViewModel) {
         imageUri = vm.saveFileToInternalStorage(uri)
     }
 
-    Box(
+    Card(
         modifier = Modifier
-            .width(250.dp)
-            .height(170.dp)
+            .padding(bottom = 10.dp)
+            .fillMaxWidth()
+            .fillMaxHeight(0.5f),
+        shape = RoundedCornerShape(10.dp),
+        backgroundColor = MaterialTheme.colors.background,
+        elevation = 5.dp,
     ) {
-        if (imageUri === null) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_profile),
-                colorFilter = ColorFilter.tint(Color.White),
-                contentDescription = "Circle Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(CircleShape)
-                    .border(5.dp, Color.White, CircleShape)
-                    .align(Alignment.Center)
-                    .padding(10.dp)
-            )
-        } else {
 
-            imageUri?.let {
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        ImageRequest
-                            .Builder(LocalContext.current)
-                            .data(data = imageUri)
-                            .build()
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(150.dp)
-                        .clip(CircleShape)
-                        .border(5.dp, Color.White, CircleShape)
-                        .align(Alignment.Center)
-                )
-            }
-        }
-        TextButton(modifier = Modifier
-            .width(60.dp)
-            .height(60.dp)
-            .align(Alignment.BottomEnd),
-            onClick = { launcher.launch("image/*") }) {
-            Image(
-                painterResource(id = R.drawable.ic_image),
-                contentDescription = null,
-                Modifier
+        Column(
+            Modifier
+                .padding(10.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceAround,
+            horizontalAlignment = Alignment.CenterHorizontally) {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                if (imageUri === null) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_profile),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.primaryVariant),
+                        contentDescription = "Circle Image",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(150.dp)
+                            .clip(CircleShape)
+                            .border(3.dp, MaterialTheme.colors.primaryVariant, CircleShape)
+                            .align(Alignment.Center)
+                            .padding(10.dp)
+                    )
+                } else {
+
+                    imageUri?.let {
+                        Image(
+                            painter = rememberAsyncImagePainter(
+                                ImageRequest
+                                    .Builder(LocalContext.current)
+                                    .data(data = imageUri)
+                                    .build()
+                            ),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(150.dp)
+                                .clip(CircleShape)
+                                .border(5.dp, Color.White, CircleShape)
+                                .align(Alignment.Center)
+                        )
+                    }
+                }
+                TextButton(modifier = Modifier
                     .width(60.dp)
-                    .height(60.dp),
+                    .height(60.dp)
+                    .align(Alignment.BottomEnd),
+                    onClick = { launcher.launch("image/*") }) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_image),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.primaryVariant),
+                        modifier = Modifier
+                            .width(60.dp)
+                            .height(60.dp),
+                    )
+                }
+            }
+            Text(
+                text = username,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                modifier = Modifier
+                    .padding(15.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 25.sp,
             )
+
         }
     }
+
 }

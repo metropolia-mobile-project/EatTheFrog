@@ -28,38 +28,18 @@ fun ProfileScreen(username: String, application: Application) {
         Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.secondary)
-            .padding(10.dp, 45.dp, 10.dp, 10.dp),
+            .padding(10.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         item {
-            ProfileGalleryPickerContainer(profileScreenViewModel)
-        }
-
-        item {
-            Text(
-                text = username,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier
-                    .padding(15.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 25.sp,
-            )
-
+            ProfileGalleryPickerContainer(profileScreenViewModel, username)
             ProfileTaskSwitchContainer(profileScreenViewModel)
             ProfileTaskDetailsContainer(profileScreenViewModel)
             ProfileGraphContainer(profileScreenViewModel)
         }
-
-
     }
-
-
-
-
-
 }
 
 

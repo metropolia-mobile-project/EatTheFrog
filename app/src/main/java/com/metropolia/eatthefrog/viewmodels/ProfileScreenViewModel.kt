@@ -9,9 +9,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.metropolia.eatthefrog.R
-import com.metropolia.eatthefrog.constants.PROFILE_IMAGE_KEY
-import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
-import com.metropolia.eatthefrog.constants.USERNAME_KEY
+import com.metropolia.eatthefrog.constants.*
 import com.metropolia.eatthefrog.database.InitialDB
 import org.apache.commons.io.IOUtils
 import java.io.ByteArrayOutputStream
@@ -32,22 +30,56 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
     var darkmode = MutableLiveData(false)
     var showDeadline = MutableLiveData(true)
     var showConfirmWindow = MutableLiveData(true)
-    var selectedTypes = MutableLiveData(listOf("Test"))
+    var selectedTypes = MutableLiveData(listOf(all))
 
     fun getClosedTasks() = database.taskDao().getClosedTasks()
     fun getActiveTasks() = database.taskDao().getActiveTasks()
     fun getFrogsEaten() = database.taskDao().getFrogsEaten()
     fun getTotalTaskCount() = database.taskDao().getTotalTaskCount()
 
+
+    init {
+        darkmode.value = getBooleanFromPreferences(DARK_MODE_KEY, false)
+        showDeadline.value = getBooleanFromPreferences(DEADLINE_KEY, true)
+        showConfirmWindow.value = getBooleanFromPreferences(CONFIRM_WINDOW_KEY, true)
+    }
+
     /**
      * Saves the image uri of the chosen profile picture to the shared preferences
      */
-
-    private fun savePreferences(imageUri: String) {
+    private fun saveImageUri(imageUri: String) {
         with (sharedPreferences.edit()) {
             putString(PROFILE_IMAGE_KEY, imageUri)
             apply()
         }
+    }
+
+    private fun saveDarkModeStatus() {
+        with (sharedPreferences.edit()) {
+            putBoolean(DARK_MODE_KEY, darkmode.value!!)
+            apply()
+        }
+    }
+
+    private fun saveConfirmWindowStatus() {
+        with (sharedPreferences.edit()) {
+            putBoolean(CONFIRM_WINDOW_KEY, showConfirmWindow.value!!)
+            apply()
+        }
+    }
+
+    private fun saveShowDeadlineStatus() {
+        with (sharedPreferences.edit()) {
+            putBoolean(DEADLINE_KEY, showDeadline.value!!)
+            apply()
+        }
+        Log.d("DEADLINE PREFS STATUS", getBooleanFromPreferences(DEADLINE_KEY, true).toString())
+        Log.d("DEADLINE VALUE", showDeadline.value.toString())
+    }
+
+    private fun getBooleanFromPreferences(key: String, default: Boolean): Boolean {
+        val prefs = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+        return prefs.getBoolean(key, default)
     }
 
     /**
@@ -77,7 +109,6 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
     /**
      * Loads the uri of the current saved profile picture from shared preferences
      */
-
     fun loadProfilePicture() : String? {
         val sharedPreferences = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         return sharedPreferences.getString(PROFILE_IMAGE_KEY, null)
@@ -85,12 +116,15 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
 
     fun toggleDarkMode() {
         darkmode.value = !darkmode.value!!
+        saveDarkModeStatus()
     }
     fun toggleDeadline() {
         showDeadline.value = !showDeadline.value!!
+        saveShowDeadlineStatus()
     }
     fun toggleConfirmWindow() {
         showConfirmWindow.value = !showConfirmWindow.value!!
+        saveConfirmWindowStatus()
     }
 
     /**
@@ -129,7 +163,7 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
             byteStream.close()
             Log.d("Saved image to Internal storage", "success")
         }
-        savePreferences(imageUri.toString())
+        saveImageUri(imageUri.toString())
         return imageUri
     }
 }

@@ -1,11 +1,9 @@
 package com.metropolia.eatthefrog.screens.profile.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -14,10 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
@@ -67,8 +62,8 @@ fun GraphFilterButtons(vm: ProfileScreenViewModel) {
                     if (selectedTypes.value?.contains(filter) == true) MaterialTheme.colors.primary
                     else MaterialTheme.colors.primaryVariant
                 )
-                .padding(horizontal = 10.dp, vertical = 5.dp)
-                .clickable { vm.toggleSelectedType(filter) },
+                .clickable { vm.toggleSelectedType(filter) }
+                .padding(horizontal = 10.dp, vertical = 5.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -89,6 +84,4 @@ fun GraphFilterButtons(vm: ProfileScreenViewModel) {
         GraphButton(filter = stringResource(R.string.tasks), left = false, center = true)
         GraphButton(filter = stringResource(R.string.frogs), left = false, center = false)
     }
-
-
 }
