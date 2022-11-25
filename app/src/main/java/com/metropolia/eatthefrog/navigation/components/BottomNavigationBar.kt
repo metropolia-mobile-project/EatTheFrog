@@ -15,9 +15,10 @@ import com.metropolia.eatthefrog.navigation.NavigationItem
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
-        NavigationItem.Home,
         NavigationItem.AddTask,
-        NavigationItem.Profile
+        NavigationItem.Profile,
+        NavigationItem.Home,
+        NavigationItem.History
     )
     BottomNavigation(backgroundColor = MaterialTheme.colors.surface) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()

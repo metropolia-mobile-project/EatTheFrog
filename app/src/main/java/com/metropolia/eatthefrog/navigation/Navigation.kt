@@ -12,6 +12,7 @@ import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.screens.HomeScreen
 import com.metropolia.eatthefrog.screens.ProfileScreen
 import com.metropolia.eatthefrog.screens.addTask.AddTaskScreen
+import com.metropolia.eatthefrog.screens.history.HistoryScreen
 
 @ExperimentalMaterialApi
 @Composable
@@ -68,6 +69,9 @@ fun Navigation(navController: NavHostController, username: String, application: 
         }
         composable(NavigationItem.Profile.route) {
             ProfileScreen(username, application)
+        }
+        composable(NavigationItem.History.route) {
+            HistoryScreen(application, navController)
         }
     }
 }
