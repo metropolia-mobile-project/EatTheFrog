@@ -11,11 +11,15 @@ import androidx.lifecycle.MutableLiveData
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.*
 import com.metropolia.eatthefrog.database.InitialDB
+import com.patrykandpatryk.vico.core.entry.ChartEntry
+import com.patrykandpatryk.vico.core.entry.ChartEntryModelProducer
+import kotlinx.coroutines.runBlocking
 import org.apache.commons.io.IOUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ProfileScreenViewModel(application: Application): AndroidViewModel(application) {
@@ -36,7 +40,7 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
     fun getActiveTasks() = database.taskDao().getActiveTasks()
     fun getFrogsEaten() = database.taskDao().getFrogsEaten()
     fun getTotalTaskCount() = database.taskDao().getTotalTaskCount()
-
+    fun parseStringToDate(string: String) = SimpleDateFormat(DATE_FORMAT).parse(string)
 
     init {
         darkmode.value = getBooleanFromPreferences(DARK_MODE_KEY, false)
@@ -166,4 +170,117 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         saveImageUri(imageUri.toString())
         return imageUri
     }
+
+
+    /**
+     * Creates Entry-objects of the completed tasks.
+     */
+    fun getTasksCompletedEntries(): ChartEntryModelProducer {
+        var entries = mutableListOf<Pair<String, Float>>()
+
+        runBlocking {
+            try {
+                var tasks = database.taskDao().getAllCompletedTasksOrderedByDate()
+                var curDate = tasks[0].deadline
+                var taskAmount = 0f
+
+                for (i in tasks.indices) {
+
+                    if (tasks[i].deadline == curDate) {
+                        taskAmount++
+                        if (i == tasks.size -1) {
+                            entries.add(Pair(curDate, taskAmount))
+                        }
+                    }
+                    else {
+
+                        if (taskAmount > 0f) entries.add(Pair(curDate, taskAmount))
+                        curDate = tasks[i].deadline
+                        taskAmount = 1f
+                    }
+                }
+            } catch (e: Exception) {
+                entries = mutableListOf(Pair(Calendar.getInstance().time.toString(), 0f))
+                Log.d("TASK_ENTRY_FAILURE", e.message.toString())
+            }
+        }
+        return entries.mapIndexed { index, (dateString, y) ->
+            TaskEntry(
+                date = parseStringToDate(dateString) as Date,
+                taskCompletedAmount = index,
+                x = index.toFloat(),
+                y = y,
+            )
+        }.let { entryCollection -> ChartEntryModelProducer(entryCollection) }
+    }
+
+
+
+    /**
+     * Creates Entry-objects of the completed frogs.
+     */
+    fun getFrogsCompletedEntries(): ChartEntryModelProducer {
+        var entries = mutableListOf<Pair<String, Int>>()
+
+        runBlocking {
+            try {
+                var tasks = database.taskDao().getAllCompletedTasksOrderedByDate()
+
+                for (i in tasks.indices) {
+                    val task = tasks[i]
+
+                    if (task.isFrog) {
+                        entries.add(Pair(task.deadline, 1))
+                        Log.d("LOOPING, FROG FOUND", "task: ${tasks[i].name}")
+                    }
+
+                }
+            } catch (e: Exception) {
+                entries = mutableListOf(Pair(Calendar.getInstance().time.toString(), 1))
+                Log.d("FROG_ENTRY_FAILURE", e.message.toString())
+            }
+        }
+
+        return entries.mapIndexed { index, (dateString, isFrog) ->
+            TaskEntry(
+                date = parseStringToDate(dateString) as Date,
+                taskCompletedAmount = 1,
+                x = index.toFloat(),
+                y = isFrog.toFloat(),
+            )
+        }.let { entryCollection -> ChartEntryModelProducer(entryCollection) }
+    }
 }
+
+class TaskEntry(
+    val date: Date,
+    val taskCompletedAmount: Int,
+    override val x: Float,
+    override val y: Float,
+) : ChartEntry {
+    override fun withY(y: Float) = TaskEntry(
+        date = this.date,
+        taskCompletedAmount = this.taskCompletedAmount,
+        x = this.x,
+        y = y,
+    )
+}
+/*
+
+class FrogEntry(
+    val date: Date,
+
+    override val x: Float,
+    override val y: Float,
+) : ChartEntry {
+    override fun withY(y: Float) = FrogEntry(
+        date = this.date,
+        isFrog = this.isFrog,
+        x = this.x,
+        y = y,
+    )
+}
+*/
+
+
+

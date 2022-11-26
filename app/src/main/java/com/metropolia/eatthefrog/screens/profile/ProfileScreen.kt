@@ -28,7 +28,7 @@ fun ProfileScreen(username: String, application: Application) {
         Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.secondary)
-            .padding(10.dp),
+            .padding(horizontal = 10.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

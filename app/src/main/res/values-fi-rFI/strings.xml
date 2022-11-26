@@ -57,4 +57,7 @@
     <string name="at">klo</string>
     <string name="settings">Asetukset</string>
     <string name="frogs">Sammakot</string>
+    <string name="activity">Aktiivisuus</string>
+    <string name="frogs_completed">Suoritetut sammakot</string>
+    <string name="tasks_completed">Suoritetut tehtävät</string>
 </resources>

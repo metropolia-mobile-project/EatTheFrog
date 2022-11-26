@@ -6,6 +6,8 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.patrykandpatryk.vico.compose.m3.style.m3ChartStyle
+import com.patrykandpatryk.vico.compose.style.ProvideChartStyle
 
 private val DarkColorPalette = darkColors(
     primary = YaleBlueLight,

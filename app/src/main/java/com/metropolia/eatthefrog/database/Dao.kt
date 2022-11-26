@@ -30,6 +30,9 @@ interface TaskDao {
     @Query("SELECT * FROM task WHERE completed = 1 AND task_name LIKE '%' || :pattern || '%' ORDER BY deadline DESC")
     fun getAllCompletedTasksOrderedByDate(pattern: String): LiveData<List<Task>>
 
+    @Query("SELECT * FROM task WHERE completed = 1 ORDER BY deadline ASC")
+    suspend fun getAllCompletedTasksOrderedByDate(): List<Task>
+
     @Query("SELECT * FROM task WHERE completed = 0 AND task_name LIKE '%' || :pattern || '%' ORDER BY deadline DESC")
     fun getAllIncompleteTasksOrderedByDate(pattern: String): LiveData<List<Task>>
 

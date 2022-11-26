@@ -56,12 +56,12 @@ fun ProfileGalleryPickerContainer(vm: ProfileScreenViewModel, username: String) 
 
     Card(
         modifier = Modifier
-            .padding(bottom = 10.dp)
+            .padding(vertical = 10.dp)
             .fillMaxWidth()
             .fillMaxHeight(0.5f),
         shape = RoundedCornerShape(10.dp),
         backgroundColor = MaterialTheme.colors.background,
-        elevation = 5.dp,
+        elevation = 25.dp,
     ) {
 
         Column(
@@ -124,7 +124,6 @@ fun ProfileGalleryPickerContainer(vm: ProfileScreenViewModel, username: String) 
             }
             Text(
                 text = username,
-                fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 modifier = Modifier
                     .padding(15.dp),

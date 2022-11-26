@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.constants.CONFIRM_WINDOW_KEY
 import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.viewmodels.DateFilter
@@ -212,27 +213,36 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
         val desc = stringResource(
             if (task.value?.completed == false) R.string.close_task else R.string.open_task,
             task.value?.name ?: "")
-        ConfirmWindow(
-            {vm.toggleTaskCompleted(task.value)},
-            {vm.closeTaskConfirmWindow()},
-            desc,
-            modifier = Modifier.clip(
-                RoundedCornerShape(20.dp))
-        )
 
+        if (vm.getBooleanFromPreferences(CONFIRM_WINDOW_KEY, true)) {
+            ConfirmWindow(
+                {vm.toggleTaskCompleted(task.value)},
+                {vm.closeTaskConfirmWindow()},
+                desc,
+                modifier = Modifier.clip(
+                    RoundedCornerShape(20.dp))
+            )
+        } else {
+            vm.toggleTaskCompleted(task.value)
+        }
     }
 
     if (vm.showFrogConfirmWindow.value) {
         val desc = stringResource(
             if (task.value?.isFrog == false) R.string.set_frog else R.string.remove_frog,
             task.value?.name ?: "")
-        ConfirmWindow(
-            {vm.toggleTaskFrog()},
-            {vm.closeFrogConfirmWindow()},
-            desc,
-            modifier = Modifier.clip(
-                RoundedCornerShape(20.dp))
-        )
+
+        if (vm.getBooleanFromPreferences(CONFIRM_WINDOW_KEY, true)) {
+            ConfirmWindow(
+                {vm.toggleTaskFrog()},
+                {vm.closeFrogConfirmWindow()},
+                desc,
+                modifier = Modifier.clip(
+                    RoundedCornerShape(20.dp))
+            )
+        } else {
+            vm.toggleTaskFrog()
+        }
     }
 }
 
