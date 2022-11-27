@@ -77,6 +77,15 @@ fun GraphInfo() {
                         .clip(CircleShape)
                         .background(colors.primaryVariant))
             }
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
+                Text(stringResource(R.string.frogs_completed), modifier = Modifier.padding(end = 10.dp))
+                Box(
+                    Modifier
+                        .wrapContentSize()
+                        .clip(CircleShape)) {
+                    Text("X")
+                }
+            }
         }
     }
 }

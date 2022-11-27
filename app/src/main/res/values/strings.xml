@@ -60,6 +60,6 @@
     <string name="settings">Settings</string>
     <string name="frogs">Frogs</string>
     <string name="activity">Activity</string>
-    <string name="frogs_completed">Frogs completed</string>
+    <string name="frogs_completed">Frog completed</string>
     <string name="tasks_completed">Tasks completed</string>
 </resources>
