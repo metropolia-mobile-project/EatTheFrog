@@ -83,7 +83,7 @@ fun GraphInfo() {
                     Modifier
                         .wrapContentSize()
                         .clip(CircleShape)) {
-                    Text("X")
+                    Text("*")
                 }
             }
         }
@@ -106,7 +106,7 @@ fun ActivityGraph(vm: ProfileScreenViewModel) {
 
             entries?.run {
                 if(y == 0f) ""
-                else "${getDay(date)}/${getMonth(date)} ${if (frogCompleted) "x" else ""}"
+                else "${getDay(date)}/${getMonth(date)} ${if (frogCompleted) "*" else ""}"
 
             }?.orEmpty()
                 ?: entries
