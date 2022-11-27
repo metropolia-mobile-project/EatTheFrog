@@ -104,7 +104,7 @@ fun SwitchRow(desc: String,
                 text = desc,
                 fontWeight = FontWeight.Light,
                 color = Color.Black,
-                fontSize = 14.sp
+                fontSize = 13.sp
             )
         }
 

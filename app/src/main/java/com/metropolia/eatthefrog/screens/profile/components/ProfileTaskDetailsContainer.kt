@@ -79,7 +79,7 @@ fun TaskInfoContainer(title: String, info: String, icon: Int, lightBackground: B
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.SpaceBetween
             ) {
-            Text(title)
+            Text(title, fontSize = 13.sp)
             Image(
                 modifier = Modifier
                     .size(40.dp),

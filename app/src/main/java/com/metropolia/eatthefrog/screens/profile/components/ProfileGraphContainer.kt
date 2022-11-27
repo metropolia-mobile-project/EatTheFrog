@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.viewmodels.TaskEntry
 import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
@@ -27,9 +28,13 @@ import com.patrykandpatryk.vico.compose.axis.vertical.startAxis
 import com.patrykandpatryk.vico.compose.chart.Chart
 import com.patrykandpatryk.vico.compose.chart.column.columnChart
 import com.patrykandpatryk.vico.compose.component.shape.lineComponent
+import com.patrykandpatryk.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
+import com.patrykandpatryk.vico.core.axis.vertical.VerticalAxis
 import com.patrykandpatryk.vico.core.component.shape.Shapes
+import com.patrykandpatryk.vico.core.entry.ChartEntryModelProducer
 
 import com.patrykandpatryk.vico.core.entry.composed.plus
+import com.patrykandpatryk.vico.core.entry.entryModelOf
 import java.util.*
 
 @Composable
@@ -65,8 +70,8 @@ fun ProfileGraphContainer(vm: ProfileScreenViewModel) {
             }
         }
     }
-
 }
+
 
 @Composable
 fun GraphInfo() {
@@ -93,7 +98,6 @@ fun GraphInfo() {
                         .background(colors.primaryVariant))
             }
         }
-
     }
 }
 
@@ -114,7 +118,7 @@ fun GraphFilterButtons(vm: ProfileScreenViewModel) {
                         topEnd = if (!left && !center) 20.dp else 0.dp,
                     )
                 )
-                .width(100.dp)
+                .width(80.dp)
                 .background(
                     if (selectedTypes.value?.contains(filter) == true) colors.primary
                     else colors.primaryVariant
@@ -125,7 +129,8 @@ fun GraphFilterButtons(vm: ProfileScreenViewModel) {
             verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = filter,
-                color = Color.White
+                color = Color.White,
+                fontSize = 10.sp
             )
         }
     }
@@ -147,24 +152,35 @@ fun GraphFilterButtons(vm: ProfileScreenViewModel) {
 @Composable
 fun ActivityGraph(vm: ProfileScreenViewModel, type: String) {
 
-    Log.d("selectedGraphs updated", "")
-
     val bottomAxis = bottomAxis(
         valueFormatter = { value, chartValues ->
-            (chartValues.chartEntryModel.entries[0].getOrNull(value.toInt()) as TaskEntry?)
-                ?.run { "${getDay(date)}/${getMonth(date)}" }
-                .orEmpty()
+            val entries = chartValues.chartEntryModel.entries[0].getOrNull(value.toInt()) as TaskEntry?
+
+            entries?.date?.run { "${getDay(this)}/${getMonth(this)}" }?.orEmpty()
+                ?: entries
+                    ?.date
+                    ?.run { "0" }
+                    .orEmpty()
         },
     )
 
     val startAxis = startAxis(
         maxLabelCount = 4,
-        valueFormatter = { value, chartValues ->
-            (chartValues.chartEntryModel.entries[0].getOrNull(value.toInt()) as TaskEntry?)
-                ?.run { "$taskCompletedAmount" }
+        horizontalLabelPosition = VerticalAxis.HorizontalLabelPosition.Inside,
+   /*     valueFormatter = { value, chartValues ->
+
+            val entries = chartValues.chartEntryModel.entries[0]
+
+            (entries.getOrNull(value.toInt()) as TaskEntry?)
+                ?.taskCompletedAmount
+                ?.run {
+                    Log.d("CHARTVALUES", "$this")
+                    "$this"
+                }
                 .orEmpty()
-        },
+        },*/
     )
+
 
     Chart(
         modifier = Modifier.fillMaxSize(),
@@ -172,14 +188,14 @@ fun ActivityGraph(vm: ProfileScreenViewModel, type: String) {
             spacing = 40.dp,
             columns =
             if (type == "Frogs") listOf(lineComponent(
-                thickness = 10.dp, color = colorResource(R.color.green),
-                shape = Shapes.pillShape))
+                thickness = 15.dp, color = colorResource(R.color.green),
+                shape = Shapes.roundedCornerShape(topLeftPercent = 50)))
             else listOf(lineComponent(
                 thickness = 20.dp, color = colors.primaryVariant,
-                shape = Shapes.pillShape),
+                shape = Shapes.roundedCornerShape(topLeftPercent = 50)),
                 lineComponent(
-                thickness = 10.dp, color = colorResource(R.color.green),
-                shape = Shapes.pillShape))),
+                thickness = 15.dp, color = colorResource(R.color.green),
+                shape = Shapes.roundedCornerShape(topLeftPercent = 50)))),
         chartModelProducer = when (type) {
             "All" -> vm.getTasksCompletedEntries() + vm.getFrogsCompletedEntries()
             "Frogs" -> vm.getFrogsCompletedEntries()
