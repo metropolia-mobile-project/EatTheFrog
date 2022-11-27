@@ -177,7 +177,6 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
                 var frogComplete = false
 
                 for (i in tasks.indices) {
-                    Log.d("TASK_ENTRY LOOP", "$i, ${tasks[i].deadline}")
                     if (tasks[i].isFrog) frogComplete = true
 
                     if (tasks[i].deadline == curDate) {
@@ -193,7 +192,7 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
                     } else {
 
                         entries.add(TaskEntry(parseStringToDate(curDate), frogComplete, entries.size.toFloat(), taskAmount))
-                        Log.d("TASK_ENTRY_SUCCESS S", "$curDate, $taskAmount, ${entries.size}")
+                        Log.d("TASK_ENTRY_SUCCESS", "$curDate, $taskAmount, ${entries.size}")
 
                         curDate = tasks[i].deadline
                         taskAmount = 1f
@@ -210,8 +209,6 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         if (entries.size == 1) {
             entries.add(TaskEntry(Date(), false, entries.size.toFloat(), 0f))
         }
-
-//        entries.sortBy {it.date }
 
         return ChartEntryModelProducer(entries)
     }
