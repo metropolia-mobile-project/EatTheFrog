@@ -3,5 +3,13 @@
 
     <style name="Theme.EatTheFrog" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/purple_700</item>
+        <item name="android:datePickerDialogTheme">@style/Dialog.Theme</item>
+        <item name="android:timePickerDialogTheme">@style/Dialog.Theme</item>
+    </style>
+
+    <style name="Dialog.Theme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorPrimary">@color/yale_blue</item>
+        <item name="android:colorPrimaryDark">@color/yale_blue</item>
+        <item name="android:colorAccent">@color/yale_blue</item>
     </style>
 </resources>

@@ -17,6 +17,9 @@ interface TaskDao {
     @Query("UPDATE task SET frog = (CASE WHEN frog = 0 AND uid = :id THEN 1 ELSE 0 END) WHERE task.deadline = :deadline")
     suspend fun toggleFrog(deadline: String, id: Long)
 
+    @Query("UPDATE task SET frog = 0 WHERE task.deadline = :deadline")
+    suspend fun toggleFrogsFalse(deadline: String)
+
     @Query("UPDATE task SET completed = (CASE WHEN completed = 0 THEN 1 ELSE 0 END) WHERE task.uid = :id")
     suspend fun toggleTask(id: Long)
 
@@ -26,6 +29,9 @@ interface TaskDao {
 
     @Query("SELECT * FROM task WHERE completed = 1 AND task_name LIKE '%' || :pattern || '%' ORDER BY deadline DESC")
     fun getAllCompletedTasksOrderedByDate(pattern: String): LiveData<List<Task>>
+
+    @Query("SELECT * FROM task WHERE completed = 1 ORDER BY deadline ASC")
+    suspend fun getAllCompletedTasksOrderedByDate(): List<Task>
 
     @Query("SELECT * FROM task WHERE completed = 0 AND task_name LIKE '%' || :pattern || '%' ORDER BY deadline DESC")
     fun getAllIncompleteTasksOrderedByDate(pattern: String): LiveData<List<Task>>

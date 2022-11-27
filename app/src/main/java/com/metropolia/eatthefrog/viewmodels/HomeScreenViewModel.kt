@@ -35,7 +35,6 @@ enum class DateFilter {
  */
 class HomeScreenViewModel(application: Application) : TasksViewModel(application) {
 
-    val app = application
     private val database = InitialDB.get(application)
     private val service = APIService.service
 

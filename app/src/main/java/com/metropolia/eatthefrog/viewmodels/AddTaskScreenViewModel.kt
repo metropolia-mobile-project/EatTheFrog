@@ -35,6 +35,12 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
         editedSubTaskList.value = oldList!! + list
     }
 
+    fun toggleFrogsFalse(deadLine: String){
+        viewModelScope.launch {
+            database.taskDao().toggleFrogsFalse(deadLine)
+        }
+    }
+
     fun deleteEditedSubTask(ind: Int) {
         val newList: MutableList<Subtask> = editedSubTaskList.value!!.toMutableList()
         newList.removeAt(ind)

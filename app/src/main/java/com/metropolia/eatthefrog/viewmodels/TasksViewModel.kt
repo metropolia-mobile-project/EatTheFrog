@@ -1,14 +1,18 @@
 package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.metropolia.eatthefrog.constants.PROFILE_IMAGE_KEY
+import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Task
 
 open class TasksViewModel(application: Application) : AndroidViewModel(application) {
 
+    val app = application
     private val database = InitialDB.get(application)
 
     var popupVisible = MutableLiveData(false)
@@ -26,4 +30,8 @@ open class TasksViewModel(application: Application) : AndroidViewModel(applicati
         popupVisible.value = true
     }
 
+    fun getBooleanFromPreferences(key: String, default: Boolean): Boolean {
+        val prefs = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+        return prefs.getBoolean(key, default)
+    }
 }
