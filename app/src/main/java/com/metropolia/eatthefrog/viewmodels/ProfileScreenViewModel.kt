@@ -170,25 +170,30 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         runBlocking {
             try {
                 var tasks = database.taskDao().getAllCompletedTasksOrderedByDate()
+                tasks = tasks.sortedBy { parseStringToDate(it.deadline) }
+
                 var curDate = tasks[0].deadline
                 var taskAmount = 0f
                 var frogComplete = false
 
                 for (i in tasks.indices) {
-
+                    Log.d("TASK_ENTRY LOOP", "$i, ${tasks[i].deadline}")
                     if (tasks[i].isFrog) frogComplete = true
 
                     if (tasks[i].deadline == curDate) {
                         taskAmount++
                         if (i == tasks.size -1) {
                             entries.add(TaskEntry(parseStringToDate(curDate), frogComplete, entries.size.toFloat(), taskAmount))
-                            Log.d("TASK_ENTRY_SUCCESS LIST END", "$curDate, $taskAmount")
+                            Log.d("TASK_ENTRY_SUCCESS LIST END", "$curDate, $taskAmount, ${entries.size}")
                         }
-                    }
-                    else {
+                    } else if (i == tasks.size -1) {
+                        entries.add(TaskEntry(parseStringToDate(curDate), frogComplete, entries.size.toFloat(), taskAmount))
+                        entries.add(TaskEntry(parseStringToDate(tasks[i].deadline), frogComplete, entries.size.toFloat(), 1f))
+                        Log.d("TASK_ENTRY_SUCCESS LIST END", "${tasks[i].deadline}, $taskAmount, ${entries.size}")
+                    } else {
 
                         entries.add(TaskEntry(parseStringToDate(curDate), frogComplete, entries.size.toFloat(), taskAmount))
-                        Log.d("TASK_ENTRY_SUCCESS S", "$curDate, $taskAmount")
+                        Log.d("TASK_ENTRY_SUCCESS S", "$curDate, $taskAmount, ${entries.size}")
 
                         curDate = tasks[i].deadline
                         taskAmount = 1f
@@ -205,6 +210,8 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         if (entries.size == 1) {
             entries.add(TaskEntry(Date(), false, entries.size.toFloat(), 0f))
         }
+
+//        entries.sortBy {it.date }
 
         return ChartEntryModelProducer(entries)
     }
