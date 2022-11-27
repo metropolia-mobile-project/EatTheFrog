@@ -11,6 +11,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.MutableLiveData
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.metropolia.eatthefrog.constants.DARK_MODE_KEY
 import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
@@ -25,18 +27,21 @@ open class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         val sharedPreferences = this.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         val username = sharedPreferences.getString(USERNAME_KEY, null)
-        var darkmode = mutableStateOf(sharedPreferences.getBoolean(DARK_MODE_KEY, false))
+        var darkmode = MutableLiveData(sharedPreferences.getBoolean(DARK_MODE_KEY, false))
 
-        sharedPreferences.registerOnSharedPreferenceChangeListener { prefs, key ->
-            if (key == DARK_MODE_KEY) darkmode.value = prefs.getBoolean(DARK_MODE_KEY, false)
+        sharedPreferences.registerOnSharedPreferenceChangeListener { a, s ->
+            if (s == DARK_MODE_KEY) {
+                darkmode.value = a.getBoolean(DARK_MODE_KEY, false)
+            }
         }
         
         setContent {
+            val dm = darkmode.observeAsState()
             ProvideWindowInsets {
-                EatTheFrogTheme(settingsDarkMode = darkmode.value) {
+                EatTheFrogTheme(settingsDarkMode = dm.value ?: false) {
                     if (username == null) {
                         WelcomeScreen(application, this)
                     } else MainScreen(username, application)

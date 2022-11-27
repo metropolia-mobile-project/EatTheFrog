@@ -28,8 +28,6 @@ import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
 @Composable
 fun ProfileTaskSwitchContainer(vm: ProfileScreenViewModel) {
 
-    // TODO: Add motivational quote under profile name. Add edit button for name. Set profile image to a container, offset -50%
-
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -103,7 +101,6 @@ fun SwitchRow(desc: String,
                 modifier = Modifier.padding(horizontal = 10.dp),
                 text = desc,
                 fontWeight = FontWeight.Light,
-                color = Color.Black,
                 fontSize = 13.sp
             )
         }

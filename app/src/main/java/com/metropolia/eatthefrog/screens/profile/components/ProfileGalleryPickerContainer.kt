@@ -108,23 +108,20 @@ fun ProfileGalleryPickerContainer(vm: ProfileScreenViewModel, username: String) 
                     }
                 }
                 TextButton(modifier = Modifier
-                    .width(60.dp)
-                    .height(60.dp)
-                    .align(Alignment.BottomEnd),
+                    .width(50.dp)
+                    .height(50.dp)
+                    .align(Alignment.TopEnd),
                     onClick = { launcher.launch("image/*") }) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_image),
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(MaterialTheme.colors.primaryVariant),
-                        modifier = Modifier
-                            .width(60.dp)
-                            .height(60.dp),
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             }
             Text(
                 text = username,
-                color = Color.Black,
                 modifier = Modifier
                     .padding(15.dp),
                 textAlign = TextAlign.Center,

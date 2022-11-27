@@ -229,7 +229,7 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
 
         var e = entries.mapIndexed { index, (dateString, y) ->
             TaskEntry(
-                date = parseStringToDate(dateString) as Date,
+                date = parseStringToDate(dateString),
                 taskCompletedAmount = y.toInt(),
                 x = index.toFloat(),
                 y = y,
@@ -264,7 +264,6 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
                             Log.d("FROG_ENTRY_SUCCESS", "$curDate, 1")
 
                         } else if (i == tasks.size -1 && !curDateHandled) {
-
                             entries.add(Pair(curDate, 0))
                             curDateHandled = true
                             Log.d("FROG_ENTRY_SUCCESS", "$curDate, 1")
@@ -274,12 +273,9 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
                         entries.add(Pair(curDate, 0))
                         curDate = tasks[i].deadline
                         curDateHandled = false
-//                        isFrog = 0
                         Log.d("FROG_ENTRY_SUCCESS", "$curDate, 1")
                     }
                 }
-
-
 
             } catch (e: Exception) {
                 entries = mutableListOf(Pair(Calendar.getInstance().time.toString(), 0))
@@ -289,7 +285,7 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
 
         var e = entries.mapIndexed { index, (dateString, isFrog) ->
             TaskEntry(
-                date = parseStringToDate(dateString) as Date,
+                date = parseStringToDate(dateString),
                 taskCompletedAmount = isFrog,
                 x = index.toFloat(),
                 y = isFrog.toFloat(),
@@ -297,7 +293,6 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         }
         return ChartEntryModelProducer(e)
     }
-
 }
 
 class TaskEntry(

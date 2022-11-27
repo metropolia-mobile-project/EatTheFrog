@@ -1,7 +1,6 @@
 package com.metropolia.eatthefrog.screens.profile.components
 
 import android.text.format.DateFormat
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -28,13 +27,9 @@ import com.patrykandpatryk.vico.compose.axis.vertical.startAxis
 import com.patrykandpatryk.vico.compose.chart.Chart
 import com.patrykandpatryk.vico.compose.chart.column.columnChart
 import com.patrykandpatryk.vico.compose.component.shape.lineComponent
-import com.patrykandpatryk.vico.core.axis.formatter.DecimalFormatAxisValueFormatter
 import com.patrykandpatryk.vico.core.axis.vertical.VerticalAxis
 import com.patrykandpatryk.vico.core.component.shape.Shapes
-import com.patrykandpatryk.vico.core.entry.ChartEntryModelProducer
-
 import com.patrykandpatryk.vico.core.entry.composed.plus
-import com.patrykandpatryk.vico.core.entry.entryModelOf
 import java.util.*
 
 @Composable
@@ -180,7 +175,6 @@ fun ActivityGraph(vm: ProfileScreenViewModel, type: String) {
                 .orEmpty()
         },*/
     )
-
 
     Chart(
         modifier = Modifier.fillMaxSize(),
