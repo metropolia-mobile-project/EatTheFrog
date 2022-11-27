@@ -24,6 +24,7 @@ import com.metropolia.eatthefrog.ui.theme.EatTheFrogTheme
 open class MainActivity : ComponentActivity() {
 
     var darkmode = MutableLiveData(false)
+    lateinit var prefsListener : SharedPreferences.OnSharedPreferenceChangeListener
 
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +34,16 @@ open class MainActivity : ComponentActivity() {
         val sharedPreferences = this.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         val username = sharedPreferences.getString(USERNAME_KEY, null)
         darkmode.value = sharedPreferences.getBoolean(DARK_MODE_KEY, false)
-        
+
+        prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+            if (key == DARK_MODE_KEY) {
+                darkmode.value = prefs.getBoolean(DARK_MODE_KEY, false)
+            }
+            Log.d("DARKMODE_CHANGED", darkmode.value.toString())
+        }
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(prefsListener)
+
         setContent {
             val dm = darkmode.observeAsState()
             ProvideWindowInsets {
@@ -43,17 +53,6 @@ open class MainActivity : ComponentActivity() {
                     } else MainScreen(username, application)
                 }
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val sharedPreferences = this.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
-        sharedPreferences.registerOnSharedPreferenceChangeListener { a, s ->
-            if (s == DARK_MODE_KEY) {
-                darkmode.value = a.getBoolean(DARK_MODE_KEY, false)
-            }
-            Log.d("DARKMODE_CHANGED", darkmode.value.toString())
         }
     }
 }
