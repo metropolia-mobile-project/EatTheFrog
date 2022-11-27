@@ -6,8 +6,6 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.patrykandpatryk.vico.compose.m3.style.m3ChartStyle
-import com.patrykandpatryk.vico.compose.style.ProvideChartStyle
 
 private val DarkColorPalette = darkColors(
     primary = YaleBlueLight,
@@ -32,9 +30,9 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun EatTheFrogTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun EatTheFrogTheme(darkTheme: Boolean = isSystemInDarkTheme(), settingsDarkMode: Boolean, content: @Composable () -> Unit) {
     val systemUiController = rememberSystemUiController()
-    val colors = if (darkTheme) {
+    val colors = if (darkTheme || settingsDarkMode) {
         systemUiController.setSystemBarsColor(
             color = DarkColorPalette.primaryVariant
         )
