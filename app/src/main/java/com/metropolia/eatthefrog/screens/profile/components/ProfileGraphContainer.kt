@@ -3,7 +3,10 @@ package com.metropolia.eatthefrog.screens.profile.components
 import android.text.format.DateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -11,6 +14,7 @@ import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,14 +27,12 @@ import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.viewmodels.TaskEntry
 import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
 import com.patrykandpatryk.vico.compose.axis.horizontal.bottomAxis
-import com.patrykandpatryk.vico.compose.axis.vertical.startAxis
+import com.patrykandpatryk.vico.compose.axis.horizontal.topAxis
 import com.patrykandpatryk.vico.compose.chart.Chart
 import com.patrykandpatryk.vico.compose.chart.column.columnChart
 import com.patrykandpatryk.vico.compose.component.shape.lineComponent
 import com.patrykandpatryk.vico.compose.component.shape.textComponent
-import com.patrykandpatryk.vico.core.axis.vertical.VerticalAxis
 import com.patrykandpatryk.vico.core.component.shape.Shapes
-import com.patrykandpatryk.vico.core.entry.composed.plus
 import java.util.*
 
 @Composable
@@ -92,7 +94,6 @@ fun GraphInfo() {
 
 @Composable
 fun ActivityGraph(vm: ProfileScreenViewModel) {
-
     val bottomAxis = bottomAxis(
 
         label = textComponent(),
@@ -116,33 +117,40 @@ fun ActivityGraph(vm: ProfileScreenViewModel) {
         },
     )
 
-    val startAxis = startAxis(
-        maxLabelCount = 4,
-        horizontalLabelPosition = VerticalAxis.HorizontalLabelPosition.Inside,
-   /*     valueFormatter = { value, chartValues ->
+    val topAxis = topAxis(
+        label = textComponent(),
 
-            val entries = chartValues.chartEntryModel.entries[0]
+        valueFormatter = { value, chartValues ->
+            var entries : TaskEntry? = try {
+                chartValues.chartEntryModel.entries[0].getOrNull(value.toInt()) as TaskEntry?
+            } catch (e: Exception) {
+                TaskEntry(Date(), false, 0f, 0f)
+            }
 
-            (entries.getOrNull(value.toInt()) as TaskEntry?)
-                ?.taskCompletedAmount
-                ?.run {
-                    Log.d("CHARTVALUES", "$this")
-                    "$this"
-                }
-                .orEmpty()
-        },*/
+            entries?.run {
+                if(y == 0f) ""
+                else "${y.toInt()}"
+
+            }?.orEmpty()
+                ?: entries
+                    ?.date
+                    ?.run { "" }
+                    .orEmpty()
+        },
     )
 
     Chart(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxHeight(),
         chart = columnChart(
             spacing = 40.dp,
             columns = listOf(lineComponent(
                 thickness = 20.dp, color = colors.primaryVariant,
                 shape = Shapes.roundedCornerShape(topLeftPercent = 50)))),
         chartModelProducer = vm.getTasksCompletedEntries(),
-            startAxis = startAxis,
-            bottomAxis = bottomAxis)
+            bottomAxis = bottomAxis,
+            topAxis = topAxis)
+
 }
 
 fun getDay(date: Date): CharSequence = DateFormat.format("dd", date)

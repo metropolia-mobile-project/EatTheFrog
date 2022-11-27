@@ -170,7 +170,7 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         runBlocking {
             try {
                 var tasks = database.taskDao().getAllCompletedTasksOrderedByDate()
-                tasks = tasks.sortedBy { parseStringToDate(it.deadline) }
+                tasks = tasks.sortedByDescending { parseStringToDate(it.deadline) }
 
                 var curDate = tasks[0].deadline
                 var taskAmount = 0f
