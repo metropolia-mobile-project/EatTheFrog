@@ -36,7 +36,8 @@ fun AddTaskBuildScreenContainer(
     editDesc: String?,
     dateDeadline: String,
     timeDeadline: String,
-    editTaskType: String?
+    editTaskType: String?,
+    isFrogBoolean: Boolean
 ) {
 
 
@@ -63,7 +64,7 @@ fun AddTaskBuildScreenContainer(
         taskType, sDate ?: currentDate, sTime, completed = false, isFrog = isFrog)
 
     val editTask = Task(editTaskId, taskTitle ?: "", description ?: "", taskType,
-        sDate ?: currentDate, sTime, completed = false, isFrog = false)
+        sDate ?: currentDate, sTime, completed = false, isFrog = isFrogBoolean)
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
