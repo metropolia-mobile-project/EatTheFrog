@@ -3,19 +3,15 @@ package com.metropolia.eatthefrog.navigation.components
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.navigation.NavigationItem
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
-        NavigationItem.AddTask,
         NavigationItem.Profile,
         NavigationItem.Home,
         NavigationItem.History

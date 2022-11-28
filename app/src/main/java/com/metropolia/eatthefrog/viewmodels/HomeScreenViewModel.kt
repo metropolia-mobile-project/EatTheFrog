@@ -3,15 +3,9 @@ package com.metropolia.eatthefrog.viewmodels
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.constants.PROFILE_IMAGE_KEY
 import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
@@ -19,7 +13,6 @@ import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.services.APIService
-import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*

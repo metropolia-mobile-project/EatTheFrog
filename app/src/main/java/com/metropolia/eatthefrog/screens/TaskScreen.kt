@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.CONFIRM_WINDOW_KEY
@@ -89,7 +90,11 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                     Image(
                         painter = painterResource(R.drawable.edit_24),
                         modifier = Modifier
-                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}/${task.value!!.isFrog}") },
+                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}/${task.value!!.isFrog}") {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    inclusive = true
+                                }
+                            } },
                         contentDescription = "edit button")
                 }
 
@@ -220,7 +225,8 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                 {vm.closeTaskConfirmWindow()},
                 desc,
                 modifier = Modifier.clip(
-                    RoundedCornerShape(20.dp))
+                    RoundedCornerShape(20.dp)),
+                application = vm.app
             )
         } else {
             vm.toggleTaskCompleted(task.value)
@@ -238,7 +244,8 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                 {vm.closeFrogConfirmWindow()},
                 desc,
                 modifier = Modifier.clip(
-                    RoundedCornerShape(20.dp))
+                    RoundedCornerShape(20.dp)),
+                application = vm.app
             )
         } else {
             vm.toggleTaskFrog()

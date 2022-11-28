@@ -201,7 +201,8 @@ fun HistoryScreenTaskPopup(vm: HistoryScreenViewModel, navController: NavControl
                 desc,
                 modifier = Modifier.clip(
                     RoundedCornerShape(20.dp)
-                )
+                ),
+                vm.app
             )
         } else {
             vm.toggleTaskCompleted()

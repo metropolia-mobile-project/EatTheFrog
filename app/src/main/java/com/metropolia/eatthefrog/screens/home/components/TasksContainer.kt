@@ -75,6 +75,7 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
                 calendar.time = deadlineDate
                 calendar.get(Calendar.WEEK_OF_YEAR) == currentWeek
             }
+            taskItems = taskItems?.sortedByDescending { parseStringToDate(it.deadline) }
         }
         DateFilter.MONTH -> {
             emptyTasksText = if (searchVisible.value == false) {
@@ -86,6 +87,7 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
                 val todayArray = today.split(".")
                 deadlineArray[1] == todayArray[1] && deadlineArray[2] == todayArray[2]
             }
+            taskItems = taskItems?.sortedByDescending { parseStringToDate(it.deadline) }
         }
         else -> { emptyTasksText = "Invalid DateFilter" }
     }
@@ -141,6 +143,7 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colors.secondary)
+                    .padding(top = 10.dp)
             ) {
                 items(items = taskItems, itemContent = { item ->
                     Box(Modifier.padding(10.dp)) {
@@ -178,7 +181,16 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
             )
         }
     }
+}
 
+private fun parseStringToDate(string: String): Date {
+    var d = Date()
+    try {
+        d = SimpleDateFormat(DATE_FORMAT).parse(string)
+    } catch (e: Exception) {
+        Log.d("Failed to parse date", e.message.toString())
+    }
+    return d
 }
 
 @Composable
