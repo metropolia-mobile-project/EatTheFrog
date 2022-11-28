@@ -23,6 +23,7 @@ fun AddTaskScreen(
     dateDeadline: String,
     timeDeadline: String,
     editTaskType: String?,
+    isFrogBoolean: Boolean,
 ) {
 
 
@@ -42,7 +43,8 @@ fun AddTaskScreen(
             editDesc,
             dateDeadline,
             timeDeadline,
-            editTaskType
+            editTaskType,
+            isFrogBoolean,
         )
     }
 }
