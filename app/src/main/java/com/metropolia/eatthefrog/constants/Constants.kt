@@ -2,6 +2,7 @@ package com.metropolia.eatthefrog.constants
 
 // Notification
 const val CHANNEL_ID = "testhingthisfirst"
+const val DATE_TIME_FORMAT = "d.M.yyyy HH:mm"
 
 // SharedPreferences
 const val SHARED_PREF_KEY = "PREFERENCES_KEY"

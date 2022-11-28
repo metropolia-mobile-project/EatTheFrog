@@ -10,16 +10,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 import androidx.navigation.NavController
+import com.metropolia.eatthefrog.notification.Scheduler
 import com.metropolia.eatthefrog.screens.home.components.ProfileContainer
 import com.metropolia.eatthefrog.screens.home.components.TasksContainer
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
+import com.metropolia.eatthefrog.viewmodels.NotificationsViewModel
 import java.util.*
+
+lateinit var notificationViewModel: NotificationsViewModel
 
 @ExperimentalMaterialApi
 @Composable
-
 fun HomeScreen(username: String, application: Application, navController: NavController) {
     val homeScreenViewModel = HomeScreenViewModel(application)
+    notificationViewModel = NotificationsViewModel(application)
+    Scheduler(viewModel = notificationViewModel)
+
     val calendar = Calendar.getInstance()
     calendar.time = Date()
     val currentWeek = calendar.get(Calendar.WEEK_OF_YEAR)

@@ -19,14 +19,12 @@ import com.metropolia.eatthefrog.notification.Scheduler
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 import com.metropolia.eatthefrog.viewmodels.NotificationsViewModel
 
-lateinit var notificationViewModel: NotificationsViewModel
 
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(username: String, application: Application) {
 
     val navController = rememberNavController()
-    notificationViewModel = NotificationsViewModel(application)
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) },
@@ -36,6 +34,4 @@ fun MainScreen(username: String, application: Application) {
         }
     },
     backgroundColor = MaterialTheme.colors.surface)
-
-    Scheduler(viewModel = notificationViewModel)
 }

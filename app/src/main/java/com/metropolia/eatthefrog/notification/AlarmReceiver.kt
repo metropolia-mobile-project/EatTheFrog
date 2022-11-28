@@ -10,13 +10,16 @@ import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
-import androidx.compose.runtime.State
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.activities.MainActivity
 import com.metropolia.eatthefrog.constants.CHANNEL_ID
+import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.constants.DATE_TIME_FORMAT
 import com.metropolia.eatthefrog.database.Task
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -26,6 +29,7 @@ import java.util.*
  */
 class AlarmReceiver : BroadcastReceiver() {
     private var notificationManager: NotificationManagerCompat? = null
+    private val converter = DateConverter()
 
     override fun onReceive(p0: Context?, p1: Intent?) {
         val task = p1?.getSerializableExtra("task") as? Task
@@ -88,9 +92,26 @@ fun setAlarm(task: Task, context: Context?) {
     val basicPendingIntent =
         getActivity(context, task.uid.toInt(), mainActivityIntent, FLAG_IMMUTABLE)
 
-    val time = Date().time
-    val clockInfoTest = AlarmManager.AlarmClockInfo(time, basicPendingIntent)
-    alarmManager.setAlarmClock(clockInfoTest, pendingIntent)
+    val timeSetForNotification = "12:53"
+    val sdf = SimpleDateFormat(DATE_FORMAT)
+    val sdff = SimpleDateFormat(DATE_TIME_FORMAT)
+    val today: String = sdf.format(Date())
+    val yhdistetty = today + " " + timeSetForNotification
+    Log.d("HOHHOH toady", today)
+    Log.d("HOHHOH yhdistetty", yhdistetty)
+    //val formatter = DateTimeFormatter.ISO_LOCAL_TIME
+    //val testi = LocalTime.parse(timeSetForNotification, formatter)
+    val date: Date = sdff.parse(yhdistetty)
+    Log.d("HOHHOH date", date.toString())
+    Log.d("HOHHOH date.time", date.time.toString())
+    val now = Date()
+    Log.d("HOHHOH now", now.toString())
+
+    if (date > now) {
+        val clockInfoTest = AlarmManager.AlarmClockInfo(date.time, basicPendingIntent)
+        alarmManager.setAlarmClock(clockInfoTest, pendingIntent)
+    }
 }
+
 
 // TODO: Cancelling an alarm if task is completed beforehand

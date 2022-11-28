@@ -16,25 +16,25 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
+import java.time.*
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Composable
 fun Scheduler(viewModel: NotificationsViewModel) {
     val context = LocalContext.current
     val today = viewModel.today
-    //val tomorrow = viewModel.tomorrow
-    val tomorrow = LocalDate.now().plusDays(1)
+    val tomorrow = viewModel.tomorrow
 
     Log.d("HOHHOH today without sdf.format", Date().toString())
-    Log.d("HOHHOH tomorrow", tomorrow.toString())
+    Log.d("HOHHOH today formatted", today)
+    Log.d("HOHHOH tomorrow", tomorrow)
 
     val tasks = viewModel.getTasks().observeAsState(null)
-    //val tasksTomorrow = (tasks.value?.filter { it.deadline == tomorrow })
+    val tasksTomorrow = (tasks.value?.filter { it.deadline == tomorrow })
     val frogToday = (tasks.value?.filter { it.deadline == today })?.filter { it.isFrog }
     var taskItems: List<Task>? = listOf()
 
-    // TODO: Figure out how to get tomorrow out of Date(), LocalDate.now().plusDays(1) doesn't work
     // Invoke notifications for tomorrows tasks
     /*if (tasksTomorrow != null) {
         if (tasksTomorrow.isNotEmpty()) {
