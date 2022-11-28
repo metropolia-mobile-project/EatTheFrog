@@ -16,10 +16,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.activities.MainActivity
 import com.metropolia.eatthefrog.constants.CHANNEL_ID
-import com.metropolia.eatthefrog.constants.DATE_FORMAT
-import com.metropolia.eatthefrog.constants.DATE_TIME_FORMAT
 import com.metropolia.eatthefrog.database.Task
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -29,7 +26,6 @@ import java.util.*
  */
 class AlarmReceiver : BroadcastReceiver() {
     private var notificationManager: NotificationManagerCompat? = null
-    private val converter = DateConverter()
 
     override fun onReceive(p0: Context?, p1: Intent?) {
         val task = p1?.getSerializableExtra("task") as? Task
@@ -80,9 +76,10 @@ class AlarmReceiver : BroadcastReceiver() {
 
 /**
  * Function takes task as a parameter to use the tasks uid as a requestCode, which needs to be different for every alarm.
- * The function will show an alarm when prompted and redirects user to MainActivity when the notification is clicked.
+ * The function will launch a notification when prompted and redirects user to MainActivity when the notification is clicked.
  */
-fun setAlarm(task: Task, context: Context?) {
+fun setAlarm(task: Task, time: String = "16:00", context: Context?) {
+    val converter = DateConverter()
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
     intent.putExtra("task", task)
@@ -92,20 +89,11 @@ fun setAlarm(task: Task, context: Context?) {
     val basicPendingIntent =
         getActivity(context, task.uid.toInt(), mainActivityIntent, FLAG_IMMUTABLE)
 
-    val timeSetForNotification = "12:53"
-    val sdf = SimpleDateFormat(DATE_FORMAT)
-    val sdff = SimpleDateFormat(DATE_TIME_FORMAT)
-    val today: String = sdf.format(Date())
-    val yhdistetty = today + " " + timeSetForNotification
-    Log.d("HOHHOH toady", today)
-    Log.d("HOHHOH yhdistetty", yhdistetty)
-    //val formatter = DateTimeFormatter.ISO_LOCAL_TIME
-    //val testi = LocalTime.parse(timeSetForNotification, formatter)
-    val date: Date = sdff.parse(yhdistetty)
-    Log.d("HOHHOH date", date.toString())
-    Log.d("HOHHOH date.time", date.time.toString())
+    val date: Date = converter.toTimestamp(time)
     val now = Date()
-    Log.d("HOHHOH now", now.toString())
+    Log.d("FUU date", date.toString())
+    Log.d("FUU date.time", date.time.toString())
+    Log.d("FUU now", now.toString())
 
     if (date > now) {
         val clockInfoTest = AlarmManager.AlarmClockInfo(date.time, basicPendingIntent)

@@ -66,16 +66,13 @@ fun Scheduler(viewModel: NotificationsViewModel) {
             testingThis(frogId, viewModel, context)
         }
     }
-    /*when(currentDateFilter.value) {
-        DateFilter.TODAY -> {
-            taskItems = tasks.value?.filter { it.deadline == today }
-        }
-    }*/
 }
 
 fun testingThis(id: Long, viewModel: NotificationsViewModel, context: Context) {
     CoroutineScope(Dispatchers.IO).launch {
         val task = viewModel.getCertainTask(id)
-        setAlarm(task, context)
+
+        if (task.time != null) setAlarm(task, task.time, context)
+        else setAlarm(task = task, context = context)
     }
 }
