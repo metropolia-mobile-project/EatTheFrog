@@ -90,7 +90,7 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                     Image(
                         painter = painterResource(R.drawable.edit_24),
                         modifier = Modifier
-                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}") {
+                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}/${task.value!!.isFrog}") {
                                 popUpTo(navController.graph.findStartDestination().id) {
                                     inclusive = true
                                 }
