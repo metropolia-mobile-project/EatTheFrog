@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.key.Key.Companion.D
@@ -95,7 +96,8 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .clip(RoundedCornerShape(topStart = 50.dp))
-        .background(MaterialTheme.colors.secondary)) {
+        .background(MaterialTheme.colors.secondary),
+    ) {
         Column {
 
             Box(modifier = Modifier
