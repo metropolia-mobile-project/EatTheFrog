@@ -103,7 +103,17 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
 
                         Row(Modifier.fillMaxWidth().padding(top = 10.dp),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.End) {
+                            horizontalArrangement = Arrangement.SpaceBetween) {
+
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    painter = painterResource(id = taskType.value?.icon ?: R.drawable.ic_null),
+                                    contentDescription = "type icon", tint = MaterialTheme.colors.secondary,
+                                    modifier = Modifier.padding(horizontal = 5.dp)
+                                )
+                                Text(text = taskType.value?.name, color = MaterialTheme.colors.secondary, fontSize = 14.sp)
+                            }
+
                            Image(
                                painter = painterResource(R.drawable.ic_baseline_edit_note),
                                modifier = Modifier
