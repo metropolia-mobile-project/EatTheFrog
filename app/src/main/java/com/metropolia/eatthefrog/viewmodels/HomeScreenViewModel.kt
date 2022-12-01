@@ -123,6 +123,9 @@ class HomeScreenViewModel(application: Application) : TasksViewModel(application
                 openFrogCompletedScreen()
                 showQuoteToast.value = true
             }
+            if ((task?.isFrog == true && task.completed)) {
+
+            }
         }
     }
 
@@ -174,6 +177,7 @@ class HomeScreenViewModel(application: Application) : TasksViewModel(application
         if (durationBetweenDates.toInt() == 1) {
             advanceStreak()
             updateLongestStreak()
+            return
         }
 
         // Check so you can't break the streak by changing frog during the same day
