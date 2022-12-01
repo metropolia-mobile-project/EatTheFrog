@@ -271,8 +271,8 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                 verticalArrangement = Arrangement.Top) {
                                 Image(painter = painterResource(id = R.drawable.ic_add_task),
                                     modifier = Modifier
-                                        .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground))
-                                Text(text = stringResource(id = R.string.no_subtasks), Modifier.padding(20.dp), color = MaterialTheme.colors.onBackground, fontSize = 18.sp, textAlign = TextAlign.Center)
+                                        .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary))
+                                Text(text = stringResource(id = R.string.no_subtasks), Modifier.padding(20.dp), color = MaterialTheme.colors.secondary, fontSize = 18.sp, textAlign = TextAlign.Center)
                             }
                         }
                     }
