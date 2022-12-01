@@ -1,14 +1,13 @@
 package com.metropolia.eatthefrog.placeholder_data
 
-import com.metropolia.eatthefrog.database.TaskType
+import com.metropolia.eatthefrog.database.TaskTypeOld
 import java.text.SimpleDateFormat
-import java.util.*
 
 data class PlaceholderTask(
     val name: String,
     val description: String,
     var subtasks: List<PlaceholderSubtask>,
-    val taskType: TaskType,
+    val taskTypeOld: TaskTypeOld,
     val deadline: String,
     var isFrog: Boolean
 )
@@ -16,7 +15,7 @@ data class PlaceholderTask(
 data class PlaceHolderTaskNew(
     val name: String,
     val description: String,
-    val taskType: TaskType,
+    val taskTypeOld: TaskTypeOld,
     val startingDate: String,
     val deadline: String,
     val isFrog: Boolean,
@@ -48,7 +47,7 @@ object PlaceholderTasks {
             "Task 1",
             "Placeholder description 1",
             subtasks,
-            TaskType.MEETING,
+            TaskTypeOld.MEETING,
             //sdf.parse("01-11-2022"),
             "",
             true
@@ -57,7 +56,7 @@ object PlaceholderTasks {
             "Task 2",
             "Placeholder description 2",
             subtasks,
-            TaskType.PLANNING,
+            TaskTypeOld.PLANNING,
             //sdf.parse("02-11-2022"),
             "",
             false
@@ -66,7 +65,7 @@ object PlaceholderTasks {
             "Task 3",
             "Placeholder description 3",
             subtasks,
-            TaskType.DEVELOPMENT,
+            TaskTypeOld.DEVELOPMENT,
             //sdf.parse("03-11-2022"),
             "",
             false
