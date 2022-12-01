@@ -20,6 +20,10 @@ import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+/**
+ * Function responsible for observing tasks deadlines.
+ * Sends frogs and tasks due today/tomorrow for scheduleNotification() function when detects upcoming due date.
+ */
 @Composable
 fun Scheduler(viewModel: NotificationsViewModel) {
     val context = LocalContext.current

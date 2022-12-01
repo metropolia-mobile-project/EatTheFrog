@@ -31,6 +31,7 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
 
     var darkmode = MutableLiveData(false)
     var showDeadline = MutableLiveData(true)
+    var deadlineValue = MutableLiveData(0)
     var showConfirmWindow = MutableLiveData(true)
 
     fun getClosedTasks() = database.taskDao().getClosedTasks()
@@ -60,6 +61,7 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
     init {
         darkmode.value = getBooleanFromPreferences(DARK_MODE_KEY, false)
         showDeadline.value = getBooleanFromPreferences(DEADLINE_KEY, true)
+        deadlineValue.value = getDeadlineFromPreferences(NOTIFICATION_KEY, 0)
         showConfirmWindow.value = getBooleanFromPreferences(CONFIRM_WINDOW_KEY, true)
     }
 
@@ -94,9 +96,21 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
+    fun saveDeadlineValue() {
+        with (sharedPreferences.edit()) {
+            putInt(NOTIFICATION_KEY, deadlineValue.value!!)
+            apply()
+        }
+    }
+
     private fun getBooleanFromPreferences(key: String, default: Boolean): Boolean {
         val prefs = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         return prefs.getBoolean(key, default)
+    }
+
+    private fun getDeadlineFromPreferences(key: String, default: Int): Int {
+        val prefs = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+        return prefs.getInt(key, default)
     }
 
     /**
