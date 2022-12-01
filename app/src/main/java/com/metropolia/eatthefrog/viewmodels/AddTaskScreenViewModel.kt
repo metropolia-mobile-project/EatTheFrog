@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.PROFILE_IMAGE_KEY
 import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 import com.metropolia.eatthefrog.database.InitialDB
@@ -27,8 +28,11 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
     var subTaskList = MutableLiveData<List<Subtask>>(listOf())
     var editedSubTaskList = MutableLiveData<List<Subtask>>(listOf())
     val typeDialogVisible = MutableLiveData(false)
+    val selectedTaskType = MutableLiveData<TaskType>()
+    val initialTaskSaved = MutableLiveData(false)
 
     fun getTaskTypes() = database.taskTypeDao().getTaskTypes()
+    fun getTaskType(id: Long) = database.taskTypeDao().getTaskType(id)
 
     fun updateEditSubTaskList(list: List<Subtask>) {
         val oldList = editedSubTaskList.value

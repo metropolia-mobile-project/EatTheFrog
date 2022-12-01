@@ -32,7 +32,8 @@ import com.metropolia.eatthefrog.database.TaskType
 
 @Composable
 fun AddTaskTypeDialog(
-    viewModel: AddTaskScreenViewModel
+    viewModel: AddTaskScreenViewModel,
+    onTaskChange: (TaskType) -> Unit
 ) {
     val context = LocalContext.current
     val visible = viewModel.typeDialogVisible.observeAsState()
@@ -53,7 +54,11 @@ fun AddTaskTypeDialog(
                             .fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Row() {
+                            Row(modifier = Modifier.clickable {
+                                viewModel.selectedTaskType.postValue(item)
+                                onTaskChange(item)
+                                viewModel.typeDialogVisible.postValue(false)
+                            }) {
                                 Image(painter = painterResource(id = item.icon ?: R.drawable.ic_null), contentDescription = item.name, modifier = Modifier.padding(end = 5.dp))
                                 Text(text = item.name)
                             }

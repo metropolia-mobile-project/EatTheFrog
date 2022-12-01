@@ -1,5 +1,7 @@
 package com.metropolia.eatthefrog.constants
 
+import com.metropolia.eatthefrog.database.TaskType
+
 // Amounts
 const val MAX_SUBTASK_AMOUNT = 7
 

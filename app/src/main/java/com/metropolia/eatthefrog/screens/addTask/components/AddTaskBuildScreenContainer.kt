@@ -10,13 +10,16 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
+import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.database.TaskTypeOld
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import java.text.SimpleDateFormat
+import com.metropolia.eatthefrog.R
 import java.util.*
 
 
@@ -35,34 +38,35 @@ fun AddTaskBuildScreenContainer(
     editDesc: String?,
     dateDeadline: String,
     timeDeadline: String,
-    editTaskType: String?,
+    editTaskType: Long,
     isFrogBoolean: Boolean
 ) {
 
 
     val subList: List<Subtask>
     val subs = viewModel.getHighlightedSubtasks(editTaskId).observeAsState()
+    val taskTypes = viewModel.getTaskTypes().observeAsState(listOf(TaskType(uid = 1000, name = stringResource(R.string.loading), icon = null)))
 
     if(subs.value != null && viewModel.editedSubTaskList.value!!.isEmpty()) {
         subList = subs.value!!.toList()
         viewModel.updateEditSubTaskList(subList)
     }
 
-    val taskTypeOldLists = listOf(TaskTypeOld.PLANNING, TaskTypeOld.MEETING, TaskTypeOld.DEVELOPMENT)
     val sdf = SimpleDateFormat(DATE_FORMAT)
     val currentDate = sdf.format(Date())
 
     var description by remember { mutableStateOf( if(isEditMode) {editDesc} else {""}) }
     var taskTitle by remember { mutableStateOf( if(isEditMode) {editTitle} else {""}) }
-    var taskTypeOld: TaskTypeOld by remember { mutableStateOf(taskTypeOldLists[0]) }
+    val observeEditTaskType = viewModel.getTaskType(editTaskType).observeAsState(taskTypes.value[0])
+    var taskType: TaskType by remember { mutableStateOf(if (!isEditMode) taskTypes.value[0] else observeEditTaskType.value) }
     var sDate by remember { mutableStateOf( if(isEditMode) {dateDeadline} else {currentDate}) }
     var sTime by remember { mutableStateOf( if(isEditMode) {timeDeadline} else {"16.00"}) }
     var isFrog by remember { mutableStateOf(false) }
 
     val newTask = Task(0, taskTitle ?: "", description ?: "",
-        taskTypeOld, sDate ?: currentDate, sTime, completed = false, isFrog = false)
+        taskType.uid, sDate ?: currentDate, sTime, completed = false, isFrog = false)
 
-    val editTask = Task(editTaskId, taskTitle ?: "", description ?: "", taskTypeOld,
+    val editTask = Task(editTaskId, taskTitle ?: "", description ?: "", taskType.uid,
         sDate ?: currentDate, sTime, completed = false, isFrog = false)
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -81,7 +85,7 @@ fun AddTaskBuildScreenContainer(
 
         AddTaskDescAndTypeContainer( description ?: "",
             onDescChange = { description = it },
-            onTaskChange = { taskTypeOld = it },
+            onTaskChange = { taskType = it },
             isEditMode,
             editTaskType,
             viewModel
@@ -113,7 +117,7 @@ fun AddTaskBuildScreenContainer(
             editTask,
             onTitleChange = { taskTitle = it },
             onDescChange = { description = it},
-            onTaskTypeChange = { taskTypeOld = it },
+            onTaskTypeChange = { taskType = it },
             onFrogChange = { isFrog = it })
     }
 }

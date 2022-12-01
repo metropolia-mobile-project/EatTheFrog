@@ -10,7 +10,7 @@ data class Task(
     @PrimaryKey(autoGenerate = true) val uid: Long = 0,
     @ColumnInfo(name = "task_name") val name: String,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "task_type") val taskTypeOld: TaskTypeOld,
+    @ColumnInfo(name = "task_type_id") val taskTypeId: Long,
     @ColumnInfo(name = "deadline") val deadline: String,
     @ColumnInfo(name = "time") val time: String?,
     @ColumnInfo(name = "completed") val completed: Boolean = false,

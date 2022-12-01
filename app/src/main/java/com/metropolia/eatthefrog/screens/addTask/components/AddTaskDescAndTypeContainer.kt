@@ -1,5 +1,7 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
+import android.os.Handler
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,10 +21,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.MutableLiveData
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.database.TaskTypeOld
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
+import kotlinx.coroutines.delay
 
 /**
  * Description title and TextField
@@ -33,41 +37,36 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 fun AddTaskDescAndTypeContainer(
     description: String,
     onDescChange: (String) -> Unit,
-    onTaskChange: (TaskTypeOld) -> Unit,
+    onTaskChange: (TaskType) -> Unit,
     isEditMode: Boolean,
-    editTaskType: String?,
+    editTaskType: Long,
     viewModel: AddTaskScreenViewModel
 ) {
 
-    val editTaskTypeIndex = when (editTaskType) {
-        "PLANNING" -> 0
-        "MEETING" -> 1
-        "DEVELOPMENT" -> 2
-        else -> {
-            0
-        }
-    }
-
+    val initialTaskSaved = viewModel.initialTaskSaved.observeAsState()
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     var expanded by remember { mutableStateOf(false) }
-    val taskTypes = viewModel.getTaskTypes().observeAsState(listOf())
+    val taskTypes = viewModel.getTaskTypes().observeAsState()
     val more = TaskType(name = "${stringResource(id = R.string.more)}...", icon = null)
-    val items = if (taskTypes.value.size < 3) taskTypes.value.plus(more) else taskTypes.value.take(3).plus(more)
-    var selectedIndex by remember {
-        mutableStateOf(
-            if (isEditMode) {
-                editTaskTypeIndex
-            } else {
-                0
-            }
-        )
+    var items = listOf<TaskType>()
+    if (taskTypes.value != null) {
+        items = if (taskTypes.value!!.size < 3) taskTypes.value!!.plus(more) else taskTypes.value!!.take(3).plus(more)
     }
     val disabledValue = ""
-    val taskTypeOldLists = listOf(TaskTypeOld.PLANNING, TaskTypeOld.MEETING, TaskTypeOld.DEVELOPMENT)
-    var taskType by remember { mutableStateOf(taskTypeOldLists[0]) }
+    val initialTaskType = (
+            if (!isEditMode) viewModel.getTaskType(1)
+            else viewModel.getTaskType(editTaskType)
+            ).observeAsState(TaskType(name = stringResource(id = R.string.loading), icon = null))
+    val selectedTask = viewModel.selectedTaskType.observeAsState(null)
 
-    onTaskChange(taskType)
+    // Making sure initial task type has been loaded from Room
+    if (initialTaskSaved.value == false) {
+        Handler().postDelayed({
+            onTaskChange(initialTaskType.value)
+            viewModel.initialTaskSaved.postValue(true)
+        }, 100)
+    }
 
     Column(
         modifier = Modifier
@@ -87,7 +86,7 @@ fun AddTaskDescAndTypeContainer(
                     .padding(start = 110.dp, end = 30.dp)
             ) {
                 Text(
-                    items[selectedIndex].name,
+                    selectedTask.value?.name ?: initialTaskType.value.name,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(onClick = { expanded = true })
@@ -107,9 +106,9 @@ fun AddTaskDescAndTypeContainer(
                     items.forEachIndexed { index, s ->
                         DropdownMenuItem(onClick = {
                             if (index != items.size -1) {
-                                selectedIndex = index
                                 expanded = false
-                                taskType = taskTypeOldLists[selectedIndex]
+                                viewModel.selectedTaskType.postValue(s)
+                                onTaskChange(s)
                             } else {
                                 expanded = false
                                 viewModel.typeDialogVisible.postValue(true)
@@ -149,6 +148,6 @@ fun AddTaskDescAndTypeContainer(
                 .fillMaxWidth()
                 .padding(0.dp, 0.dp, 30.dp, 15.dp)
         )
-        AddTaskTypeDialog(viewModel = viewModel)
+        AddTaskTypeDialog(viewModel = viewModel, onTaskChange = { onTaskChange(it) })
     }
 }

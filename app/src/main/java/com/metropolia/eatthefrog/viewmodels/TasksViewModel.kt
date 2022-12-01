@@ -21,6 +21,7 @@ open class TasksViewModel(application: Application) : AndroidViewModel(applicati
 
     fun getSubtasksAmount(id: Long) = database.subtaskDao().getSubtasksAmount(id)
     fun getSubtasks(id: Long) = database.subtaskDao().getSubtasks(id)
+    fun getTaskType(id: Long) = database.taskTypeDao().getTaskType(id)
 
     fun updateHighlightedTask(t: Task) {
         this.highlightedTaskId.value = t.uid
