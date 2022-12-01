@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.constants.CONFIRM_WINDOW_KEY
 import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.ui_components.PopupView
@@ -192,14 +193,19 @@ fun HistoryScreenTaskPopup(vm: HistoryScreenViewModel, navController: NavControl
         val desc = stringResource(
             if (task.value?.completed == false) R.string.close_task else R.string.open_task,
             task.value?.name ?: "")
-        ConfirmWindow(
-            {vm.toggleTaskCompleted()},
-            {vm.closeTaskConfirmWindow()},
-            desc,
-            modifier = Modifier.clip(
-                RoundedCornerShape(20.dp)
-            )
-        )
 
+        if(vm.getBooleanFromPreferences(CONFIRM_WINDOW_KEY, true)) {
+            ConfirmWindow(
+                {vm.toggleTaskCompleted()},
+                {vm.closeTaskConfirmWindow()},
+                desc,
+                modifier = Modifier.clip(
+                    RoundedCornerShape(20.dp)
+                ),
+                vm.app
+            )
+        } else {
+            vm.toggleTaskCompleted()
+        }
     }
 }

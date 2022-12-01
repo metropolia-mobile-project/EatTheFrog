@@ -5,20 +5,23 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
     primary = YaleBlueLight,
     primaryVariant = YaleBlue,
     secondary = GreyBlue,
-    background = LightGray
+    background = DarkGray,
+    onBackground = Color.White
 )
 
 private val LightColorPalette = lightColors(
     primary = YaleBlueLight,
     primaryVariant = YaleBlue,
     secondary = GreyBlue,
-    background = LightGray
+    background = LightGray,
+    onBackground = Color.Black
     /* Other default colors to override
     background = Color.White,
     surface = Color.White,
@@ -30,9 +33,9 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun EatTheFrogTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun EatTheFrogTheme(darkTheme: Boolean = isSystemInDarkTheme(), settingsDarkMode: Boolean, content: @Composable () -> Unit) {
     val systemUiController = rememberSystemUiController()
-    val colors = if (darkTheme) {
+    val colors = if (darkTheme || settingsDarkMode) {
         systemUiController.setSystemBarsColor(
             color = DarkColorPalette.primaryVariant
         )

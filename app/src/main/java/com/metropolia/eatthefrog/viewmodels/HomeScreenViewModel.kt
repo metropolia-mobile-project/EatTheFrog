@@ -2,25 +2,21 @@ package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.metropolia.eatthefrog.R
-import com.metropolia.eatthefrog.constants.DATE_FORMAT
-import com.metropolia.eatthefrog.constants.PROFILE_IMAGE_KEY
-import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
+import com.metropolia.eatthefrog.constants.*
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.services.APIService
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 enum class DateFilter {
@@ -34,11 +30,13 @@ enum class DateFilter {
  */
 open class HomeScreenViewModel(application: Application) : TasksViewModel(application) {
 
-    val app = application
+    private val sharedPreferences: SharedPreferences = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+
     private val database = InitialDB.get(application)
     private val service = APIService.service
 
     private val sdf = SimpleDateFormat(DATE_FORMAT)
+    private val dtf = DateTimeFormatter.ofPattern(DATE_FORMAT)
     val today: String = sdf.format(Date())
 
     var searchVisible = MutableLiveData(false)
@@ -50,6 +48,8 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
     var showFrogCompletedScreen = MutableLiveData(false)
     var searchInput = mutableStateOf("")
     var quote = APIService.Result("", "", "")
+    var currentStreak = MutableLiveData(sharedPreferences.getInt(CURRENT_STREAK_KEY, 0))
+    var longestStreak = MutableLiveData(sharedPreferences.getInt(LONGEST_STREAK_KEY, 0))
 
     fun getTasks() = database.taskDao().getAllTasks("%${searchInput.value}")
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
@@ -118,6 +118,7 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
             closeTaskConfirmWindow()
 
             if ((task?.isFrog == true && !showQuoteToast.value) && !task.completed) {
+                saveStreakStatus()
                 popupVisible.value = false
                 openFrogCompletedScreen()
                 showQuoteToast.value = true
@@ -141,7 +142,73 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
     }
 
     fun loadProfilePicture() : String? {
-        val sharedPreferences = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         return sharedPreferences.getString(PROFILE_IMAGE_KEY, null)
+    }
+
+    private fun setCurrentStreak() {
+        currentStreak.value = sharedPreferences.getInt(CURRENT_STREAK_KEY, 0)
+    }
+
+    private fun setLongestStreak() {
+        longestStreak.value = sharedPreferences.getInt(LONGEST_STREAK_KEY, 0)
+    }
+
+    private fun saveStreakStatus() {
+        checkIfStreakContinues()
+        setCurrentStreak()
+        setLongestStreak()
+    }
+
+    private fun checkIfStreakContinues(){
+        val latestEatenFrog = sharedPreferences.getString(LATEST_EATEN_FROG_KEY, null)
+        if (latestEatenFrog == null) {
+            advanceStreak()
+            updateLongestStreak()
+            return
+        }
+
+        val latestDate = LocalDate.parse(latestEatenFrog, dtf).atStartOfDay()
+        val todayDate = LocalDate.now().atStartOfDay()
+
+        val durationBetweenDates = Duration.between(latestDate, todayDate).toDays()
+        if (durationBetweenDates.toInt() == 1) {
+            advanceStreak()
+            updateLongestStreak()
+        }
+
+        // Check so you can't break the streak by changing frog during the same day
+        if (durationBetweenDates.toInt() == 0) {
+            return
+        }
+
+        resetStreak()
+    }
+
+    private fun advanceStreak() {
+        val currentStreak = sharedPreferences.getInt(CURRENT_STREAK_KEY, 0)
+        with (sharedPreferences.edit()) {
+            putString(LATEST_EATEN_FROG_KEY, dtf.format(LocalDate.now()))
+            putInt(CURRENT_STREAK_KEY, currentStreak + 1)
+            apply()
+        }
+    }
+
+    private fun resetStreak() {
+        with (sharedPreferences.edit()) {
+            putInt(CURRENT_STREAK_KEY, 1)
+            putString(LATEST_EATEN_FROG_KEY, dtf.format(LocalDate.now()))
+            apply()
+        }
+    }
+
+    private fun updateLongestStreak() {
+        val currentStreak = sharedPreferences.getInt(CURRENT_STREAK_KEY, 0)
+        val longestStreak = sharedPreferences.getInt(LONGEST_STREAK_KEY, 0)
+        if (currentStreak > longestStreak) {
+            with (sharedPreferences.edit()) {
+                putInt(LONGEST_STREAK_KEY, currentStreak)
+                apply()
+            }
+        }
     }
 }
