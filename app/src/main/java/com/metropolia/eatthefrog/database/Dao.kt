@@ -75,5 +75,25 @@ interface SubtaskDao {
     @Query("DELETE FROM subtask WHERE subtask.uid = :id")
     fun deleteSubTask(id: Long)
 
+}
 
+@Dao
+interface TaskTypeDao {
+    // Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertTaskType(taskType: TaskType): Long
+
+    // Query
+    @Query("SELECT * FROM tasktype")
+    fun getTaskTypes(): LiveData<List<TaskType>>
+
+    @Query("SELECT * FROM tasktype WHERE tasktype.uid = :id")
+    fun getTaskType(id: Long): LiveData<TaskType>
+
+    @Query("SELECT * FROM tasktype LIMIT 1")
+    fun getFirstTaskType(): LiveData<TaskType>
+
+    // Delete
+    @Query("DELETE FROM tasktype WHERE tasktype.uid = :id")
+    suspend fun deleteTasktype(id: Long)
 }

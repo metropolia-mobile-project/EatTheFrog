@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.screens.home.components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 import java.text.SimpleDateFormat
@@ -28,7 +29,8 @@ fun CompletedTasksContainer(vm: HistoryScreenViewModel) {
 
     val tasks = vm.getCompletedTasks().observeAsState(listOf())
     val selectedType = vm.selectedTypes.observeAsState(listOf())
-    val all = stringResource(id = R.string.all)
+    val allTaskTypes = vm.getAllTaskTypes().observeAsState(listOf())
+    val all = vm.all
 
     fun parseStringToDate(string: String) = SimpleDateFormat(DATE_FORMAT).parse(string)
 
@@ -43,9 +45,7 @@ fun CompletedTasksContainer(vm: HistoryScreenViewModel) {
         ) {
 
             itemsIndexed(tasks.value) { index, task ->
-
-                if (selectedType.value.contains(task.taskType.name) || selectedType.value.contains(all)) {
-
+                if (selectedType.value.contains(all)) {
                     if (index == 0) {
                         Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
                         curDate = parseStringToDate(task.deadline)
@@ -65,9 +65,32 @@ fun CompletedTasksContainer(vm: HistoryScreenViewModel) {
                     ) {
                         SingleTaskContainer(task, vm)
                     }
+                } else {
+                     for (taskType in allTaskTypes.value) {
+                        if (selectedType.value.contains(taskType) && taskType.uid == task.taskTypeId) {
+                            if (index == 0) {
+                                Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
+                                curDate = parseStringToDate(task.deadline)
+                            } else if (curDate != null
+                                && curDate != parseStringToDate(task.deadline)
+                                && parseStringToDate(task.deadline) != firstDate) {
+                                Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
+                                curDate = parseStringToDate(task.deadline)
+                            }
 
+                            Row(
+                                Modifier
+                                    .padding(vertical = 10.dp)
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                SingleTaskContainer(task, vm)
+                            }
+                        }
+                    }
                 }
-                else if (index >= tasks.value.size -1) {
+                if (index >= tasks.value.size -1) {
                     Column(
                         Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,

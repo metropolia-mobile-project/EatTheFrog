@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class HistoryScreenViewModel(application: Application) : TasksViewModel(application) {
 
     private val database = InitialDB.get(application)
-    private val all = application.getString(R.string.all)
+    val all = (TaskType(uid = 1000, name = application.getString(R.string.all), icon = null))
     var selectedTypes = MutableLiveData(listOf(all))
     var showTaskDoneConfirmWindow = mutableStateOf(false)
     var searchInput = mutableStateOf("")
@@ -31,9 +31,7 @@ class HistoryScreenViewModel(application: Application) : TasksViewModel(applicat
     fun getIncompleteTasks() = database.taskDao().getAllIncompleteTasksOrderedByDate("%${searchInput.value}")
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
-
-    // TODO: Change implementation to fetch from db/wherever the custom TaskTypes are stored.
-    fun getAllTaskTypes() = TaskType.values()
+    fun getAllTaskTypes() = database.taskTypeDao().getTaskTypes()
 
     fun updateSearchInput(string: String) {
         searchInput.value = string
@@ -43,11 +41,11 @@ class HistoryScreenViewModel(application: Application) : TasksViewModel(applicat
         searchInput.value = ""
     }
 
-    fun toggleSelectedType(type: String) {
+    fun toggleSelectedType(type: TaskType) {
 
-        var newList : MutableList<String> = selectedTypes.value?.toMutableList() ?: mutableListOf()
+        val newList : MutableList<TaskType> = selectedTypes.value?.toMutableList() ?: mutableListOf()
 
-        if (type == all) {
+        if (type.name == all.name) {
             selectedTypes.value = listOf(all)
             return
         } else {

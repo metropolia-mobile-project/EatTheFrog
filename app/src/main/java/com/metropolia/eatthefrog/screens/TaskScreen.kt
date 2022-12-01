@@ -27,6 +27,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.CONFIRM_WINDOW_KEY
+import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.viewmodels.DateFilter
@@ -42,10 +43,10 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
 
-
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
-
+    val taskType = vm.getTaskType(if (task.value != null) task.value!!.taskTypeId else 1).observeAsState(TaskType(name = stringResource(id = R.string.loading), icon = null))
+    val firstTaskType = vm.getFirstTaskType().observeAsState()
     navController.addOnDestinationChangedListener { _, destination, _->
         if (destination.route != NavigationItem.Home.route) {
             vm.resetPopupStatus()
@@ -90,7 +91,8 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                     Image(
                         painter = painterResource(R.drawable.edit_24),
                         modifier = Modifier
-                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}/${task.value!!.isFrog}") {
+
+                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${taskType.value?.uid ?: firstTaskType.value!!.uid}/${task.value!!.isFrog}") {
                                 popUpTo(navController.graph.findStartDestination().id) {
                                     inclusive = true
                                 }
@@ -183,7 +185,9 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                             verticalAlignment = Alignment.CenterVertically,
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
-                                            Text(st.name, modifier = Modifier.padding(start = 10.dp).fillMaxWidth(0.8f))
+                                            Text(st.name, modifier = Modifier
+                                                .padding(start = 10.dp)
+                                                .fillMaxWidth(0.8f))
                                         }
 
                                         Switch(
