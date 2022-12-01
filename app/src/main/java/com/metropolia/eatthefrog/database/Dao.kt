@@ -90,6 +90,9 @@ interface TaskTypeDao {
     @Query("SELECT * FROM tasktype WHERE tasktype.uid = :id")
     fun getTaskType(id: Long): LiveData<TaskType>
 
+    @Query("SELECT * FROM tasktype LIMIT 1")
+    fun getFirstTaskType(): LiveData<TaskType>
+
     // Delete
     @Query("DELETE FROM tasktype WHERE tasktype.uid = :id")
     suspend fun deleteTasktype(id: Long)

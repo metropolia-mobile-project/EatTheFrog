@@ -55,7 +55,7 @@ fun AddTaskDescAndTypeContainer(
     }
     val disabledValue = ""
     val initialTaskType = (
-            if (!isEditMode) viewModel.getTaskType(1)
+            if (!isEditMode) viewModel.getFirstTaskType()
             else viewModel.getTaskType(editTaskType)
             ).observeAsState(TaskType(name = stringResource(id = R.string.loading), icon = null))
     val selectedTask = viewModel.selectedTaskType.observeAsState(null)
@@ -63,7 +63,11 @@ fun AddTaskDescAndTypeContainer(
     // Making sure initial task type has been loaded from Room
     if (initialTaskSaved.value == false) {
         Handler().postDelayed({
-            onTaskChange(initialTaskType.value)
+            if (initialTaskSaved.value != null) {
+                onTaskChange(initialTaskType.value)
+            } else {
+                onTaskChange(taskTypes.value!![0])
+            }
             viewModel.initialTaskSaved.postValue(true)
         }, 100)
     }

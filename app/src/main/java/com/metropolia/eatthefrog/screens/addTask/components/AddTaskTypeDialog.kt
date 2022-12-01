@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
@@ -30,6 +31,7 @@ import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.ICON_LIST
 import com.metropolia.eatthefrog.database.TaskType
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AddTaskTypeDialog(
     viewModel: AddTaskScreenViewModel,
@@ -43,24 +45,51 @@ fun AddTaskTypeDialog(
 
     if (visible.value == true) {
         Dialog(onDismissRequest = { viewModel.typeDialogVisible.postValue(false) }) {
-            Column(modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colors.surface)
-                .fillMaxWidth()
-                .padding(20.dp)) {
+            Column(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(MaterialTheme.colors.surface)
+                    .fillMaxWidth()
+                    .padding(20.dp)
+            ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = stringResource(id = R.string.choose_task_type),
+                        textAlign = TextAlign.Center,
+                        textDecoration = TextDecoration.Underline,
+                        color = MaterialTheme.colors.onSurface,
+                        modifier = Modifier.padding(vertical = 10.dp).align(Alignment.CenterHorizontally)
+                    )
+                }
+
                 LazyColumn(Modifier.fillMaxHeight(0.5f)) {
                     items(taskTypes.value) { item ->
-                        Row(modifier = Modifier
-                            .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Row(modifier = Modifier.clickable {
-                                viewModel.selectedTaskType.postValue(item)
-                                onTaskChange(item)
-                                viewModel.typeDialogVisible.postValue(false)
-                            }) {
-                                Image(painter = painterResource(id = item.icon ?: R.drawable.ic_null), contentDescription = item.name, modifier = Modifier.padding(end = 5.dp))
-                                Text(text = item.name)
+                            Card(
+                                elevation = 5.dp,
+                                onClick = {
+                                    viewModel.selectedTaskType.postValue(item)
+                                    onTaskChange(item)
+                                    viewModel.typeDialogVisible.postValue(false)
+                                }
+                            ) {
+                                Row(modifier = Modifier
+                                    .padding(5.dp),
+                                ) {
+                                    Image(
+                                        painter = painterResource(
+                                            id = item.icon ?: R.drawable.ic_null
+                                        ),
+                                        contentDescription = item.name,
+                                        modifier = Modifier.padding(end = 5.dp)
+                                    )
+                                    Text(text = item.name)
+                                }
                             }
                             Icon(
                                 painterResource(id = R.drawable.ic_add),
@@ -78,7 +107,7 @@ fun AddTaskTypeDialog(
                     }
                 }
                 Column(
-                    modifier = Modifier.padding(vertical = 50.dp),
+                    modifier = Modifier.padding(vertical = 10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -98,8 +127,12 @@ fun AddTaskTypeDialog(
                     LazyRow(Modifier.fillMaxWidth()) {
                         items(ICON_LIST) { item ->
                             val isChosen = item == chosenIcon
-                            val borderColor = if (isChosen) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.surface
-                            val insideColor = if (isChosen) ButtonDefaults.buttonColors(backgroundColor = borderColor) else ButtonDefaults.outlinedButtonColors(contentColor = borderColor)
+                            val borderColor =
+                                if (isChosen) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.surface
+                            val insideColor =
+                                if (isChosen) ButtonDefaults.buttonColors(backgroundColor = borderColor) else ButtonDefaults.outlinedButtonColors(
+                                    contentColor = borderColor
+                                )
                             val imageColor = if (isChosen) Color.White else Color.Black
                             Button(
                                 border = BorderStroke(1.dp, color = borderColor),
@@ -119,11 +152,20 @@ fun AddTaskTypeDialog(
                     Button(
                         onClick = {
                             if (typeInput != "") {
-                                viewModel.insertTaskType(TaskType(name = typeInput, icon = chosenIcon))
+                                viewModel.insertTaskType(
+                                    TaskType(
+                                        name = typeInput,
+                                        icon = chosenIcon
+                                    )
+                                )
                                 typeInput = ""
                                 chosenIcon = ICON_LIST[0]
                             } else {
-                                Toast.makeText(context, context.getText(R.string.add_task_type_name), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    context.getText(R.string.add_task_type_name),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         },
                         modifier = Modifier
@@ -132,6 +174,15 @@ fun AddTaskTypeDialog(
                     ) {
                         Text(text = stringResource(id = R.string.add_type))
                     }
+                    Text(
+                        text = "x",
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .padding(horizontal = 10.dp)
+                            .clickable { viewModel.typeDialogVisible.postValue(false) },
+                        fontSize = 30.sp,
+                        color = MaterialTheme.colors.secondary
+                    )
                 }
             }
         }

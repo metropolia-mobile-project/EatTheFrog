@@ -44,7 +44,7 @@ fun SingleTaskContainer(task: Task, vm: TasksViewModel) {
     val closedSubtaskAmount = subtasks.value?.filter { it.completed }?.size ?: 0
     val subtaskText = if (subtaskAmount.value == 0) stringResource(id = R.string.no_subtasks)
                       else "$closedSubtaskAmount/${subtaskAmount.value} ${stringResource(id = if (subtaskAmount.value == 1) R.string.subtask else R.string.subtasks)} ${stringResource(id = R.string.done)}"
-    val taskType = vm.getTaskType(task.taskTypeId).observeAsState(TaskType(name = stringResource(id = R.string.loading), icon = null))
+    val taskType = vm.getTaskType(task.taskTypeId).observeAsState()
     val deadlineText = if (vm.selectedFilter.value == DateFilter.TODAY) "${stringResource(id = R.string.at)} ${task.time}" else "${task.deadline} ${stringResource(id = R.string.at)} ${task.time}"
 
     Card(
@@ -64,11 +64,11 @@ fun SingleTaskContainer(task: Task, vm: TasksViewModel) {
                 .padding(horizontal = 20.dp)
                 .padding(top = 10.dp), verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    painter = painterResource(id = taskType.value.icon ?: R.drawable.ic_null),
+                    painter = painterResource(id = taskType.value?.icon ?: R.drawable.ic_null),
                     contentDescription = "type icon", tint = MaterialTheme.colors.secondary,
                     modifier = Modifier.padding(horizontal = 5.dp)
                 )
-                Text(text = taskType.value.name, color = MaterialTheme.colors.secondary, fontSize = 14.sp)
+                Text(text = taskType.value?.name ?: "<${stringResource(id = R.string.deleted_type)}>", color = MaterialTheme.colors.secondary, fontSize = 14.sp)
         }
 
             Row(

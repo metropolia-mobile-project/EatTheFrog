@@ -33,6 +33,7 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
 
     fun getTaskTypes() = database.taskTypeDao().getTaskTypes()
     fun getTaskType(id: Long) = database.taskTypeDao().getTaskType(id)
+    fun getFirstTaskType() = database.taskTypeDao().getFirstTaskType()
 
     fun updateEditSubTaskList(list: List<Subtask>) {
         val oldList = editedSubTaskList.value

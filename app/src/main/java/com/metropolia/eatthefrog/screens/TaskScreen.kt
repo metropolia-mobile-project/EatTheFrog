@@ -45,11 +45,8 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
 
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
-    val taskType = vm.getTaskType(if (task.value != null) task.value!!.taskTypeId else 1).observeAsState(
-        TaskType(name = stringResource(id = R.string.loading), icon = null)
-    )
-    Log.d("type in task screen", taskType.toString())
-
+    val taskType = vm.getTaskType(if (task.value != null) task.value!!.taskTypeId else 1).observeAsState(TaskType(name = stringResource(id = R.string.loading), icon = null))
+    val firstTaskType = vm.getFirstTaskType().observeAsState()
     navController.addOnDestinationChangedListener { _, destination, _->
         if (destination.route != NavigationItem.Home.route) {
             vm.resetPopupStatus()
@@ -95,7 +92,7 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                         painter = painterResource(R.drawable.edit_24),
                         modifier = Modifier
 
-                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${taskType.value.uid}/${task.value!!.isFrog}") {
+                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${taskType.value?.uid ?: firstTaskType.value!!.uid}/${task.value!!.isFrog}") {
                                 popUpTo(navController.graph.findStartDestination().id) {
                                     inclusive = true
                                 }
