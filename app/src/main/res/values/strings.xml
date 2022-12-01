@@ -70,4 +70,5 @@
     <string name="activity">Activity</string>
     <string name="frogs_completed">Frog completed</string>
     <string name="tasks_completed">Tasks completed</string>
+    <string name="dont_ask_again">Do not ask me again</string>
 </resources>

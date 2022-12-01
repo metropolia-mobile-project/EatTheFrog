@@ -59,10 +59,7 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
 
     }
 
-    fun getHighlightedSubtasks(id: Long) =
-            database.subtaskDao().getSubtasks(id)
-
-
+    fun getHighlightedSubtasks(id: Long) = database.subtaskDao().getSubtasks(id)
 
     fun updateTask(task: Task) {
         viewModelScope.launch {
@@ -126,7 +123,6 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
             database.taskTypeDao().deleteTasktype(id)
         }
     }
-
 }
 
 

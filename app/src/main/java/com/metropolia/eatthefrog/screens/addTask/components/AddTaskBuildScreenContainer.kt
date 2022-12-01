@@ -35,7 +35,8 @@ fun AddTaskBuildScreenContainer(
     editDesc: String?,
     dateDeadline: String,
     timeDeadline: String,
-    editTaskType: String?
+    editTaskType: String?,
+    isFrogBoolean: Boolean
 ) {
 
 
@@ -112,7 +113,7 @@ fun AddTaskBuildScreenContainer(
             editTask,
             onTitleChange = { taskTitle = it },
             onDescChange = { description = it},
-            onTaskTypeChange = { taskType = it },
+            onTaskTypeChange = { taskTypeOld = it },
             onFrogChange = { isFrog = it })
     }
 }

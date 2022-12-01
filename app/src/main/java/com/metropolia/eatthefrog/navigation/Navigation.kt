@@ -21,7 +21,7 @@ fun Navigation(navController: NavHostController, username: String, application: 
         composable(NavigationItem.Home.route) {
             HomeScreen(username, application, navController)
         }
-        composable("add_task/{taskUid}/{isEdit}/{taskTitle}/{taskDesc}/{dateDeadline}/{timeDeadline}/{taskType}", arguments = listOf(
+        composable("add_task/{taskUid}/{isEdit}/{taskTitle}/{taskDesc}/{dateDeadline}/{timeDeadline}/{taskType}/{isFrog}", arguments = listOf(
             navArgument(name = "taskUid"){
                 type = NavType.LongType
                 defaultValue = 0
@@ -49,6 +49,10 @@ fun Navigation(navController: NavHostController, username: String, application: 
             navArgument(name = "taskType") {
                 type = NavType.StringType
                 defaultValue = ""
+            },
+            navArgument(name = "isFrog") {
+                type = NavType.BoolType
+                defaultValue = false
             }
         )
         ) { navBackStackEntry ->
@@ -62,7 +66,8 @@ fun Navigation(navController: NavHostController, username: String, application: 
                         editDesc = navBackStackEntry.arguments!!.getString("taskDesc"),
                         dateDeadline = it,
                         timeDeadline = it1,
-                        editTaskType = navBackStackEntry.arguments!!.getString("taskType")
+                        editTaskType = navBackStackEntry.arguments!!.getString("taskType"),
+                        isFrogBoolean = navBackStackEntry.arguments!!.getBoolean("isFrog")
                         )
                 }
             }

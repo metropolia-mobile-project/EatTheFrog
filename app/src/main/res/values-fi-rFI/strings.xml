@@ -68,4 +68,5 @@
     <string name="activity">Aktiivisuus</string>
     <string name="frogs_completed">Suoritettu sammakko</string>
     <string name="tasks_completed">Suoritetut tehtävät</string>
+    <string name="dont_ask_again">Älä kysy uudestaan</string>
 </resources>
