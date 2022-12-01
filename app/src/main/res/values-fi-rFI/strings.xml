@@ -72,4 +72,5 @@
     <string name="loading">Ladataan...</string>
     <string name="deleted_type">poistettu tyyppi</string>
     <string name="choose_task_type">Valitse tehtävätyyppi</string>
+    <string name="cannot_delete_last_type">Viimeistä tehtävätyyppiä ei voida poistaa!</string>
 </resources>

@@ -54,10 +54,12 @@ fun AddTaskDescAndTypeContainer(
         items = if (taskTypes.value!!.size < 3) taskTypes.value!!.plus(more) else taskTypes.value!!.take(3).plus(more)
     }
     val disabledValue = ""
+    val firstTaskType = viewModel.getFirstTaskType().observeAsState()
     val initialTaskType = (
             if (!isEditMode) viewModel.getFirstTaskType()
             else viewModel.getTaskType(editTaskType)
             ).observeAsState(TaskType(name = stringResource(id = R.string.loading), icon = null))
+
     val selectedTask = viewModel.selectedTaskType.observeAsState(null)
 
     // Making sure initial task type has been loaded from Room
@@ -65,8 +67,7 @@ fun AddTaskDescAndTypeContainer(
         Handler().postDelayed({
             if (initialTaskSaved.value != null) {
                 onTaskChange(initialTaskType.value)
-            } else {
-                onTaskChange(taskTypes.value!![0])
+                viewModel.selectedTaskType.postValue(initialTaskType.value)
             }
             viewModel.initialTaskSaved.postValue(true)
         }, 100)
@@ -90,7 +91,7 @@ fun AddTaskDescAndTypeContainer(
                     .padding(start = 110.dp, end = 30.dp)
             ) {
                 Text(
-                    selectedTask.value?.name ?: initialTaskType.value.name,
+                    text = if (selectedTask.value?.name != null) selectedTask.value!!.name else if (initialTaskType.value?.name != null) initialTaskType.value.name else firstTaskType.value!!.name,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(onClick = { expanded = true })
@@ -152,6 +153,6 @@ fun AddTaskDescAndTypeContainer(
                 .fillMaxWidth()
                 .padding(0.dp, 0.dp, 30.dp, 15.dp)
         )
-        AddTaskTypeDialog(viewModel = viewModel, onTaskChange = { onTaskChange(it) })
+        AddTaskTypeDialog(viewModel = viewModel, onTaskChange = { onTaskChange(it)})
     }
 }

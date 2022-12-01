@@ -4,6 +4,7 @@ import com.metropolia.eatthefrog.database.TaskType
 
 // Amounts
 const val MAX_SUBTASK_AMOUNT = 7
+const val MAX_TASK_TYPE_NAME_LENGTH = 20
 
 // Shared preferences keys
 const val SHARED_PREF_KEY = "PREFERENCES_KEY"

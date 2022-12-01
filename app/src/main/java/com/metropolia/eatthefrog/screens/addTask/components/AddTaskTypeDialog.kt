@@ -1,5 +1,7 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
+import android.os.Handler
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -29,6 +31,7 @@ import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.ICON_LIST
+import com.metropolia.eatthefrog.constants.MAX_TASK_TYPE_NAME_LENGTH
 import com.metropolia.eatthefrog.database.TaskType
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -40,6 +43,7 @@ fun AddTaskTypeDialog(
     val context = LocalContext.current
     val visible = viewModel.typeDialogVisible.observeAsState()
     val taskTypes = viewModel.getTaskTypes().observeAsState(listOf())
+    val firstTaskType = viewModel.getFirstTaskType().observeAsState()
     var typeInput by remember { mutableStateOf("") }
     var chosenIcon by remember { mutableStateOf(ICON_LIST[0]) }
 
@@ -58,7 +62,9 @@ fun AddTaskTypeDialog(
                         textAlign = TextAlign.Center,
                         textDecoration = TextDecoration.Underline,
                         color = MaterialTheme.colors.onSurface,
-                        modifier = Modifier.padding(vertical = 10.dp).align(Alignment.CenterHorizontally)
+                        modifier = Modifier
+                            .padding(vertical = 10.dp)
+                            .align(Alignment.CenterHorizontally)
                     )
                 }
 
@@ -100,7 +106,26 @@ fun AddTaskTypeDialog(
                                     .clip(CircleShape)
                                     .border(1.dp, Color.Black, CircleShape)
                                     .clickable {
-                                        viewModel.deleteTaskType(item.uid)
+                                        if (taskTypes.value.size != 1) {
+                                            if (viewModel.selectedTaskType.value?.uid == item.uid) {
+                                                viewModel.deleteTaskType(item.uid)
+                                                // If we delete the first task type, give the DB a bit to reload the new first task type
+                                                Handler().postDelayed({
+                                                    viewModel.selectedTaskType.postValue(firstTaskType.value)
+                                                    onTaskChange(firstTaskType.value!!)
+                                                }, 100)
+                                            } else {
+                                                viewModel.deleteTaskType(item.uid)
+                                            }
+                                        } else {
+                                            Toast
+                                                .makeText(
+                                                    context,
+                                                    context.getText(R.string.cannot_delete_last_type),
+                                                    Toast.LENGTH_LONG
+                                                )
+                                                .show()
+                                        }
                                     }
                             )
                         }
@@ -119,10 +144,13 @@ fun AddTaskTypeDialog(
                     )
                     TextField(
                         value = typeInput,
-                        onValueChange = { typeInput = it },
+                        onValueChange = {
+                            if (it.length <= MAX_TASK_TYPE_NAME_LENGTH) typeInput = it
+                        },
                         label = {
                             Text(stringResource(id = R.string.task_type_name))
-                        }
+                        },
+                        maxLines = 1
                     )
                     LazyRow(Modifier.fillMaxWidth()) {
                         items(ICON_LIST) { item ->
