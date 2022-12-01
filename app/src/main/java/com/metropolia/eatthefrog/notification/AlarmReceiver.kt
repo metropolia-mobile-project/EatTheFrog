@@ -78,7 +78,7 @@ class AlarmReceiver : BroadcastReceiver() {
  * Function takes task as a parameter to use the tasks uid as a requestCode, which needs to be different for every alarm.
  * The function will launch a notification when prompted and redirects user to MainActivity when the notification is clicked.
  */
-fun setAlarm(task: Task, time: String = "16:00", context: Context?) {
+fun setAlarm(task: Task, time: String = "09:00", context: Context?) {
     val converter = DateConverter()
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)

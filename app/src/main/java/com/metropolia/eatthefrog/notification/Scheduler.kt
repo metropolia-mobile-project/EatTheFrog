@@ -36,28 +36,26 @@ fun Scheduler(viewModel: NotificationsViewModel) {
     var taskItems: List<Task>? = listOf()
 
     // Invoke notifications for tomorrows tasks
-    /*if (tasksTomorrow != null) {
-        if (tasksTomorrow.isNotEmpty()) {
+    if (tasksTomorrow != null && tasksTomorrow.isNotEmpty()) {
 
-            // If only one task due tomorrow
-            if (tasksTomorrow.size == 1) {
-                val test = tasksTomorrow[0].uid
-                testingThis(test, viewModel, context)
-            }
+        // If only one task due tomorrow
+        if (tasksTomorrow.size == 1) {
+            val test = tasksTomorrow[0].uid
+            testingThis(test, viewModel, context)
+        }
 
-            // If only one task due today
+        // If only one task due today
 
-            // Notification stuff from now on
-            *//*if (tasks.value != null) {
-            val context = LocalContext.current
-            val id = tasks.value?.uid
-            val date = tasks.value?.deadline
-            if (id != null) {
-                com.metropolia.eatthefrog.screens.testingThis(id, vm, context)
-            }
-        }*//*
+        // Notification stuff from now on
+        /*if (tasks.value != null) {
+        val context = LocalContext.current
+        val id = tasks.value?.uid
+        val date = tasks.value?.deadline
+        if (id != null) {
+            com.metropolia.eatthefrog.screens.testingThis(id, vm, context)
         }
     }*/
+    }
 
     // Invoke notifications for today's frog
     if (frogToday != null) {
