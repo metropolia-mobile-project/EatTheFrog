@@ -111,7 +111,7 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                     contentDescription = "type icon", tint = MaterialTheme.colors.secondary,
                                     modifier = Modifier.padding(horizontal = 5.dp)
                                 )
-                                Text(text = taskType.value?.name, color = MaterialTheme.colors.secondary, fontSize = 14.sp)
+                                Text(text = taskType.value?.name ?: "<${stringResource(id = R.string.deleted_type)}>", color = MaterialTheme.colors.secondary, fontSize = 14.sp)
                             }
 
                            Image(
