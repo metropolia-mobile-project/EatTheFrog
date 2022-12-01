@@ -45,7 +45,7 @@
     <string name="no_tasks_found">Tehtäviä ei löytynyt.</string>
     <string name="no_tasks_for_this_week">Ei vielä tehtäviä tälle viikolle.</string>
     <string name="no_tasks_for_this_month">Ei vielä tehtäviä tälle kuukaudelle.</string>
-    <string name="go_to_add_task">Mene \'Lisää tehtävä\' välilehdelle aloittaaksesi!</string>
+    <string name="go_to_add_task">Paina \'+\' nappia aloittaaksesi!</string>
     <string name="no_subtasks">Ei alitehtäviä.</string>
     <string name="confirm">Vahvista</string>
     <string name="cancel">Peru</string>

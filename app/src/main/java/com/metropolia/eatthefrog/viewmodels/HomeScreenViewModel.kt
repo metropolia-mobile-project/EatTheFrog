@@ -63,7 +63,7 @@ class HomeScreenViewModel(application: Application) : TasksViewModel(application
                     service.getRandomMotivationalQuote()[0]
                 } catch (e: Exception) {
                     Log.d("API fetch failed", e.message.toString())
-                    APIService.Result("JUST DO IT!", "Shia LaBeouf", "")
+                    APIService.Result("DO NOT REDEEEEM!", "Mahatma Gandhi", "")
                 }
             }
         }
