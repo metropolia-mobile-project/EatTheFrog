@@ -31,42 +31,59 @@ fun Scheduler(viewModel: NotificationsViewModel) {
     Log.d("HOHHOH tomorrow", tomorrow)
 
     val tasks = viewModel.getTasks().observeAsState(null)
+    val tasksToday = (tasks.value?.filter { it.deadline == today })
     val tasksTomorrow = (tasks.value?.filter { it.deadline == tomorrow })
     val frogToday = (tasks.value?.filter { it.deadline == today })?.filter { it.isFrog }
-    var taskItems: List<Task>? = listOf()
 
     // Invoke notifications for tomorrows tasks
     if (tasksTomorrow != null && tasksTomorrow.isNotEmpty()) {
 
         // If only one task due tomorrow
         if (tasksTomorrow.size == 1) {
-            val test = tasksTomorrow[0].uid
-            testingThis(test, viewModel, context)
+            val task = tasksTomorrow[0].uid
+            scheduleNotification(task, viewModel, context)
         }
+        // If multiple tasks due tomorrow
+        else {
+            var task: Long
+            for (item in tasksTomorrow) {
+                task = item.uid
+                scheduleNotification(task, viewModel, context)
+            }
+        }
+    }
+
+    // Invoke notifications for today's tasks
+    if (tasksToday != null && tasksToday.isNotEmpty()) {
 
         // If only one task due today
-
-        // Notification stuff from now on
-        /*if (tasks.value != null) {
-        val context = LocalContext.current
-        val id = tasks.value?.uid
-        val date = tasks.value?.deadline
-        if (id != null) {
-            com.metropolia.eatthefrog.screens.testingThis(id, vm, context)
+        if (tasksToday.size == 1) {
+            val task = tasksToday[0].uid
+            scheduleNotification(task, viewModel, context)
         }
-    }*/
+        // If multiple tasks due today
+        else {
+            var task: Long
+            for (item in tasksToday) {
+                task = item.uid
+                scheduleNotification(task, viewModel, context)
+            }
+        }
     }
 
     // Invoke notifications for today's frog
     if (frogToday != null) {
         if (frogToday.isNotEmpty()) {
             val frogId = frogToday[0].uid
-            testingThis(frogId, viewModel, context)
+            scheduleNotification(frogId, viewModel, context)
         }
     }
 }
 
-fun testingThis(id: Long, viewModel: NotificationsViewModel, context: Context) {
+/**
+ * Function responsible for calling setAlarm() and sending the corresponding task for it
+ */
+fun scheduleNotification(id: Long, viewModel: NotificationsViewModel, context: Context) {
     CoroutineScope(Dispatchers.IO).launch {
         val task = viewModel.getCertainTask(id)
 
