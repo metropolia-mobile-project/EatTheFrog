@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -27,10 +28,14 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.CONFIRM_WINDOW_KEY
+import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 /**
@@ -42,7 +47,6 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
 
-
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
 
@@ -53,67 +57,128 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
         }
     }
 
+    fun formatDateString(string: String): String {
+        var newDateString = ""
+        try {
+            val newFormat = SimpleDateFormat("dd MMMM, yyyy")
+            val date = SimpleDateFormat(DATE_FORMAT).parse(string)
+            newDateString = newFormat.format(date)
+        } catch (e: Exception) {
+            Log.d("Failed to format date", string)
+        }
+        return newDateString
+    }
+
+    fun formatTimeString(string: String): String {
+        var newDateString = ""
+        try {
+            val newFormat = SimpleDateFormat("hh:mm aaa")
+            val date = SimpleDateFormat(DATE_FORMAT).parse(string)
+            newDateString = newFormat.format(date)
+        } catch (e: Exception) {
+            Log.d("Failed to format date", string)
+        }
+        return newDateString
+    }
+
     PopupView(vm.popupVisible, callback = {vm.resetPopupStatus()}) {
 
         Box(
             Modifier
                 .fillMaxSize()
-                .padding(20.dp)) {
+                .padding(horizontal = 20.dp)) {
 
 
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally) {
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Switch(
-                            checked = task.value?.completed ?: false,
-                            onCheckedChange = { vm.openTaskConfirmWindow() },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colors.primaryVariant
-                            ),
-                        )
-                        Text(if (task.value?.completed == false)
-                                stringResource(R.string.close)
-                            else stringResource(R.string.open))
-                    }
-
-                    Image(
-                        painter = painterResource(R.drawable.edit_24),
-                        modifier = Modifier
-                            .clickable { navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}/${task.value!!.isFrog}") {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    inclusive = true
-                                }
-                            } },
-                        contentDescription = "edit button")
-                }
-
                 LazyColumn(
                     Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(1f)
-                        .padding(top = 20.dp)
+                        .fillMaxSize()
                 ) {
                     item {
+
+                        Row(Modifier.fillMaxWidth().padding(top = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.End) {
+                           Image(
+                               painter = painterResource(R.drawable.ic_baseline_edit_note),
+                               modifier = Modifier
+                                   .size(40.dp)
+                                   .clickable {
+                                       navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${task.value!!.taskType}/${task.value!!.isFrog}") {
+                                       popUpTo(navController.graph.findStartDestination().id) {
+                                           inclusive = true
+                                       }
+                                   } },
+                               contentDescription = "edit button",
+                               colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground))
+                        }
+
                         Text(
                             text = task.value?.name ?: "",
-                            Modifier
+                            modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 15.dp),
+                                .padding(bottom = 20.dp, top = 10.dp),
+                            fontSize = 25.sp,
                             fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center)
+                            textAlign = TextAlign.Start)
 
                         Text(task.value?.description ?: "", Modifier.padding(bottom = 15.dp))
+
+                        Row(
+                            Modifier
+                                .padding(vertical = 5.dp)
+                                .fillMaxWidth()
+                                .height(100.dp)
+                                .clip(RoundedCornerShape(15.dp))
+                                .background(MaterialTheme.colors.background)
+                                .padding(15.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+
+
+                            Image(painter = painterResource(id = R.drawable.ic_calendar), modifier = Modifier
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(MaterialTheme.colors.surface)
+                                .padding(10.dp)
+                                .size(20.dp), contentDescription = "calendar icon", colorFilter = ColorFilter.tint(MaterialTheme.colors.primaryVariant))
+
+
+                            Column(Modifier.padding(start = 10.dp)) {
+                                Text(text = formatDateString(task.value?.deadline ?: ""))
+                                Text(text = formatTimeString(task.value?.deadline ?: ""))
+                            }
+                        }
+
+                        Column(
+                            Modifier
+                                .padding(vertical = 5.dp)
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(15.dp))
+                                .background(MaterialTheme.colors.background)
+                                .padding(15.dp),
+                            verticalArrangement = Arrangement.SpaceAround,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+
+                            PopupSwitchRow(desc = if (task.value?.completed == false)
+                                    stringResource(R.string.close)
+                                else stringResource(R.string.open),
+                                enabledIcon = R.drawable.ic_baseline_task_alt_24,
+                                enabled = task.value?.completed ?: false,
+                                toggleState = { vm.openTaskConfirmWindow() }
+                            )
+
+                            PopupSwitchRow(desc = stringResource(R.string.daily_frog),
+                                enabledIcon = R.drawable.ic_frog_cropped,
+                                enabled = task.value?.isFrog ?: false,
+                                toggleState = { vm.openFrogConfirmWindow() }
+                            )
+                        }
 
                         if (vm.selectedFilter.value == DateFilter.TODAY) {
                             Row(
@@ -127,25 +192,9 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                 Text(
                                     if (subtasks.value.isNotEmpty()) stringResource(R.string.subtasks_header)
                                     else "",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 15.sp
                                 )
-
-                                Row(
-                                    horizontalArrangement = Arrangement.Center,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        stringResource(R.string.daily_frog),
-                                    )
-                                    Switch(
-                                        checked = task.value?.isFrog ?: false,
-                                        onCheckedChange = { vm.openFrogConfirmWindow() },
-                                        colors = SwitchDefaults.colors(
-                                            checkedThumbColor = MaterialTheme.colors.primaryVariant
-                                        )
-                                    )
-                                }
-
-
                             }
                         }
                     }
@@ -153,9 +202,11 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                     if (subtasks.value.isNotEmpty()) {
                         itemsIndexed(subtasks.value) { i, st ->
                             Row(
-                                Modifier
+                                modifier = Modifier
                                     .padding(bottom = if (i < subtasks.value.size - 1) 10.dp else 0.dp
-                                )) {
+                                ),
+                                verticalAlignment = Alignment.CenterVertically
+                                ) {
 
                                 Image(
                                     painter =
@@ -168,13 +219,13 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                 Card(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(15.dp))
-                                        .wrapContentSize(), elevation = 25.dp
+                                        .wrapContentSize(), elevation = 225.dp
                                 ) {
                                     Row(
                                         Modifier
                                             .fillMaxWidth()
-                                            .padding(5.dp)
-                                            .background(MaterialTheme.colors.background),
+                                            .background(MaterialTheme.colors.background)
+                                            .padding(5.dp),
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
@@ -183,7 +234,9 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                             verticalAlignment = Alignment.CenterVertically,
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
-                                            Text(st.name, modifier = Modifier.padding(start = 10.dp).fillMaxWidth(0.8f))
+                                            Text(st.name, modifier = Modifier
+                                                .padding(start = 10.dp)
+                                                .fillMaxWidth(0.8f))
                                         }
 
                                         Switch(
@@ -200,12 +253,14 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                         }
                     } else {
                         item {
-                            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Top) {
                                 Image(painter = painterResource(id = R.drawable.ic_add_task),
                                     modifier = Modifier
-                                        .padding(top = 30.dp)
-                                        .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(MaterialTheme.colors.surface))
-                                Text(text = stringResource(id = R.string.no_subtasks), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
+                                        .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground))
+                                Text(text = stringResource(id = R.string.no_subtasks), Modifier.padding(20.dp), color = MaterialTheme.colors.onBackground, fontSize = 18.sp, textAlign = TextAlign.Center)
                             }
                         }
                     }
@@ -253,4 +308,60 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
     }
 }
 
+@Composable
+fun PopupSwitchRow(desc: String,
+              enabledIcon: Int,
+              disabledIcon: Int? = enabledIcon,
+              enabled: Boolean, toggleState: () -> Unit) {
+
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 5.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+
+            Card(
+                modifier = Modifier
+                    .wrapContentSize(Alignment.Center)
+                    .background(MaterialTheme.colors.background),
+                shape = CircleShape,
+                elevation = 5.dp,
+            ) {
+
+                Column(
+                    Modifier
+                        .padding(10.dp)) {
+                    Image(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(
+                            if (enabled) enabledIcon
+                            else disabledIcon ?: enabledIcon
+                        ),
+                        contentDescription = "darkmode_lightmode")
+                }
+
+            }
+            Text(
+                modifier = Modifier.padding(horizontal = 10.dp),
+                text = desc,
+                fontWeight = FontWeight.Light,
+                fontSize = 13.sp
+            )
+        }
+
+        Switch(
+            checked = enabled,
+            onCheckedChange = { toggleState() },
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colors.primaryVariant
+            )
+        )
+    }
+}
 

@@ -45,7 +45,7 @@
     <string name="no_tasks_found">No tasks found.</string>
     <string name="no_tasks_for_this_week">No tasks for this week yet.</string>
     <string name="no_tasks_for_this_month">No tasks for this month yet.</string>
-    <string name="go_to_add_task">Go to \'Add task\' tab to get started!</string>
+    <string name="go_to_add_task">Click the \'+\' button to get started!</string>
     <string name="no_subtasks">No subtasks.</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
