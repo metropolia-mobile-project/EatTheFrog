@@ -93,6 +93,10 @@ fun AddTaskCreateSubsContainer(
                         Icons.Default.Add,
                         contentDescription = "",
                         modifier = Modifier
+                             //New subtasks is created here, for new tasks subtaskID is 1 if there is not tasks in database yet
+                             //otherwise it takes last task ID and adds +1 to it
+                             //subtasks are put to list which is stored in viewmodel
+                             //While creating subtasks there is check that subtask have to have title and there is maximum amount of 7 subtasks
                             .clickable {
                                 if (!isEditMode) {
                                     subTaskId = if (lastTask.value == null) {
