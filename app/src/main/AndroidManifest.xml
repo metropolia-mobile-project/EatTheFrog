@@ -32,6 +32,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
+			
         <receiver android:name=".notification.AlarmReceiver" />
     </application>
 
