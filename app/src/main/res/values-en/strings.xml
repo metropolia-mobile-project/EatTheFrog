@@ -45,10 +45,18 @@
     <string name="no_tasks_found">No tasks found.</string>
     <string name="no_tasks_for_this_week">No tasks for this week yet.</string>
     <string name="no_tasks_for_this_month">No tasks for this month yet.</string>
-    <string name="go_to_add_task">Go to \'Add task\' tab to get started!</string>
+    <string name="go_to_add_task">Click the \'+\' button to get started!</string>
     <string name="no_subtasks">No subtasks.</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="meeting">Meeting</string>
+    <string name="planning">Planning</string>
+    <string name="development">Development</string>
+    <string name="more">More</string>
+    <string name="add_type">Add task type</string>
+    <string name="add_task_type_name">Please add a name for the task type!</string>
+    <string name="task_type_name">Task type name</string>
+    <string name="new_task_type">New task type</string>
     <string name="complete">Complete</string>
     <string name="incomplete">Incomplete</string>
     <string name="search">Search</string>
@@ -60,4 +68,9 @@
     <string name="activity">Activity</string>
     <string name="frogs_completed">Frog completed</string>
     <string name="tasks_completed">Tasks completed</string>
+    <string name="dont_ask_again">Do not ask me again</string>
+    <string name="loading">Loading...</string>
+    <string name="deleted_type">deleted type</string>
+    <string name="choose_task_type">Choose a task type</string>
+    <string name="cannot_delete_last_type">Cannot delete the last task type!</string>
 </resources>

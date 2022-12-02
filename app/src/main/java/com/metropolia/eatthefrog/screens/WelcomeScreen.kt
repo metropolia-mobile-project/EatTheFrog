@@ -113,6 +113,7 @@ fun WelcomeScreen(application: Application, activity: Activity) {
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = {
+                welcomeScreenViewModel.saveInitialTypes()
                 welcomeScreenViewModel.savePreferences(username)
                 val intent = Intent(activity, MainActivity::class.java)
                 startActivity(activity, intent, null)

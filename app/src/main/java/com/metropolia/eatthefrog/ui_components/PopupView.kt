@@ -56,14 +56,14 @@ fun PopupView(display: MutableLiveData<Boolean>, callback: () -> Unit, content: 
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.7f)
+                    .fillMaxHeight(0.8f)
                     .background(Color.Transparent),
                 verticalArrangement = Arrangement.Bottom) {
                 Column(
                     Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp))
-                        .background(MaterialTheme.colors.secondary),
+                        .background(MaterialTheme.colors.surface),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally) {
                     content()

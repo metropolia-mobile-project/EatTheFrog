@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -15,6 +16,7 @@ import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.database.TaskType
+import com.metropolia.eatthefrog.database.TaskTypeOld
 import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import java.text.SimpleDateFormat
@@ -39,7 +41,7 @@ fun AddTaskCreateButtonContainer(
     onFrogChange: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
-
+    val taskTypes = viewModel.getTaskTypes().observeAsState(listOf(TaskType(name = stringResource(id = R.string.loading), icon = null)))
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -72,8 +74,7 @@ fun AddTaskCreateButtonContainer(
                         onTitleChange("")
                         onDescChange("")
                         onFrogChange(false)
-                        onTaskTypeChange(TaskType.PLANNING)
-
+                        onTaskTypeChange(taskTypes.value[0])
                         
                     } else {
                         viewModel.updateTask(editTask)

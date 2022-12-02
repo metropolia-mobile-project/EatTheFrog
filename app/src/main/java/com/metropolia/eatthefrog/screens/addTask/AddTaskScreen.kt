@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.screens.addTask.components.AddTaskBuildScreenContainer
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 
@@ -27,7 +28,8 @@ fun AddTaskScreen(
     editDesc: String?,
     dateDeadline: String,
     timeDeadline: String,
-    editTaskType: String?,
+    editTaskType: Long,
+    isFrogBoolean: Boolean,
 ) {
 
 
@@ -47,7 +49,8 @@ fun AddTaskScreen(
             editDesc,
             dateDeadline,
             timeDeadline,
-            editTaskType
+            editTaskType,
+            isFrogBoolean,
         )
     }
 }
