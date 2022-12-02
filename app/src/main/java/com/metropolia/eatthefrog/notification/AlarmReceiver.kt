@@ -16,7 +16,12 @@ import androidx.core.app.NotificationManagerCompat
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.activities.MainActivity
 import com.metropolia.eatthefrog.constants.CHANNEL_ID
+import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.constants.TIME_FORMAT
 import com.metropolia.eatthefrog.database.Task
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -26,14 +31,20 @@ import java.util.*
  */
 class AlarmReceiver : BroadcastReceiver() {
     private var notificationManager: NotificationManagerCompat? = null
+    private val dtf = DateTimeFormatter.ofPattern(DATE_FORMAT)
+    private val sdf = SimpleDateFormat(TIME_FORMAT)
 
     override fun onReceive(p0: Context?, p1: Intent?) {
         val task = p1?.getSerializableExtra("task") as? Task
+        val today: String = dtf.format(LocalDateTime.now())
 
         // Bold the notification title
-        val boldTitle: Spannable = SpannableString(task?.name)
+        val boldTitle: Spannable = if (task?.deadline == today) {
+            if (task.isFrog) SpannableString("Today's frog: " + task.name)
+            else SpannableString("Due today: " + task.name)
+        } else SpannableString("Due tomorrow at " + sdf.format(Date()) + ": " + task?.name)
         val sb: Spannable = boldTitle
-        task?.name?.length?.let {
+        boldTitle.length.let {
             sb.setSpan(
                 StyleSpan(Typeface.BOLD),
                 0,

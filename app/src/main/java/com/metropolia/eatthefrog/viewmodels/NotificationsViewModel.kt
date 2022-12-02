@@ -21,7 +21,6 @@ class NotificationsViewModel(application: Application) : HomeScreenViewModel(app
     private val sharedPreferences: SharedPreferences = application
         .getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
     private val dtf = DateTimeFormatter.ofPattern(DATE_FORMAT)
-    val stf = DateTimeFormatter.ofPattern(TIME_FORMAT)
 
     val tomorrow: String = dtf.format(LocalDateTime.now().plusDays(1))
     var deadlineValue = MutableLiveData(0)
