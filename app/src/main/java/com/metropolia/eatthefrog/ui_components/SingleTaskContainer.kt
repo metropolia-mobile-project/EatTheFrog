@@ -3,10 +3,7 @@ package com.metropolia.eatthefrog.ui_components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -19,6 +16,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.database.Task
+import com.metropolia.eatthefrog.database.TaskType
+import com.metropolia.eatthefrog.placeholder_data.PlaceholderTask
+import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.TasksViewModel
 
@@ -36,7 +36,7 @@ fun SingleTaskContainer(task: Task, vm: TasksViewModel) {
     val closedSubtaskAmount = subtasks.value?.filter { it.completed }?.size ?: 0
     val subtaskText = if (subtaskAmount.value == 0) stringResource(id = R.string.no_subtasks)
                       else "$closedSubtaskAmount/${subtaskAmount.value} ${stringResource(id = if (subtaskAmount.value == 1) R.string.subtask else R.string.subtasks)} ${stringResource(id = R.string.done)}"
-    val typeText = task.taskType.toString().lowercase().capitalize()
+    val taskType = vm.getTaskType(task.taskTypeId).observeAsState()
     val deadlineText = if (vm.selectedFilter.value == DateFilter.TODAY) "${stringResource(id = R.string.at)} ${task.time}" else "${task.deadline} ${stringResource(id = R.string.at)} ${task.time}"
 
     Card(
@@ -51,10 +51,18 @@ fun SingleTaskContainer(task: Task, vm: TasksViewModel) {
         }
     ) {
         Column() {
-            Text(text = typeText, color = MaterialTheme.colors.secondary, fontSize = 14.sp, modifier = Modifier
+            Row(modifier = Modifier
                 .align(Alignment.End)
                 .padding(horizontal = 20.dp)
-                .padding(top = 10.dp))
+                .padding(top = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(id = taskType.value?.icon ?: R.drawable.ic_null),
+                    contentDescription = "type icon", tint = MaterialTheme.colors.secondary,
+                    modifier = Modifier.padding(horizontal = 5.dp)
+                )
+                Text(text = taskType.value?.name ?: "<${stringResource(id = R.string.deleted_type)}>", color = MaterialTheme.colors.secondary, fontSize = 14.sp)
+        }
+
             Row(
                 Modifier.padding(horizontal = 20.dp)) {
                 Column() {

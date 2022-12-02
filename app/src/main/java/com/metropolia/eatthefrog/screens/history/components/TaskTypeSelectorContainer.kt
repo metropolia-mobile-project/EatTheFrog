@@ -17,22 +17,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 import java.util.*
 
 @Composable
 fun TaskTypeSelectorContainer(vm: HistoryScreenViewModel) {
 
-    var selectedTypes = vm.selectedTypes.observeAsState()
+    val taskTypes = vm.getAllTaskTypes().observeAsState(listOf(TaskType(name = stringResource(id = R.string.loading), icon = null)))
+    val selectedTypes = vm.selectedTypes.observeAsState()
 
     @Composable
-    fun TypeRow(type: String) {
-
-        var name = type
-        name = name.lowercase(Locale.getDefault())
-        name = name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+    fun TypeRow(type: TaskType) {
 
         Row(
             Modifier
@@ -49,7 +48,7 @@ fun TaskTypeSelectorContainer(vm: HistoryScreenViewModel) {
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = name,
+                text = type.name,
                 color = Color.White
             )
             if (selectedTypes.value?.contains(type) == true) {
@@ -64,7 +63,7 @@ fun TaskTypeSelectorContainer(vm: HistoryScreenViewModel) {
     }
 
     LazyRow(Modifier.fillMaxWidth()) {
-        if (vm.getAllTaskTypes().isNotEmpty()) item { TypeRow("All") }
-        items(vm.getAllTaskTypes()) { TypeRow(it.name) }
+        if (taskTypes.value.isNotEmpty()) item { TypeRow(vm.all) }
+        items(taskTypes.value) { TypeRow(it) }
     }
 }

@@ -29,7 +29,8 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
 
     val tasks = vm.getIncompleteTasks().observeAsState(listOf())
     val selectedType = vm.selectedTypes.observeAsState(listOf())
-    val all = stringResource(id = R.string.all)
+    val allTaskTypes = vm.getAllTaskTypes().observeAsState(listOf())
+    val all = vm.all
     fun parseStringToDate(string: String) = SimpleDateFormat(DATE_FORMAT).parse(string)
 
     if (tasks.value.isNotEmpty()) {
@@ -43,9 +44,7 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
         ) {
 
             itemsIndexed(tasks.value) { index, task ->
-
-                if (selectedType.value.contains(task.taskType.name) || selectedType.value.contains(all)) {
-
+                if (selectedType.value.contains(all)) {
                     val before = Calendar.getInstance()
                     before.add(Calendar.DATE, -1)
 
@@ -69,7 +68,37 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
                             SingleTaskContainer(task, vm)
                         }
                     }
-                } else if (index >= tasks.value.size -1) {
+                } else {
+                    for (taskType in allTaskTypes.value) {
+                        if (selectedType.value.contains(taskType) && taskType.uid == task.taskTypeId) {
+
+                            val before = Calendar.getInstance()
+                            before.add(Calendar.DATE, -1)
+
+                            if (parseStringToDate(task.deadline).before(before.time)) {
+                                if (curDate != null && curDate != parseStringToDate(task.deadline)) {
+                                    Text(
+                                        task.deadline,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.padding(top = 10.dp)
+                                    )
+                                    curDate = parseStringToDate(task.deadline)
+                                }
+
+                                Row(
+                                    Modifier
+                                        .padding(vertical = 10.dp)
+                                        .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Start,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    SingleTaskContainer(task, vm)
+                                }
+                            }
+                        }
+                    }
+                }
+                if (index >= tasks.value.size -1) {
                     Column(
                         Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,

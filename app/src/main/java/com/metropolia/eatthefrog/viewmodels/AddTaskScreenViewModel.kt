@@ -4,15 +4,18 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.PROFILE_IMAGE_KEY
 import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
+import com.metropolia.eatthefrog.database.TaskType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +27,13 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
 
     var subTaskList = MutableLiveData<List<Subtask>>(listOf())
     var editedSubTaskList = MutableLiveData<List<Subtask>>(listOf())
+    val typeDialogVisible = MutableLiveData(false)
+    val selectedTaskType = MutableLiveData<TaskType>()
+    val initialTaskSaved = MutableLiveData(false)
+
+    fun getTaskTypes() = database.taskTypeDao().getTaskTypes()
+    fun getTaskType(id: Long) = database.taskTypeDao().getTaskType(id)
+    fun getFirstTaskType() = database.taskTypeDao().getFirstTaskType()
 
     fun updateEditSubTaskList(list: List<Subtask>) {
         val oldList = editedSubTaskList.value
@@ -106,6 +116,18 @@ class AddTaskScreenViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun getLastTask(): LiveData<Task> = database.taskDao().getLastTask()
+
+    fun insertTaskType(taskType: TaskType) {
+        viewModelScope.launch {
+            database.taskTypeDao().insertTaskType(taskType)
+        }
+    }
+
+    fun deleteTaskType(id: Long) {
+        viewModelScope.launch {
+            database.taskTypeDao().deleteTasktype(id)
+        }
+    }
 }
 
 

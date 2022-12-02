@@ -47,8 +47,8 @@ fun Navigation(navController: NavHostController, username: String, application: 
                 defaultValue = ""
             },
             navArgument(name = "taskType") {
-                type = NavType.StringType
-                defaultValue = ""
+                type = NavType.LongType
+                defaultValue = 1
             },
             navArgument(name = "isFrog") {
                 type = NavType.BoolType
@@ -66,7 +66,7 @@ fun Navigation(navController: NavHostController, username: String, application: 
                         editDesc = navBackStackEntry.arguments!!.getString("taskDesc"),
                         dateDeadline = it,
                         timeDeadline = it1,
-                        editTaskType = navBackStackEntry.arguments!!.getString("taskType"),
+                        editTaskType = navBackStackEntry.arguments!!.getLong("taskType"),
                         isFrogBoolean = navBackStackEntry.arguments!!.getBoolean("isFrog")
                         )
                 }

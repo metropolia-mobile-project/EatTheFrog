@@ -63,7 +63,7 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
                     service.getRandomMotivationalQuote()[0]
                 } catch (e: Exception) {
                     Log.d("API fetch failed", e.message.toString())
-                    APIService.Result("JUST DO IT!", "Shia LaBeouf", "")
+                    APIService.Result("DO NOT REDEEEEM!", "Mahatma Gandhi", "")
                 }
             }
         }
@@ -123,6 +123,9 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
                 openFrogCompletedScreen()
                 showQuoteToast.value = true
             }
+            if ((task?.isFrog == true && task.completed)) {
+
+            }
         }
     }
 
@@ -174,6 +177,7 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
         if (durationBetweenDates.toInt() == 1) {
             advanceStreak()
             updateLongestStreak()
+            return
         }
 
         // Check so you can't break the streak by changing frog during the same day

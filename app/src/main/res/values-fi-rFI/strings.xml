@@ -45,10 +45,18 @@
     <string name="no_tasks_found">Tehtäviä ei löytynyt.</string>
     <string name="no_tasks_for_this_week">Ei vielä tehtäviä tälle viikolle.</string>
     <string name="no_tasks_for_this_month">Ei vielä tehtäviä tälle kuukaudelle.</string>
-    <string name="go_to_add_task">Mene \'Lisää tehtävä\' välilehdelle aloittaaksesi!</string>
+    <string name="go_to_add_task">Paina \'+\' nappia aloittaaksesi!</string>
     <string name="no_subtasks">Ei alitehtäviä.</string>
     <string name="confirm">Vahvista</string>
     <string name="cancel">Peru</string>
+    <string name="meeting">Tapaaminen</string>
+    <string name="planning">Suunnittelu</string>
+    <string name="development">Kehitystyö</string>
+    <string name="more">Lisää</string>
+    <string name="add_type">Lisää tehtävätyyppi</string>
+    <string name="add_task_type_name">Lisää nimi tehtävätyypille!</string>
+    <string name="task_type_name">Tehtävätyypin nimi</string>
+    <string name="new_task_type">Uusi tehtävätyyppi</string>
     <string name="complete">Suoritettu</string>
     <string name="incomplete">Suorittamatta</string>
     <string name="search">Etsi</string>
@@ -61,4 +69,8 @@
     <string name="frogs_completed">Suoritettu sammakko</string>
     <string name="tasks_completed">Suoritetut tehtävät</string>
     <string name="dont_ask_again">Älä kysy uudestaan</string>
+    <string name="loading">Ladataan...</string>
+    <string name="deleted_type">poistettu tyyppi</string>
+    <string name="choose_task_type">Valitse tehtävätyyppi</string>
+    <string name="cannot_delete_last_type">Viimeistä tehtävätyyppiä ei voida poistaa!</string>
 </resources>
