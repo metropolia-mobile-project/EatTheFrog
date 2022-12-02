@@ -51,7 +51,9 @@ fun ProfileGalleryPickerContainer(vm: ProfileScreenViewModel, username: String) 
     val context = LocalContext.current
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 
-    val imageCropLauncher = rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
+    //Launches cropping feature after wanted picture is picked from gallery
+    //cropped picture is saved to internal storage as profile pic
+    val imageCropLauncher = rememberLauncherForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
             imageUri = result.uriContent
         } else {
@@ -64,9 +66,8 @@ fun ProfileGalleryPickerContainer(vm: ProfileScreenViewModel, username: String) 
     ) { uri: Uri? ->
         val cropOptions = CropImageContractOptions(uri, CropImageOptions())
         imageCropLauncher.launch(cropOptions)
-        imageUri = vm.saveFileToInternalStorage(uri)
     }
-    
+    vm.saveFileToInternalStorage(imageUri)
 
 
 
