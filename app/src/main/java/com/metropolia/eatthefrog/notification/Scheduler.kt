@@ -41,16 +41,9 @@ fun Scheduler(viewModel: NotificationsViewModel) {
 
     // Invoke notifications for tomorrows tasks
     if (tasksTomorrow != null && tasksTomorrow.isNotEmpty()) {
-
-        // If only one task due tomorrow
-        if (tasksTomorrow.size == 1) {
-            val task = tasksTomorrow[0].uid
-            scheduleNotification(task, viewModel, context)
-        }
-        // If multiple tasks due tomorrow
-        else {
-            var task: Long
-            for (item in tasksTomorrow) {
+        var task: Long
+        for (item in tasksTomorrow) {
+            if (!item.completed) {
                 task = item.uid
                 scheduleNotification(task, viewModel, context)
             }
@@ -59,16 +52,9 @@ fun Scheduler(viewModel: NotificationsViewModel) {
 
     // Invoke notifications for today's tasks
     if (tasksToday != null && tasksToday.isNotEmpty()) {
-
-        // If only one task due today
-        if (tasksToday.size == 1) {
-            val task = tasksToday[0].uid
-            scheduleNotification(task, viewModel, context)
-        }
-        // If multiple tasks due today
-        else {
-            var task: Long
-            for (item in tasksToday) {
+        var task: Long
+        for (item in tasksToday) {
+            if (!item.completed) {
                 task = item.uid
                 scheduleNotification(task, viewModel, context)
             }
@@ -77,7 +63,7 @@ fun Scheduler(viewModel: NotificationsViewModel) {
 
     // Invoke notifications for today's frog
     if (frogToday != null) {
-        if (frogToday.isNotEmpty()) {
+        if (frogToday.isNotEmpty() && !frogToday[0].completed) {
             val frogId = frogToday[0].uid
             scheduleNotification(frogId, viewModel, context)
         }
