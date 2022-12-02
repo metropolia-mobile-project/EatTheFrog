@@ -23,6 +23,10 @@ interface TaskDao {
     @Query("UPDATE task SET completed = (CASE WHEN completed = 0 THEN 1 ELSE 0 END) WHERE task.uid = :id")
     suspend fun toggleTask(id: Long)
 
+    //Test
+    @Query("SELECT * FROM task WHERE task.uid = :id")
+    fun getTest(id: Long): Task
+
     // Query
     @Query("SELECT * FROM task WHERE task_name LIKE '%' || :pattern || '%' ORDER BY frog DESC")
     fun getAllTasks(pattern: String): LiveData<List<Task>>

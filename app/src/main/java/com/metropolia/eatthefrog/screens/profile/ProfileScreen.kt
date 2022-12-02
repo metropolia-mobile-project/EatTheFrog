@@ -18,11 +18,13 @@ import com.metropolia.eatthefrog.screens.profile.components.ProfileGalleryPicker
 import com.metropolia.eatthefrog.screens.profile.components.ProfileGraphContainer
 import com.metropolia.eatthefrog.screens.profile.components.ProfileTaskDetailsContainer
 import com.metropolia.eatthefrog.screens.profile.components.ProfileTaskSwitchContainer
+import com.metropolia.eatthefrog.viewmodels.NotificationsViewModel
 import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
 
 @Composable
 fun ProfileScreen(username: String, application: Application) {
     val profileScreenViewModel = ProfileScreenViewModel(application)
+    val notificationViewModel = NotificationsViewModel(application)
 
     LazyColumn(
         Modifier
@@ -35,7 +37,7 @@ fun ProfileScreen(username: String, application: Application) {
 
         item {
             ProfileGalleryPickerContainer(profileScreenViewModel, username)
-            ProfileTaskSwitchContainer(profileScreenViewModel)
+            ProfileTaskSwitchContainer(profileScreenViewModel, notificationViewModel)
             ProfileTaskDetailsContainer(profileScreenViewModel)
             ProfileGraphContainer(profileScreenViewModel)
         }

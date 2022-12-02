@@ -73,4 +73,9 @@
     <string name="deleted_type">poistettu tyyppi</string>
     <string name="choose_task_type">Valitse tehtävätyyppi</string>
     <string name="cannot_delete_last_type">Viimeistä tehtävätyyppiä ei voida poistaa!</string>
+    <string name="notif_at_deadline">Määräaikana</string>
+    <string name="notif_5before">5 min ennen</string>
+    <string name="notif_10before">10 min ennen</string>
+    <string name="notif_30before">30 min ennen</string>
+    <string name="notif_hour_before">Tuntia ennen</string>
 </resources>

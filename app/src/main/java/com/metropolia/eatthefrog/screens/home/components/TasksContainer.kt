@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.Task
-import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
+import com.metropolia.eatthefrog.ui_components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 import org.intellij.lang.annotations.JdkConstants

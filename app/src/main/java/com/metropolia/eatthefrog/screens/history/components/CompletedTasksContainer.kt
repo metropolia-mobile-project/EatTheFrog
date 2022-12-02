@@ -19,8 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
-import com.metropolia.eatthefrog.database.TaskType
-import com.metropolia.eatthefrog.screens.home.components.SingleTaskContainer
+import com.metropolia.eatthefrog.ui_components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 import java.text.SimpleDateFormat
 

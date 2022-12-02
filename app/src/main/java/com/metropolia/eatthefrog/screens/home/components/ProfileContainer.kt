@@ -31,7 +31,6 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
-import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 import java.text.SimpleDateFormat
 import java.util.*

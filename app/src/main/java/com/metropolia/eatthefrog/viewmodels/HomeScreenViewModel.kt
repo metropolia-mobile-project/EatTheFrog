@@ -28,7 +28,7 @@ enum class DateFilter {
 /**
  * ViewModel for the Home screen
  */
-class HomeScreenViewModel(application: Application) : TasksViewModel(application) {
+open class HomeScreenViewModel(application: Application) : TasksViewModel(application) {
 
     private val sharedPreferences: SharedPreferences = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
 
