@@ -79,7 +79,7 @@ class AlarmReceiver : BroadcastReceiver() {
  * The function will launch a notification when prompted and redirects user to MainActivity when the notification is clicked.
  */
 fun setAlarm(task: Task, time: String = "09:00", context: Context?) {
-    val converter = DateConverter()
+    val converter = DateTimeConverter()
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
     intent.putExtra("task", task)

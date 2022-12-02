@@ -5,19 +5,10 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import com.metropolia.eatthefrog.R
-import com.metropolia.eatthefrog.constants.DATE_FORMAT
-import com.metropolia.eatthefrog.database.Task
-import com.metropolia.eatthefrog.viewmodels.DateFilter
-import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 import com.metropolia.eatthefrog.viewmodels.NotificationsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.*
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -29,6 +20,8 @@ fun Scheduler(viewModel: NotificationsViewModel) {
     val context = LocalContext.current
     val today = viewModel.today
     val tomorrow = viewModel.tomorrow
+    val options = viewModel.listItems
+    val index = viewModel.deadlineValue.observeAsState()
 
     Log.d("HOHHOH today without sdf.format", Date().toString())
     Log.d("HOHHOH today formatted", today)
@@ -45,7 +38,7 @@ fun Scheduler(viewModel: NotificationsViewModel) {
         for (item in tasksTomorrow) {
             if (!item.completed) {
                 task = item.uid
-                scheduleNotification(task, viewModel, context)
+                scheduleNotification(task, options[index.value ?: 0], viewModel, context)
             }
         }
     }
@@ -56,7 +49,7 @@ fun Scheduler(viewModel: NotificationsViewModel) {
         for (item in tasksToday) {
             if (!item.completed) {
                 task = item.uid
-                scheduleNotification(task, viewModel, context)
+                scheduleNotification(task, options[index.value ?: 0], viewModel, context)
             }
         }
     }
@@ -65,7 +58,7 @@ fun Scheduler(viewModel: NotificationsViewModel) {
     if (frogToday != null) {
         if (frogToday.isNotEmpty() && !frogToday[0].completed) {
             val frogId = frogToday[0].uid
-            scheduleNotification(frogId, viewModel, context)
+            scheduleNotification(frogId, options[index.value ?: 0], viewModel, context)
         }
     }
 }
@@ -73,11 +66,24 @@ fun Scheduler(viewModel: NotificationsViewModel) {
 /**
  * Function responsible for calling setAlarm() and sending the corresponding task for it
  */
-fun scheduleNotification(id: Long, viewModel: NotificationsViewModel, context: Context) {
+fun scheduleNotification(id: Long, option: String, viewModel: NotificationsViewModel, context: Context) {
     CoroutineScope(Dispatchers.IO).launch {
+        val converter = DateTimeConverter()
         val task = viewModel.getCertainTask(id)
+        val minutes = viewModel.minutes
+        val hours = viewModel.hours
 
-        if (task.time != null) setAlarm(task, task.time, context)
+        if (task.time != null) {
+            if (option in hours) {
+                val modifiedTime = converter.modifyTime(task.time, hours = hours[option]!!)
+                setAlarm(task, modifiedTime.toString(), context)
+            }
+            if (option in minutes) {
+                val modifiedTime = converter.modifyTime(task.time, minutes = minutes[option]!!)
+                setAlarm(task, modifiedTime.toString(), context)
+            }
+            setAlarm(task, task.time, context)
+        }
         else setAlarm(task = task, context = context)
     }
 }

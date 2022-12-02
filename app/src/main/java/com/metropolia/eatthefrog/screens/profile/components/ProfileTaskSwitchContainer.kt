@@ -1,35 +1,25 @@
 package com.metropolia.eatthefrog.screens.profile.components
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.MutableLiveData
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.viewmodels.NotificationsViewModel
 import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
 
 /**
@@ -38,7 +28,7 @@ import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
  */
 
 @Composable
-fun ProfileTaskSwitchContainer(vm: ProfileScreenViewModel) {
+fun ProfileTaskSwitchContainer(vm: ProfileScreenViewModel, nvm: NotificationsViewModel) {
 
     Card(
         modifier = Modifier
@@ -72,7 +62,7 @@ fun ProfileTaskSwitchContainer(vm: ProfileScreenViewModel) {
 
             val deadlineState = vm.showDeadline.observeAsState()
             if (deadlineState.value == true) {
-                NotificationDropdown(vm)
+                NotificationDropdown(nvm)
             }
         }
     }
@@ -130,10 +120,6 @@ fun SwitchRow(
             )
         }
 
-        /*if (checkedState.value == true) {
-            NotificationDropdown()
-        }*/
-
         Switch(
             checked = checkedState.value ?: false,
             onCheckedChange = { toggleState() },
@@ -145,17 +131,10 @@ fun SwitchRow(
 }
 
 @Composable
-fun NotificationDropdown(viewModel: ProfileScreenViewModel) {
-    val listItems = listOf(
-        "At deadline",
-        "5 mins before",
-        "10 mins before",
-        "30 min before",
-        "1 hour before"
-    )
+fun NotificationDropdown(nvm: NotificationsViewModel) {
+    val listItems = nvm.listItems
 
-    val indexValue = viewModel.deadlineValue.observeAsState()
-    Log.d("FUCK ", indexValue.value.toString())
+    val indexValue = nvm.deadlineValue.observeAsState()
     val disabledValue = ""
     var expanded by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableStateOf(indexValue.value!!) }
@@ -183,8 +162,8 @@ fun NotificationDropdown(viewModel: ProfileScreenViewModel) {
             listItems.forEachIndexed { index, s ->
                 DropdownMenuItem(onClick = {
                     selectedIndex = index
-                    viewModel.deadlineValue.value = index
-                    viewModel.saveDeadlineValue()
+                    nvm.deadlineValue.value = index
+                    nvm.saveDeadlineValue()
                     expanded = false
                 }) {
                     val disabledText = if (s == disabledValue) {
