@@ -23,7 +23,8 @@ import java.util.*
 /**
  * Create task button saves task to database if name and description is inserted to text fields.
  * Saves subtask list to database if subtasks have been created.
- * Navigates to 'home' screen when tasks are saved.
+ * if function is launched in edit mode 'create task' button is changed to edit task and
+ * instead of creating new task it will make changes for the current task
  */
 @Composable
 fun AddTaskCreateButtonContainer(

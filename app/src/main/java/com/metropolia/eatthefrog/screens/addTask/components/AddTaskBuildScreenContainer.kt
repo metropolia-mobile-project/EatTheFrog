@@ -23,7 +23,8 @@ import java.util.*
 
 /**
  * This container holds variables that other containers need as a parameter to build new task object.
- * Every other container is inside this function and 'AddTaskBuildScreenContainer' is called in 'AddTaskScreen'
+ * Same screen is also used for editing the existing tasks, if this gets paramater isEditmode = true it will launch as edit mode.
+ * Every other container is inside this function and 'AddTaskBuildScreenContainer' is called in 'AddTaskScreen'.
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -39,10 +40,11 @@ fun AddTaskBuildScreenContainer(
     editTaskType: String?
 ) {
 
-
+    //All variables that are needed all over the screen is created here and passed to other functions
     val subList: List<Subtask>
     val subs = viewModel.getHighlightedSubtasks(editTaskId).observeAsState()
 
+    //Gives existing subtasks to viewmodel so they can be edited in edit mode
     if(subs.value != null && viewModel.editedSubTaskList.value!!.isEmpty()) {
         subList = subs.value!!.toList()
         viewModel.updateEditSubTaskList(subList)

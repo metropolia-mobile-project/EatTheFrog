@@ -12,6 +12,11 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 
 lateinit var addTaskScreenViewModel: AddTaskScreenViewModel
 
+/**
+ * Actual add task / edit task screen
+ * only build screen is called here and gets all the parameters which are given to addTaskScreen
+ * when navigated to it.
+ */
 @Composable
 fun AddTaskScreen(
     application: Application,

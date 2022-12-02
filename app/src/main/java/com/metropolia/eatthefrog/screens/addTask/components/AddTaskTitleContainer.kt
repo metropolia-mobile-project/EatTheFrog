@@ -38,6 +38,7 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 /**
  * UI for showing profile picture
  * UI and functionality to add title for new task
+ * in edit mode title is already given which is current task title and it can be changed writing over it
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -61,6 +62,8 @@ fun AddTaskTitleContainer(
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Start
     ) {
+        //Loads either profile picture placeholder image or if user have already
+        //picked their profile picture it will be showed here
         if (imageUri === null) {
             Image(
                 painter = painterResource(id = R.drawable.ic_profile),
