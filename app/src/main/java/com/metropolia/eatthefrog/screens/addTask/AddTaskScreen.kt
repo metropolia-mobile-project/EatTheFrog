@@ -3,6 +3,7 @@ package com.metropolia.eatthefrog.screens.addTask
 import android.app.Application
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,9 +32,10 @@ fun AddTaskScreen(
     addTaskScreenViewModel = AddTaskScreenViewModel(application)
     Column(
         modifier = Modifier
-            .fillMaxSize()
+
             .verticalScroll(rememberScrollState())
-            .background(Color.White)
+            .background(MaterialTheme.colors.surface)
+            .fillMaxSize()
     ) {
         AddTaskBuildScreenContainer(
             viewModel = addTaskScreenViewModel,

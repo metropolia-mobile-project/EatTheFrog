@@ -3,9 +3,11 @@ package com.metropolia.eatthefrog.screens.addTask.components
 import android.util.Log
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -36,7 +38,6 @@ import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 
 /**
- * UI for showing profile picture
  * UI and functionality to add title for new task
  */
 @OptIn(ExperimentalComposeUiApi::class)
@@ -47,86 +48,47 @@ fun AddTaskTitleContainer(
     onNameChange: (String) -> Unit,
 ) {
 
-
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    val imageUri by remember { mutableStateOf<Uri?>(vm.loadProfilePicture()?.toUri()) }
 
-
-    Row(
-        modifier = Modifier
+    Card(
+        Modifier
             .fillMaxWidth()
             .height(125.dp)
-            .padding(20.dp, 30.dp, 0.dp, 0.dp),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Start
+            .clip(RoundedCornerShape(15.dp))
+            .background(MaterialTheme.colors.background),
+        elevation = 10.dp
     ) {
-        if (imageUri === null) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_profile),
-                contentDescription = "Circle Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(75.dp)
-                    .clip(CircleShape)
-                    .border(2.dp, MaterialTheme.colors.secondary, CircleShape)
-                    .padding(5.dp)
-            )
-        } else {
-            imageUri?.let {
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        ImageRequest
-                            .Builder(LocalContext.current)
-                            .data(data = imageUri)
-                            .build()
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .size(75.dp)
-                        .shadow(elevation = 10.dp, shape = CircleShape, clip = true)
-                        .clip(CircleShape)
-                )
-            }
-        }
         Column(
             modifier = Modifier
-                .padding(15.dp, 0.dp, 0.dp, 0.dp),
+                .fillMaxSize()
+                .background(MaterialTheme.colors.background)
+                .padding(10.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start
         ) {
 
             Text(
                 text = stringResource(id = R.string.task_name)
             )
 
-
-            Box(
+            TextField(
+                value = taskTitle,
+                onValueChange = onNameChange,
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent
+                ),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = {
+                    keyboardController?.hide(); focusManager.clearFocus()
+                }),
+                singleLine = true,
+                textStyle = LocalTextStyle.current.copy(
+                    textAlign = TextAlign.Start
+                ),
                 modifier = Modifier
-                    .padding(0.dp),
-                contentAlignment = Alignment.CenterStart,
-            )
-            {
+                    .fillMaxWidth())
 
-                TextField(
-                    value = taskTitle,
-                    onValueChange = onNameChange,
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color.Transparent
-                    ),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = {
-                        keyboardController?.hide(); focusManager.clearFocus()
-                    }),
-                    singleLine = true,
-                    textStyle = LocalTextStyle.current.copy(
-                        textAlign = TextAlign.Start
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(0.dp, 0.dp, 30.dp, 15.dp),
-
-                    )
-            }
         }
     }
 }
