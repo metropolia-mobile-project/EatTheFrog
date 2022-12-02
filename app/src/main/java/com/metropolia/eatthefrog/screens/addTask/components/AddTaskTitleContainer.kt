@@ -81,6 +81,7 @@ fun AddTaskTitleContainer(
                             .data(data = imageUri)
                             .build()
                     ),
+                    contentScale = ContentScale.Crop,
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.CenterVertically)

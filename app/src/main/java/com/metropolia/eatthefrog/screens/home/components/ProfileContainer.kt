@@ -65,6 +65,7 @@ fun ProfileContainer(username: String, vm: HomeScreenViewModel) {
                             .build()
                     ),
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .size(75.dp)
