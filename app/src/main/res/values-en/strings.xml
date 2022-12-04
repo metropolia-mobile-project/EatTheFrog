@@ -73,4 +73,5 @@
     <string name="deleted_type">deleted type</string>
     <string name="choose_task_type">Choose a task type</string>
     <string name="cannot_delete_last_type">Cannot delete the last task type!</string>
+    <string name="add_task_header">Add Task</string>
 </resources>

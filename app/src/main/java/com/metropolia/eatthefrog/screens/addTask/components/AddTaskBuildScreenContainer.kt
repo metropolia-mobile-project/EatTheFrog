@@ -124,8 +124,7 @@ fun AddTaskBuildScreenContainer(
     Column(
         Modifier
             .fillMaxSize()
-            .focusRequester(focusRequester)
-            .clickable { keyboardController?.hide(); focusManager.clearFocus() },
+            .focusRequester(focusRequester),
         verticalArrangement = Arrangement.Bottom
 
     ) {

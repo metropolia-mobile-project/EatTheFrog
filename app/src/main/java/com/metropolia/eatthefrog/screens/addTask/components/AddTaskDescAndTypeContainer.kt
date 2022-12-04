@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -123,7 +124,8 @@ fun AddTaskDescAndTypeContainer(
                     modifier = Modifier
                         .width(25.dp)
                         .height(25.dp)
-                        .clickable(onClick = { expanded = true })
+                        .clickable(onClick = { expanded = true }),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
                 )
             }
         }

@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -106,7 +107,8 @@ fun AddTaskDateAndTimeContainer(
                         modifier = Modifier
                             .width(25.dp)
                             .height(25.dp)
-                            .padding(0.dp, 0.dp, 4.dp, 0.dp)
+                            .padding(0.dp, 0.dp, 4.dp, 0.dp),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
                     )
                     Text(
                         text = date.value
@@ -114,7 +116,7 @@ fun AddTaskDateAndTimeContainer(
 
                 }
                 Divider(
-                    color = Color.Black, thickness = 1.dp, modifier = Modifier
+                    color = MaterialTheme.colors.onBackground, thickness = 1.dp, modifier = Modifier
                         .width(125.dp)
                 )
             }
@@ -136,7 +138,8 @@ fun AddTaskDateAndTimeContainer(
                             .size(25.dp)
                             .padding(end = 4.dp)
                             .width(25.dp)
-                            .height(25.dp)
+                            .height(25.dp),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
                     )
                     Text(
                         text = time.value,
@@ -145,7 +148,7 @@ fun AddTaskDateAndTimeContainer(
                     )
                 }
                 Divider(
-                    color = Color.Black, thickness = 1.dp, modifier = Modifier
+                    color = MaterialTheme.colors.onBackground, thickness = 1.dp, modifier = Modifier
                         .width(125.dp)
                 )
             }
