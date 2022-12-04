@@ -31,6 +31,8 @@ import java.util.*
 
 /**
  * This container shows created subtasks in lazyColumn.
+ * if edit mode is true this lazyColumn shows existing sub tasks of that task
+ * subtasks can be deleted from the list, and if using in edit mode sub tasks are also deleted from database.
  */
 @Composable
 fun AddTaskLazyColumnContainer(
@@ -99,6 +101,8 @@ fun AddTaskLazyColumnContainer(
                         }, modifier = Modifier
                             .padding(0.dp, 3.dp)
                     )
+                    //Delete icon next to every item in list, if creating new task task is deleted from viewmodel list
+                    //if in edit mode task is also deleted from database
                     Icon(
                         painterResource(id = R.drawable.ic_add),
                         contentDescription = "Delete Subtask from list",

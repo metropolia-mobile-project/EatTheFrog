@@ -68,6 +68,7 @@ fun AddTaskDateAndTimeContainer(
     }
 
 
+    //These pickers launch Calendar and clock to pick wanted time and date for task deadlines
     val sDatePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
@@ -82,7 +83,7 @@ fun AddTaskDateAndTimeContainer(
     )
 
 
-
+    //Passes picked time and date to 'buildScreenContainer' where all task data is put together
     onDateChange(date.value)
     onTimeChange(time.value)
 

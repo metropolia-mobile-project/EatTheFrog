@@ -39,6 +39,7 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 
 /**
  * UI and functionality to add title for new task
+ * in edit mode title is already given which is current task title and it can be changed writing over it
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

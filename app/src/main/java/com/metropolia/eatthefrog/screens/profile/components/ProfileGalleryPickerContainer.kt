@@ -34,6 +34,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
 
@@ -48,11 +51,25 @@ fun ProfileGalleryPickerContainer(vm: ProfileScreenViewModel, username: String) 
     val context = LocalContext.current
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
 
+    //Launches cropping feature after wanted picture is picked from gallery
+    //cropped picture is saved to internal storage as profile pic
+    val imageCropLauncher = rememberLauncherForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            imageUri = result.uriContent
+        } else {
+            val exception = result.error
+        }
+    }
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        imageUri = vm.saveFileToInternalStorage(uri)
+        val cropOptions = CropImageContractOptions(uri, CropImageOptions())
+        imageCropLauncher.launch(cropOptions)
     }
+    vm.saveFileToInternalStorage(imageUri)
+
+
 
     Card(
         modifier = Modifier
@@ -98,6 +115,7 @@ fun ProfileGalleryPickerContainer(vm: ProfileScreenViewModel, username: String) 
                                     .data(data = imageUri)
                                     .build()
                             ),
+                            contentScale = ContentScale.Crop,
                             contentDescription = null,
                             modifier = Modifier
                                 .size(150.dp)

@@ -73,5 +73,10 @@
     <string name="deleted_type">deleted type</string>
     <string name="choose_task_type">Choose a task type</string>
     <string name="cannot_delete_last_type">Cannot delete the last task type!</string>
+    <string name="notif_at_deadline">At deadline</string>
+    <string name="notif_5before">5 min before</string>
+    <string name="notif_10before">10 min before</string>
+    <string name="notif_30before">30 min before</string>
+    <string name="notif_hour_before">1 hour before</string>
     <string name="add_task_header">Add Task</string>
 </resources>
