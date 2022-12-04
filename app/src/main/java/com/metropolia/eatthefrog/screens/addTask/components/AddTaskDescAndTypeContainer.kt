@@ -73,27 +73,16 @@ fun AddTaskDescAndTypeContainer(
         }, 100)
     }
 
-    Column(
-        modifier = Modifier
-            .wrapContentHeight()
-            .wrapContentWidth()
-            .padding(40.dp, 30.dp, 0.dp, 0.dp),
-
-        ) {
-        Row() {
+    Column(Modifier.padding(10.dp)) {
+        Row(Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween) {
             Text(
-                text = stringResource(id = R.string.description)
+                text = stringResource(id = R.string.description),
             )
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.TopStart)
-                    .padding(start = 110.dp, end = 30.dp)
-            ) {
+            Row {
                 Text(
                     text = if (selectedTask.value?.name != null) selectedTask.value!!.name else if (initialTaskType.value?.name != null) initialTaskType.value.name else firstTaskType.value!!.name,
                     modifier = Modifier
-                        .fillMaxWidth()
                         .clickable(onClick = { expanded = true })
                         .background(
                             Color.Transparent
@@ -134,7 +123,7 @@ fun AddTaskDescAndTypeContainer(
                     modifier = Modifier
                         .width(25.dp)
                         .height(25.dp)
-                        .align(Alignment.CenterEnd)
+                        .clickable(onClick = { expanded = true })
                 )
             }
         }
@@ -151,7 +140,6 @@ fun AddTaskDescAndTypeContainer(
             }),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(0.dp, 0.dp, 30.dp, 15.dp)
         )
         AddTaskTypeDialog(viewModel = viewModel, onTaskChange = { onTaskChange(it)})
     }

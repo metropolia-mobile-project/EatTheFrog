@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -66,7 +67,6 @@ fun AddTaskDateAndTimeContainer(
     }
 
 
-
     val sDatePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
@@ -84,70 +84,71 @@ fun AddTaskDateAndTimeContainer(
 
     onDateChange(date.value)
     onTimeChange(time.value)
-    Text(
-        text = stringResource(id = R.string.task_deadline),
-        Modifier.padding(30.dp, 15.dp, 0.dp, 10.dp),
-        fontWeight = FontWeight.Bold,
-    )
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .padding(30.dp, 0.dp, 30.dp, 30.dp)
-            .fillMaxWidth()
-    ) {
 
-        Column(Modifier.clickable { sDatePickerDialog.show() }) {
-            Row {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_calendar),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(25.dp)
-                        .height(25.dp)
-                        .padding(0.dp, 0.dp, 4.dp, 0.dp)
-                )
-                Text(
-                    text = date.value
-                )
+    Column(Modifier.padding(10.dp)) {
 
-            }
-            Divider(
-                color = Color.Black, thickness = 2.dp, modifier = Modifier
-                    .width(125.dp)
-            )
-        }
-
-        Column(
+        Text(
+            text = stringResource(id = R.string.task_deadline),
+            Modifier.padding(bottom = 10.dp),
+        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(30.dp, 0.dp, 0.dp, 0.dp)
-                .clickable { mTimePickerDialog.show() }
+                .fillMaxWidth()
         ) {
 
-            Row(
-                modifier = Modifier
-                    .padding(0.dp, 0.dp, 0.dp, 0.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_add_time),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .clickable { mTimePickerDialog.show() }
-                        .size(25.dp)
-                        .padding(end = 4.dp)
-                        .width(25.dp)
-                        .height(25.dp)
-                )
-                Text(
-                    text = time.value,
-                    modifier = Modifier
-                        .padding(0.dp, 0.dp, 0.dp, 0.dp)
+            Column(Modifier.clickable { sDatePickerDialog.show() }) {
+                Row {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_calendar),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(25.dp)
+                            .height(25.dp)
+                            .padding(0.dp, 0.dp, 4.dp, 0.dp)
+                    )
+                    Text(
+                        text = date.value
+                    )
+
+                }
+                Divider(
+                    color = Color.Black, thickness = 1.dp, modifier = Modifier
+                        .width(125.dp)
                 )
             }
-            Divider(
-                color = Color.Black, thickness = 2.dp, modifier = Modifier
-                    .width(125.dp)
-            )
+
+            Column(
+                modifier = Modifier
+                    .clickable { mTimePickerDialog.show() }
+            ) {
+
+                Row(
+                    modifier = Modifier
+                        .padding(0.dp, 0.dp, 0.dp, 0.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_add_time),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .clickable { mTimePickerDialog.show() }
+                            .size(25.dp)
+                            .padding(end = 4.dp)
+                            .width(25.dp)
+                            .height(25.dp)
+                    )
+                    Text(
+                        text = time.value,
+                        modifier = Modifier
+                            .padding(0.dp, 0.dp, 0.dp, 0.dp)
+                    )
+                }
+                Divider(
+                    color = Color.Black, thickness = 1.dp, modifier = Modifier
+                        .width(125.dp)
+                )
+            }
         }
     }
 }

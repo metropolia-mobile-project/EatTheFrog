@@ -83,7 +83,7 @@ fun AddTaskCreateButtonContainer(
                     }
                 }
             }, modifier = Modifier
-                .width(200.dp)
+                .fillMaxWidth()
                 .padding(top = 50.dp)
         ) {
             if (isEditMode == true) {

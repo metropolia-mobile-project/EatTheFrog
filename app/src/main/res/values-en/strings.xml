@@ -16,12 +16,12 @@
     <string name="dark_mode">Dark mode</string>
     <string name="deadline_rem">Deadline reminder</string>
     <string name="create_task">Create Task</string>
-    <string name="sub_task_title">Sub-task title</string>
-    <string name="task_deadline">Task deadline</string>
+    <string name="sub_task_title">Subtask title</string>
+    <string name="task_deadline">Deadline</string>
     <string name="starting_date">Starting date</string>
     <string name="ending_date">Ending date</string>
     <string name="description">Description</string>
-    <string name="task_name">Task name</string>
+    <string name="title">Title</string>
     <string name="hello">Hello</string>
     <string name="you_have">You have</string>
     <string name="tasks_today">tasks today</string>

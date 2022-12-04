@@ -51,44 +51,34 @@ fun AddTaskTitleContainer(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Card(
-        Modifier
+    Column(
+        modifier = Modifier
             .fillMaxWidth()
-            .height(125.dp)
-            .clip(RoundedCornerShape(15.dp))
-            .background(MaterialTheme.colors.background),
-        elevation = 10.dp
+            .padding(10.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start
     ) {
-        Column(
+
+        Text(
+            text = stringResource(id = R.string.title),
+        )
+
+        TextField(
+            value = taskTitle,
+            onValueChange = onNameChange,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = {
+                keyboardController?.hide(); focusManager.clearFocus()
+            }),
+            singleLine = true,
+            textStyle = LocalTextStyle.current.copy(
+                textAlign = TextAlign.Start
+            ),
             modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background)
-                .padding(10.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
-        ) {
+                .fillMaxWidth())
 
-            Text(
-                text = stringResource(id = R.string.task_name)
-            )
-
-            TextField(
-                value = taskTitle,
-                onValueChange = onNameChange,
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent
-                ),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = {
-                    keyboardController?.hide(); focusManager.clearFocus()
-                }),
-                singleLine = true,
-                textStyle = LocalTextStyle.current.copy(
-                    textAlign = TextAlign.Start
-                ),
-                modifier = Modifier
-                    .fillMaxWidth())
-
-        }
     }
 }

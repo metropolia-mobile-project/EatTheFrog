@@ -1,16 +1,17 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -20,7 +21,6 @@ import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.database.TaskType
-import com.metropolia.eatthefrog.database.TaskTypeOld
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import java.text.SimpleDateFormat
 import com.metropolia.eatthefrog.R
@@ -125,7 +125,7 @@ fun AddTaskBuildScreenContainer(
         Modifier
             .fillMaxSize()
             .focusRequester(focusRequester)
-            .background(MaterialTheme.colors.primary),
+            .clickable { keyboardController?.hide(); focusManager.clearFocus() },
         verticalArrangement = Arrangement.Bottom
 
     ) {
@@ -135,53 +135,80 @@ fun AddTaskBuildScreenContainer(
                 .fillMaxWidth()
                 .padding(10.dp)
                 .focusRequester(focusRequester)
-                .background(MaterialTheme.colors.background)
-                .clickable { keyboardController?.hide(); focusManager.clearFocus() }
         ) {
 
-            AddTaskTitleContainer(viewModel,
-                taskTitle ?: "",
-                onNameChange = { taskTitle = it })
+            AddTaskContentCardWrapper {
+                AddTaskTitleContainer(viewModel,
+                    taskTitle ?: "",
+                    onNameChange = { taskTitle = it })
+            }
 
-            AddTaskDescAndTypeContainer(
-                description ?: "",
-                onDescChange = { description = it },
-                onTaskChange = { taskType = it },
-                isEditMode,
-                editTaskType,
-                viewModel
-            )
+            AddTaskContentCardWrapper {
+                AddTaskDescAndTypeContainer(
+                    description ?: "",
+                    onDescChange = { description = it },
+                    onTaskChange = { taskType = it },
+                    isEditMode,
+                    editTaskType,
+                    viewModel
+                )
+            }
 
-            AddTaskDateAndTimeContainer(
-                onDateChange = { sDate = it },
-                onTimeChange = { sTime = it },
-                isEditMode,
-                dateDeadline,
-                timeDeadline,
-                sDate
-            )
+            AddTaskContentCardWrapper {
+                AddTaskDateAndTimeContainer(
+                    onDateChange = { sDate = it },
+                    onTimeChange = { sTime = it },
+                    isEditMode,
+                    dateDeadline,
+                    timeDeadline,
+                    sDate
+                )
+            }
 
-            AddTaskLazyColumnContainer(viewModel = viewModel,
-                isEditMode,
-                sDate,
-                isFrog,
-                onIsFrogChange = { isFrog = it })
-
-            AddTaskCreateSubsContainer(
-                viewModel = viewModel,
-                isEditMode,
-                editTaskId
-            )
-
-            AddTaskCreateButtonContainer(viewModel = viewModel,
-                navHost = navHost,
-                newTask,
-                isEditMode,
-                editTask,
-                onTitleChange = { taskTitle = it },
-                onDescChange = { description = it },
-                onTaskTypeChange = { taskType = it },
-                onFrogChange = { isFrog = it })
+            AddTaskContentCardWrapper {
+                Column(Modifier.fillMaxWidth().padding(10.dp)) {
+                    AddTaskLazyColumnContainer(viewModel = viewModel,
+                        isEditMode,
+                        sDate,
+                        isFrog,
+                        onIsFrogChange = { isFrog = it })
+                    AddTaskCreateSubsContainer(
+                        viewModel = viewModel,
+                        isEditMode,
+                        editTaskId
+                    )
+                    AddTaskCreateButtonContainer(viewModel = viewModel,
+                        navHost = navHost,
+                        newTask,
+                        isEditMode,
+                        editTask,
+                        onTitleChange = { taskTitle = it },
+                        onDescChange = { description = it },
+                        onTaskTypeChange = { taskType = it },
+                        onFrogChange = { isFrog = it })
+                }
+            }
         }
+    }
+}
+
+/**
+ * Wraps the AddTask composables in a Card composable
+ */
+@Composable
+fun AddTaskContentCardWrapper(
+    modifier: Modifier =
+        Modifier
+            .padding(vertical = 5.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(15.dp)),
+
+    content: @Composable () -> Unit) {
+    Card(
+        modifier = modifier,
+        backgroundColor = MaterialTheme.colors.background,
+        elevation = 25.dp
+    ) {
+        content()
     }
 }
