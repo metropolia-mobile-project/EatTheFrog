@@ -1,6 +1,5 @@
 package com.metropolia.eatthefrog.screens.history.components
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,33 +19,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.ALL_UID
-import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.ui_components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
-import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * Sorts the incomplete tasks according to the date values and displays them in the HistoryScreen "Incomplete" tab.
+ */
 @Composable
 fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
 
     val tasks = vm.getIncompleteTasks().observeAsState(listOf())
     val selectedType = vm.selectedTypes.observeAsState(listOf())
     var taskItems: MutableList<Task>? = mutableListOf()
-    fun parseStringToDate(string: String) = SimpleDateFormat(DATE_FORMAT).parse(string)
-
 
     for (task in tasks.value) {
         if (selectedType.value.any {it.uid == task.taskTypeId} || selectedType.value.any {it.uid == ALL_UID }) {
             taskItems?.add(task)
         }
     }
-    Log.d("TASKITEMS SIZE", taskItems?.size.toString())
 
     if (taskItems != null) {
         if (taskItems.isNotEmpty()) {
 
-            var curDate = parseStringToDate(tasks.value[0].deadline)
+            var curDate = vm.parseStringToDate(tasks.value[0].deadline)
 
             LazyColumn(
                 modifier = Modifier
@@ -58,14 +55,17 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
                     val before = Calendar.getInstance()
                     before.add(Calendar.DATE, -1)
 
-                    if (parseStringToDate(task.deadline).before(before.time)) {
-                        if (curDate != null && curDate != parseStringToDate(task.deadline)) {
+                    if (vm.parseStringToDate(task.deadline).before(before.time)) {
+                        if (index == 0) {
+                            Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
+                            curDate = vm.parseStringToDate(task.deadline)
+                        } else if (curDate != null && curDate != vm.parseStringToDate(task.deadline)) {
                             Text(
                                 task.deadline,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(top = 10.dp)
                             )
-                            curDate = parseStringToDate(task.deadline)
+                            curDate = vm.parseStringToDate(task.deadline)
                         }
 
                         Row(
@@ -80,18 +80,18 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
                     }
                 }
             }
+        } else {
+            Column(
+                Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center) {
+                Image(painter = painterResource(id = R.drawable.ic_add_task), modifier = Modifier
+                    .padding(top = 30.dp)
+                    .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(
+                    MaterialTheme.colors.surface))
+                Text(text = stringResource(R.string.no_tasks_found), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
+            }
         }
     }
-    if (taskItems?.size == 0) {
-        Column(
-            Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center) {
-            Image(painter = painterResource(id = R.drawable.ic_add_task), modifier = Modifier
-                .padding(top = 30.dp)
-                .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(
-                MaterialTheme.colors.surface))
-            Text(text = stringResource(R.string.no_tasks_found), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
-        }
-    }
+
 }

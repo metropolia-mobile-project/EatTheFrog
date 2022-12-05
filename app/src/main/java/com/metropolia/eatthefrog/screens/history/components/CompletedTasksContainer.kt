@@ -1,6 +1,5 @@
 package com.metropolia.eatthefrog.screens.history.components
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,12 +19,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.ALL_UID
-import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.ui_components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
-import java.text.SimpleDateFormat
 
+/**
+ * Sorts the completed tasks according to the date values and displays them in the HistoryScreen "Complete" tab.
+ */
 @Composable
 fun CompletedTasksContainer(vm: HistoryScreenViewModel) {
 
@@ -33,19 +33,15 @@ fun CompletedTasksContainer(vm: HistoryScreenViewModel) {
     val selectedType = vm.selectedTypes.observeAsState(listOf())
     var taskItems: MutableList<Task>? = mutableListOf()
 
-    fun parseStringToDate(string: String) = SimpleDateFormat(DATE_FORMAT).parse(string)
-
-
     for (task in tasks.value) {
         if (selectedType.value.any {it.uid == task.taskTypeId} || selectedType.value.any {it.uid == ALL_UID}) {
             taskItems?.add(task)
         }
     }
 
-
     if (taskItems != null) {
         if (taskItems.isNotEmpty()) {
-            var firstDate = parseStringToDate(tasks.value[0].deadline)
+            var firstDate = vm.parseStringToDate(tasks.value[0].deadline)
             var curDate = firstDate
 
             LazyColumn(
@@ -58,12 +54,12 @@ fun CompletedTasksContainer(vm: HistoryScreenViewModel) {
 
                     if (index == 0) {
                         Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
-                        curDate = parseStringToDate(task.deadline)
+                        curDate = vm.parseStringToDate(task.deadline)
                     } else if (curDate != null
-                        && curDate != parseStringToDate(task.deadline)
-                        && parseStringToDate(task.deadline) != firstDate) {
+                        && curDate != vm.parseStringToDate(task.deadline)
+                        && vm.parseStringToDate(task.deadline) != firstDate) {
                         Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
-                        curDate = parseStringToDate(task.deadline)
+                        curDate = vm.parseStringToDate(task.deadline)
                     }
 
                     Row(
