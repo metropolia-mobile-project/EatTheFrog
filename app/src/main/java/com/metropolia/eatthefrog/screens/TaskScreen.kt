@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.CONFIRM_WINDOW_KEY
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
@@ -35,8 +35,6 @@ import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 /**
  * Popup window which displays the selected Task object and its data.
@@ -44,14 +42,15 @@ import java.time.format.DateTimeFormatter
  */
 @ExperimentalMaterialApi
 @Composable
-
 fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
+    val context = LocalContext.current
 
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
     val task = vm.getSelectedTask().observeAsState()
-    val taskType = vm.getTaskType(if (task.value != null) task.value!!.taskTypeId else 1).observeAsState(TaskType(name = stringResource(id = R.string.loading), icon = null))
+    val taskType = vm.getTaskType(if (task.value != null) task.value!!.taskTypeId else 1)
+        .observeAsState(TaskType(name = stringResource(id = R.string.loading), icon = null))
     val firstTaskType = vm.getFirstTaskType().observeAsState()
-    navController.addOnDestinationChangedListener { _, destination, _->
+    navController.addOnDestinationChangedListener { _, destination, _ ->
         if (destination.route != NavigationItem.Home.route) {
             vm.resetPopupStatus()
             Log.d("Navigated to another view", "another view")
@@ -70,17 +69,17 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
         return newDateString
     }
 
-    PopupView(vm.popupVisible, callback = {vm.resetPopupStatus()}) {
-
+    PopupView(vm.popupVisible, callback = { vm.resetPopupStatus() }) {
         Box(
             Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp)) {
-
+                .padding(horizontal = 20.dp)
+        ) {
 
             Column(
                 modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally) {
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
                 LazyColumn(
                     Modifier
@@ -88,31 +87,44 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                 ) {
                     item {
 
-                        Row(Modifier.fillMaxWidth().padding(top = 10.dp),
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween) {
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
 
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
-                                    painter = painterResource(id = taskType.value?.icon ?: R.drawable.ic_null),
-                                    contentDescription = "type icon", tint = MaterialTheme.colors.secondary,
+                                    painter = painterResource(
+                                        id = taskType.value.icon ?: R.drawable.ic_null
+                                    ),
+                                    contentDescription = "type icon",
+                                    tint = MaterialTheme.colors.secondary,
                                     modifier = Modifier.padding(horizontal = 5.dp)
                                 )
-                                Text(text = taskType.value?.name ?: "<${stringResource(id = R.string.deleted_type)}>", color = MaterialTheme.colors.secondary, fontSize = 14.sp)
+                                Text(
+                                    text = taskType.value.name,
+                                    color = MaterialTheme.colors.secondary,
+                                    fontSize = 14.sp
+                                )
                             }
 
-                           Image(
-                               painter = painterResource(R.drawable.ic_baseline_edit_note),
-                               modifier = Modifier
-                                   .size(40.dp)
-                                   .clickable {
-                                       navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${taskType.value?.uid ?: firstTaskType.value!!.uid}/${task.value!!.isFrog}") {
-                                       popUpTo(navController.graph.findStartDestination().id) {
-                                           inclusive = true
-                                       }
-                                   } },
-                               contentDescription = "edit button",
-                               colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground))
+                            Image(
+                                painter = painterResource(R.drawable.ic_baseline_edit_note),
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clickable {
+                                        navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${taskType.value.uid}/${task.value!!.isFrog}") {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                inclusive = true
+                                            }
+                                        }
+                                    },
+                                contentDescription = "edit button",
+                                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                            )
                         }
 
                         Text(
@@ -122,7 +134,8 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                 .padding(bottom = 20.dp, top = 10.dp),
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Start)
+                            textAlign = TextAlign.Start
+                        )
 
                         Text(task.value?.description ?: "", Modifier.padding(bottom = 15.dp))
 
@@ -138,12 +151,16 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                             horizontalArrangement = Arrangement.Start
                         ) {
 
-
-                            Image(painter = painterResource(id = R.drawable.ic_calendar), modifier = Modifier
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(MaterialTheme.colors.surface)
-                                .padding(10.dp)
-                                .size(20.dp), contentDescription = "calendar icon", colorFilter = ColorFilter.tint(MaterialTheme.colors.primaryVariant))
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_calendar),
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(MaterialTheme.colors.surface)
+                                    .padding(10.dp)
+                                    .size(20.dp),
+                                contentDescription = "calendar icon",
+                                colorFilter = ColorFilter.tint(MaterialTheme.colors.primaryVariant)
+                            )
 
 
                             Column(Modifier.padding(start = 10.dp)) {
@@ -165,10 +182,9 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
-
                             PopupSwitchRow(desc = if (task.value?.completed == false)
-                                    stringResource(R.string.close)
-                                else stringResource(R.string.open),
+                                stringResource(R.string.close)
+                            else stringResource(R.string.open),
                                 enabledIcon = R.drawable.ic_baseline_task_alt_24,
                                 enabled = task.value?.completed ?: false,
                                 toggleState = { vm.openTaskConfirmWindow() }
@@ -204,16 +220,18 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                         itemsIndexed(subtasks.value) { i, st ->
                             Row(
                                 modifier = Modifier
-                                    .padding(bottom = if (i < subtasks.value.size - 1) 10.dp else 0.dp
-                                ),
+                                    .padding(
+                                        bottom = if (i < subtasks.value.size - 1) 10.dp else 0.dp
+                                    ),
                                 verticalAlignment = Alignment.CenterVertically
-                                ) {
+                            ) {
 
                                 Image(
                                     painter =
                                     if (st.completed) painterResource(id = R.drawable.ic_baseline_task_alt_24)
                                     else painterResource(id = R.drawable.ic_baseline_task_alt_24_gray),
-                                    contentDescription = "completed sign")
+                                    contentDescription = "completed sign"
+                                )
 
                                 Spacer(Modifier.width(5.dp))
 
@@ -235,9 +253,11 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                             verticalAlignment = Alignment.CenterVertically,
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
-                                            Text(st.name, modifier = Modifier
-                                                .padding(start = 10.dp)
-                                                .fillMaxWidth(0.8f))
+                                            Text(
+                                                st.name, modifier = Modifier
+                                                    .padding(start = 10.dp)
+                                                    .fillMaxWidth(0.8f)
+                                            )
                                         }
 
                                         Switch(
@@ -247,7 +267,6 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                                 checkedThumbColor = MaterialTheme.colors.primaryVariant
                                             ),
                                         )
-
                                     }
                                 }
                             }
@@ -257,11 +276,22 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                             Column(
                                 modifier = Modifier.fillMaxSize(),
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Top) {
-                                Image(painter = painterResource(id = R.drawable.ic_add_task),
+                                verticalArrangement = Arrangement.Top
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_add_task),
                                     modifier = Modifier
-                                        .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary))
-                                Text(text = stringResource(id = R.string.no_subtasks), Modifier.padding(20.dp), color = MaterialTheme.colors.secondary, fontSize = 18.sp, textAlign = TextAlign.Center)
+                                        .size(100.dp),
+                                    contentDescription = "plus sign",
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colors.secondary)
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.no_subtasks),
+                                    Modifier.padding(20.dp),
+                                    color = MaterialTheme.colors.secondary,
+                                    fontSize = 18.sp,
+                                    textAlign = TextAlign.Center
+                                )
                             }
                         }
                     }
@@ -273,34 +303,38 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
     if (vm.showTaskDoneConfirmWindow.value) {
         val desc = stringResource(
             if (task.value?.completed == false) R.string.close_task else R.string.open_task,
-            task.value?.name ?: "")
+            task.value?.name ?: ""
+        )
 
         if (vm.getBooleanFromPreferences(CONFIRM_WINDOW_KEY, true)) {
             ConfirmWindow(
-                {vm.toggleTaskCompleted(task.value)},
-                {vm.closeTaskConfirmWindow()},
+                { vm.toggleTaskCompleted(task.value, context) },
+                { vm.closeTaskConfirmWindow() },
                 desc,
                 modifier = Modifier.clip(
-                    RoundedCornerShape(20.dp)),
+                    RoundedCornerShape(20.dp)
+                ),
                 application = vm.app
             )
         } else {
-            vm.toggleTaskCompleted(task.value)
+            vm.toggleTaskCompleted(task.value, LocalContext.current)
         }
     }
 
     if (vm.showFrogConfirmWindow.value) {
         val desc = stringResource(
             if (task.value?.isFrog == false) R.string.set_frog else R.string.remove_frog,
-            task.value?.name ?: "")
+            task.value?.name ?: ""
+        )
 
         if (vm.getBooleanFromPreferences(CONFIRM_WINDOW_KEY, true)) {
             ConfirmWindow(
-                {vm.toggleTaskFrog()},
-                {vm.closeFrogConfirmWindow()},
+                { vm.toggleTaskFrog() },
+                { vm.closeFrogConfirmWindow() },
                 desc,
                 modifier = Modifier.clip(
-                    RoundedCornerShape(20.dp)),
+                    RoundedCornerShape(20.dp)
+                ),
                 application = vm.app
             )
         } else {
@@ -310,11 +344,12 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
 }
 
 @Composable
-fun PopupSwitchRow(desc: String,
-              enabledIcon: Int,
-              disabledIcon: Int? = enabledIcon,
-              enabled: Boolean, toggleState: () -> Unit) {
-
+fun PopupSwitchRow(
+    desc: String,
+    enabledIcon: Int,
+    disabledIcon: Int? = enabledIcon,
+    enabled: Boolean, toggleState: () -> Unit
+) {
 
     Row(
         modifier = Modifier
@@ -323,7 +358,6 @@ fun PopupSwitchRow(desc: String,
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
 
         Row(verticalAlignment = Alignment.CenterVertically) {
 
@@ -337,17 +371,19 @@ fun PopupSwitchRow(desc: String,
 
                 Column(
                     Modifier
-                        .padding(10.dp)) {
+                        .padding(10.dp)
+                ) {
                     Image(
                         modifier = Modifier.size(20.dp),
                         painter = painterResource(
                             if (enabled) enabledIcon
                             else disabledIcon ?: enabledIcon
                         ),
-                        contentDescription = "darkmode_lightmode")
+                        contentDescription = "darkmode_lightmode"
+                    )
                 }
-
             }
+
             Text(
                 modifier = Modifier.padding(horizontal = 10.dp),
                 text = desc,

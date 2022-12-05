@@ -129,6 +129,10 @@ fun setAlarm(task: Task, time: String = "09:00", context: Context?) {
     }
 }
 
+/**
+ * Function takes task as a parameter to use the tasks uid as a requestCode, which needs to be different for every alarm.
+ * The function will cancel a notification when prompted, which is when a task or a frog is marked completed.
+ */
 fun cancelAlarm(task: Task, context: Context?) {
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
