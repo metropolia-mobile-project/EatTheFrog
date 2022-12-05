@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
@@ -47,28 +49,24 @@ fun AddTaskLazyColumnContainer(
     val currentDate = sdf.format(Date())
 
     Column(
-        Modifier.heightIn(0.dp, 350.dp)
+        Modifier.heightIn(0.dp, 350.dp).fillMaxWidth(),
     ) {
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                "Subtasks",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(30.dp, 0.dp, 0.dp, 0.dp)
+                stringResource(R.string.subtasks_header)
             )
             if (currentDate == sDate && !isEditMode) {
                 Row(modifier = Modifier) {
                     Text(
-                        "Is Frog",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(0.dp, 0.dp, 15.dp, 0.dp)
+                        stringResource(R.string.daily_frog),
                     )
                     Switch(
                         checked = isFrog,
                         onCheckedChange = onIsFrogChange,
-                        Modifier.padding(0.dp, 0.dp, 40.dp, 0.dp).height(25.dp)
+                        Modifier.height(25.dp)
                     )
                 }
             }
@@ -77,9 +75,9 @@ fun AddTaskLazyColumnContainer(
 
         LazyColumn(
             Modifier
+                .padding(vertical = 20.dp)
                 .wrapContentHeight()
                 .fillMaxWidth()
-                .padding(30.dp, 0.dp, 0.dp, 0.dp)
         ) {
 
             itemsIndexed(
@@ -93,7 +91,7 @@ fun AddTaskLazyColumnContainer(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top,
                     modifier = Modifier
-                        .wrapContentWidth()
+                        .fillMaxWidth()
                 ) {
                     Text(
                         text = (index + 1).toString() + ". " + if (sub.name.length > 13) {
@@ -102,7 +100,6 @@ fun AddTaskLazyColumnContainer(
                             sub.name
                         }, modifier = Modifier
                             .padding(0.dp, 3.dp)
-                            .width(185.dp)
                     )
                     //Delete icon next to every item in list, if creating new task task is deleted from viewmodel list
                     //if in edit mode task is also deleted from database
