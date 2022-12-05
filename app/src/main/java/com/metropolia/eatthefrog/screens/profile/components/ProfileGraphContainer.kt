@@ -35,6 +35,10 @@ import com.patrykandpatryk.vico.compose.component.shape.textComponent
 import com.patrykandpatryk.vico.core.component.shape.Shapes
 import java.util.*
 
+/**
+ * Displays a graph which contains amount of closed tasks on the Y-axis and date on the X-axis.
+ * Displays also a "*" character next to dates which have a completed frog within them.
+ */
 @Composable
 fun ProfileGraphContainer(vm: ProfileScreenViewModel) {
 
