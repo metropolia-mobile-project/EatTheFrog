@@ -98,9 +98,9 @@ fun FrogCompletedScreen(vm: HomeScreenViewModel) {
                         fontSize = 20.sp
                     )
                     Spacer(Modifier.height(10.dp))
-                    Text("\"${vm.quote.q}\"", textAlign = TextAlign.Center)
+                    Text("\"${vm.service.quote.value?.q}\"", textAlign = TextAlign.Center)
                     Spacer(Modifier.height(10.dp))
-                    Text("-${vm.quote.a}", textAlign = TextAlign.Center)
+                    Text("-${vm.service.quote.value?.a}", textAlign = TextAlign.Center)
                 }
             },
 

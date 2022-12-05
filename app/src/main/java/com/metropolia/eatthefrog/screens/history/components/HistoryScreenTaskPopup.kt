@@ -37,8 +37,7 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 import java.text.SimpleDateFormat
 
 /**
- * Popup window which displays the selected Task object and its data. Enables the user to set Sub-tasks as complete, as well as
- * edit the Task object in CreateTaskScreen.
+ * Popup window which displays the selected Task object and its data.
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -49,7 +48,6 @@ fun HistoryScreenTaskPopup(vm: HistoryScreenViewModel, navController: NavControl
     val taskType = vm.getTaskType(if (task.value != null) task.value!!.taskTypeId else 1).observeAsState(
         TaskType(name = stringResource(id = R.string.loading), icon = null)
     )
-    val firstTaskType = vm.getFirstTaskType().observeAsState()
 
 
     navController.addOnDestinationChangedListener { _, destination, _->
@@ -70,19 +68,6 @@ fun HistoryScreenTaskPopup(vm: HistoryScreenViewModel, navController: NavControl
         }
         return newDateString
     }
-
-    fun formatTimeString(string: String): String {
-        var newDateString = ""
-        try {
-            val newFormat = SimpleDateFormat("hh:mm aaa")
-            val date = SimpleDateFormat(DATE_FORMAT).parse(string)
-            newDateString = newFormat.format(date)
-        } catch (e: Exception) {
-            Log.d("Failed to format date", string)
-        }
-        return newDateString
-    }
-
 
     PopupView(vm.popupVisible, callback = {vm.resetPopupStatus()}) {
 
@@ -114,19 +99,6 @@ fun HistoryScreenTaskPopup(vm: HistoryScreenViewModel, navController: NavControl
                                 )
                                 Text(text = taskType.value?.name ?: "<${stringResource(id = R.string.deleted_type)}>", color = MaterialTheme.colors.secondary, fontSize = 14.sp)
                             }
-
-   /*                         Image(
-                                painter = painterResource(R.drawable.ic_baseline_edit_note),
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clickable {
-                                        navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${taskType.value?.uid ?: firstTaskType.value!!.uid}/${task.value!!.isFrog}") {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                inclusive = true
-                                            }
-                                        } },
-                                contentDescription = "edit button",
-                                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground))*/
                         }
 
                         Text(
@@ -162,7 +134,7 @@ fun HistoryScreenTaskPopup(vm: HistoryScreenViewModel, navController: NavControl
 
                             Column(Modifier.padding(start = 10.dp)) {
                                 Text(text = formatDateString(task.value?.deadline ?: ""))
-                                Text(text = formatTimeString(task.value?.deadline ?: ""))
+                                Text(text = task.value?.time ?: "")
                             }
                         }
 

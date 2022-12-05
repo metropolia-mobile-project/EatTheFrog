@@ -18,41 +18,48 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
-import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.constants.ALL_UID
+import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.ui_components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
-import java.text.SimpleDateFormat
 
+/**
+ * Sorts the completed tasks according to the date values and displays them in the HistoryScreen "Complete" tab.
+ */
 @Composable
 fun CompletedTasksContainer(vm: HistoryScreenViewModel) {
 
     val tasks = vm.getCompletedTasks().observeAsState(listOf())
     val selectedType = vm.selectedTypes.observeAsState(listOf())
-    val allTaskTypes = vm.getAllTaskTypes().observeAsState(listOf())
-    val all = vm.all
+    var taskItems: MutableList<Task>? = mutableListOf()
 
-    fun parseStringToDate(string: String) = SimpleDateFormat(DATE_FORMAT).parse(string)
+    for (task in tasks.value) {
+        if (selectedType.value.any {it.uid == task.taskTypeId} || selectedType.value.any {it.uid == ALL_UID}) {
+            taskItems?.add(task)
+        }
+    }
 
-    if (tasks.value.isNotEmpty()) {
-        var firstDate = parseStringToDate(tasks.value[0].deadline)
-        var curDate = firstDate
+    if (taskItems != null) {
+        if (taskItems.isNotEmpty()) {
+            var firstDate = vm.parseStringToDate(tasks.value[0].deadline)
+            var curDate = firstDate
 
-        LazyColumn(
-            modifier = Modifier
-                .padding(horizontal = 10.dp)
-                .fillMaxSize()
-        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .fillMaxSize()
+            ) {
 
-            itemsIndexed(tasks.value) { index, task ->
-                if (selectedType.value.contains(all)) {
+                itemsIndexed(taskItems) { index, task ->
+
                     if (index == 0) {
                         Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
-                        curDate = parseStringToDate(task.deadline)
+                        curDate = vm.parseStringToDate(task.deadline)
                     } else if (curDate != null
-                        && curDate != parseStringToDate(task.deadline)
-                        && parseStringToDate(task.deadline) != firstDate) {
+                        && curDate != vm.parseStringToDate(task.deadline)
+                        && vm.parseStringToDate(task.deadline) != firstDate) {
                         Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
-                        curDate = parseStringToDate(task.deadline)
+                        curDate = vm.parseStringToDate(task.deadline)
                     }
 
                     Row(
@@ -64,45 +71,20 @@ fun CompletedTasksContainer(vm: HistoryScreenViewModel) {
                     ) {
                         SingleTaskContainer(task, vm)
                     }
-                } else {
-                     for (taskType in allTaskTypes.value) {
-                        if (selectedType.value.contains(taskType) && taskType.uid == task.taskTypeId) {
-                            if (index == 0) {
-                                Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
-                                curDate = parseStringToDate(task.deadline)
-                            } else if (curDate != null
-                                && curDate != parseStringToDate(task.deadline)
-                                && parseStringToDate(task.deadline) != firstDate) {
-                                Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
-                                curDate = parseStringToDate(task.deadline)
-                            }
-
-                            Row(
-                                Modifier
-                                    .padding(vertical = 10.dp)
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                SingleTaskContainer(task, vm)
-                            }
-                        }
-                    }
-                }
-                if (index >= tasks.value.size -1) {
-                    Column(
-                        Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center) {
-                        Image(painter = painterResource(id = R.drawable.ic_add_task), modifier = Modifier
-                            .padding(top = 30.dp)
-                            .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(
-                            MaterialTheme.colors.surface))
-                        Text(text = stringResource(R.string.no_tasks_found), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
-                    }
                 }
             }
-        }
 
+        } else {
+            Column(
+                Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center) {
+                Image(painter = painterResource(id = R.drawable.ic_add_task), modifier = Modifier
+                    .padding(top = 30.dp)
+                    .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(
+                    MaterialTheme.colors.surface))
+                Text(text = stringResource(R.string.no_tasks_found), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
+            }
+        }
     }
 }
