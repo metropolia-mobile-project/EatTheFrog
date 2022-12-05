@@ -70,18 +70,6 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
         return newDateString
     }
 
-    fun formatTimeString(string: String): String {
-        var newDateString = ""
-        try {
-            val newFormat = SimpleDateFormat("hh:mm aaa")
-            val date = SimpleDateFormat(DATE_FORMAT).parse(string)
-            newDateString = newFormat.format(date)
-        } catch (e: Exception) {
-            Log.d("Failed to format date", string)
-        }
-        return newDateString
-    }
-
     PopupView(vm.popupVisible, callback = {vm.resetPopupStatus()}) {
 
         Box(
@@ -159,8 +147,10 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
 
 
                             Column(Modifier.padding(start = 10.dp)) {
+                                Log.d("deadline date", task.value?.deadline.toString())
+
                                 Text(text = formatDateString(task.value?.deadline ?: ""))
-                                Text(text = formatTimeString(task.value?.deadline ?: ""))
+                                Text(text = task.value?.time ?: "")
                             }
                         }
 

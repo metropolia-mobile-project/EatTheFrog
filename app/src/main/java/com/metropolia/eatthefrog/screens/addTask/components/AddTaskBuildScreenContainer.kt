@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens.addTask.components
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -111,12 +112,12 @@ fun AddTaskBuildScreenContainer(
 
     val newTask = Task(
         0, taskTitle ?: "", description ?: "",
-        taskType.uid, sDate ?: currentDate, sTime, completed = false, isFrog = false
+        taskType.uid, sDate ?: currentDate, sTime, completed = false, isFrog = isFrog ?: false
     )
 
     val editTask = Task(
         editTaskId, taskTitle ?: "", description ?: "", taskType.uid,
-        sDate ?: currentDate, sTime, completed = false, isFrog = false
+        sDate ?: currentDate, sTime, completed = false, isFrog = isFrogBoolean ?: false
     )
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -172,7 +173,10 @@ fun AddTaskBuildScreenContainer(
                         isEditMode,
                         sDate,
                         isFrog,
-                        onIsFrogChange = { isFrog = it })
+                        onIsFrogChange = {
+                            isFrog = it
+                            Log.d("FROG CHANGED", isFrog.toString())
+                        })
                     AddTaskCreateSubsContainer(
                         viewModel = viewModel,
                         isEditMode,
