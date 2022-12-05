@@ -168,7 +168,12 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
 
                     val entry = entries.find { it.date == parseStringToDate(task.deadline)}
                     if (entry != null) {
-                        entries.forEach { if (it.date == parseStringToDate(task.deadline)) it.y++ }
+                        entries.forEach {
+                            if (it.date == parseStringToDate(task.deadline)) {
+                                it.y++
+                                if (!it.frogCompleted) it.frogCompleted = task.isFrog
+                            }
+                        }
                         Log.d("TASK_ENTRY", "task entry modified with deadline ${task.deadline}")
                     } else {
                         entries.add(TaskEntry(parseStringToDate(task.deadline), task.isFrog, entries.size.toFloat(), 1f))
@@ -192,7 +197,7 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
 
 class TaskEntry(
     val date: Date,
-    val frogCompleted: Boolean,
+    var frogCompleted: Boolean,
     override val x: Float,
     override var y: Float,
 ) : ChartEntry {
