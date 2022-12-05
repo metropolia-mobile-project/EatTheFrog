@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.screens.history.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,8 +35,13 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
     val selectedType = vm.selectedTypes.observeAsState(listOf())
     var taskItems: MutableList<Task>? = mutableListOf()
 
+    val before = Calendar.getInstance()
+    before.add(Calendar.DATE, -1)
+
     for (task in tasks.value) {
-        if (selectedType.value.any {it.uid == task.taskTypeId} || selectedType.value.any {it.uid == ALL_UID }) {
+        if ((selectedType.value.any {it.uid == task.taskTypeId} || selectedType.value.any {it.uid == ALL_UID })
+            && vm.parseStringToDate(task.deadline).before(before.time)
+                ) {
             taskItems?.add(task)
         }
     }
@@ -52,32 +58,29 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
             ) {
 
                 itemsIndexed(taskItems) { index, task ->
-                    val before = Calendar.getInstance()
-                    before.add(Calendar.DATE, -1)
 
-                    if (vm.parseStringToDate(task.deadline).before(before.time)) {
-                        if (index == 0) {
-                            Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
-                            curDate = vm.parseStringToDate(task.deadline)
-                        } else if (curDate != null && curDate != vm.parseStringToDate(task.deadline)) {
-                            Text(
-                                task.deadline,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(top = 10.dp)
-                            )
-                            curDate = vm.parseStringToDate(task.deadline)
-                        }
-
-                        Row(
-                            Modifier
-                                .padding(vertical = 10.dp)
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Start,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            SingleTaskContainer(task, vm)
-                        }
+                    if (index == 0) {
+                        Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
+                        curDate = vm.parseStringToDate(task.deadline)
+                    } else if (curDate != null && curDate != vm.parseStringToDate(task.deadline)) {
+                        Text(
+                            task.deadline,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
+                        curDate = vm.parseStringToDate(task.deadline)
                     }
+
+                    Row(
+                        Modifier
+                            .padding(vertical = 10.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        SingleTaskContainer(task, vm)
+                    }
+
                 }
             }
         } else {

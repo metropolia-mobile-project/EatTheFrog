@@ -47,15 +47,6 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         }
         return d
     }
-    private fun dateToString(date: Date): String  {
-        var d = ""
-        try {
-            d = SimpleDateFormat(DATE_FORMAT).format(date)
-        } catch (e: Exception) {
-            Log.d("Failed to parse date", e.message.toString())
-        }
-        return d
-    }
 
     init {
         darkmode.value = getBooleanFromPreferences(DARK_MODE_KEY, false)
@@ -172,31 +163,16 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
                 var tasks = database.taskDao().getAllCompletedTasksOrderedByDate()
                 tasks = tasks.sortedByDescending { parseStringToDate(it.deadline) }
 
-                var curDate = tasks[0].deadline
-                var taskAmount = 0f
-                var frogComplete = false
-
                 for (i in tasks.indices) {
-                    if (tasks[i].isFrog) frogComplete = true
+                    var task = tasks[i]
 
-                    if (tasks[i].deadline == curDate) {
-                        taskAmount++
-                        if (i == tasks.size -1) {
-                            entries.add(TaskEntry(parseStringToDate(curDate), frogComplete, entries.size.toFloat(), taskAmount))
-                            Log.d("TASK_ENTRY_SUCCESS LIST END", "$curDate, $taskAmount, ${entries.size}")
-                        }
-                    } else if (i == tasks.size -1) {
-                        entries.add(TaskEntry(parseStringToDate(curDate), frogComplete, entries.size.toFloat(), taskAmount))
-                        entries.add(TaskEntry(parseStringToDate(tasks[i].deadline), frogComplete, entries.size.toFloat(), 1f))
-                        Log.d("TASK_ENTRY_SUCCESS LIST END", "${tasks[i].deadline}, $taskAmount, ${entries.size}")
+                    val entry = entries.find { it.date == parseStringToDate(task.deadline)}
+                    if (entry != null) {
+                        entries.forEach { if (it.date == parseStringToDate(task.deadline)) it.y++ }
+                        Log.d("TASK_ENTRY", "task entry modified with deadline ${task.deadline}")
                     } else {
-
-                        entries.add(TaskEntry(parseStringToDate(curDate), frogComplete, entries.size.toFloat(), taskAmount))
-                        Log.d("TASK_ENTRY_SUCCESS", "$curDate, $taskAmount, ${entries.size}")
-
-                        curDate = tasks[i].deadline
-                        taskAmount = 1f
-                        frogComplete = false
+                        entries.add(TaskEntry(parseStringToDate(task.deadline), task.isFrog, entries.size.toFloat(), 1f))
+                        Log.d("TASK_ENTRY", "new entry added with deadline ${task.deadline}")
                     }
                 }
             } catch (e: Exception) {
@@ -218,7 +194,7 @@ class TaskEntry(
     val date: Date,
     val frogCompleted: Boolean,
     override val x: Float,
-    override val y: Float,
+    override var y: Float,
 ) : ChartEntry {
     override fun withY(y: Float) = TaskEntry(
         date = this.date,
