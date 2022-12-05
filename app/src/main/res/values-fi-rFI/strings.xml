@@ -14,14 +14,14 @@
     <string name="active_tasks">Tehtäviä kesken</string>
     <string name="total_tasks">Tehtäviä yhteensä</string>
     <string name="dark_mode">Tumma tila</string>
-    <string name="deadline_rem">Ilmoitukset deadlinestä</string>
+    <string name="deadline_rem">Ilmoitukset määräajasta</string>
     <string name="create_task">Luo tehtävä</string>
     <string name="sub_task_title">Alatehtävän nimi</string>
-    <string name="task_deadline">Tehtävän deadline</string>
+    <string name="task_deadline">Määräaika</string>
     <string name="starting_date">Aloituspäivämäärä</string>
     <string name="ending_date">Lopetuspäivämäärä</string>
     <string name="description">Kuvaus</string>
-    <string name="task_name">Tehtävän nimi</string>
+    <string name="title">Otsikko</string>
     <string name="you_have">Sinulla on</string>
     <string name="hello">Hei</string>
     <string name="tasks_today">tehtävää tänään</string>
@@ -78,4 +78,5 @@
     <string name="notif_10before">10 min ennen</string>
     <string name="notif_30before">30 min ennen</string>
     <string name="notif_hour_before">Tuntia ennen</string>
+    <string name="add_task_header">Lisää Tehtävä</string>
 </resources>

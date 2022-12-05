@@ -57,7 +57,7 @@ fun AddTaskCreateSubsContainer(
 
     Column(
         modifier = Modifier
-            .padding(30.dp, 30.dp, 0.dp, 0.dp)
+//            .padding(30.dp, 30.dp, 0.dp, 0.dp)
             .wrapContentWidth()
             .bringIntoViewRequester(bringIntoViewRequester)
     ) {
@@ -86,8 +86,8 @@ fun AddTaskCreateSubsContainer(
                             }
                         }
                     }
-                    .width(250.dp)
-                    .padding(0.dp, 0.dp, 30.dp, 15.dp),
+                    .fillMaxWidth(),
+//                    .padding(0.dp, 0.dp, 30.dp, 15.dp),
                 trailingIcon = {
                     Icon(
                         Icons.Default.Add,
