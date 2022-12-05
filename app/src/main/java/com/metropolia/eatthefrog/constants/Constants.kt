@@ -25,3 +25,6 @@ const val DATE_TIME_FORMAT = "d.M.yyyy HH:mm"
 
 // Notification
 const val CHANNEL_ID = "testhingthisfirst"
+
+// "All" tasktype UID
+const val ALL_UID = 1000L

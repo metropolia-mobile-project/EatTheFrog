@@ -18,44 +18,54 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
-import com.metropolia.eatthefrog.constants.DATE_FORMAT
+import com.metropolia.eatthefrog.constants.ALL_UID
+import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.ui_components.SingleTaskContainer
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
-import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * Sorts the incomplete tasks according to the date values and displays them in the HistoryScreen "Incomplete" tab.
+ */
 @Composable
 fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
 
     val tasks = vm.getIncompleteTasks().observeAsState(listOf())
     val selectedType = vm.selectedTypes.observeAsState(listOf())
-    val allTaskTypes = vm.getAllTaskTypes().observeAsState(listOf())
-    val all = vm.all
-    fun parseStringToDate(string: String) = SimpleDateFormat(DATE_FORMAT).parse(string)
+    var taskItems: MutableList<Task>? = mutableListOf()
 
-    if (tasks.value.isNotEmpty()) {
+    for (task in tasks.value) {
+        if (selectedType.value.any {it.uid == task.taskTypeId} || selectedType.value.any {it.uid == ALL_UID }) {
+            taskItems?.add(task)
+        }
+    }
 
-        var curDate = parseStringToDate(tasks.value[0].deadline)
+    if (taskItems != null) {
+        if (taskItems.isNotEmpty()) {
 
-        LazyColumn(
-            modifier = Modifier
-                .padding(horizontal = 10.dp)
-                .fillMaxSize()
-        ) {
+            var curDate = vm.parseStringToDate(tasks.value[0].deadline)
 
-            itemsIndexed(tasks.value) { index, task ->
-                if (selectedType.value.contains(all)) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .fillMaxSize()
+            ) {
+
+                itemsIndexed(taskItems) { index, task ->
                     val before = Calendar.getInstance()
                     before.add(Calendar.DATE, -1)
 
-                    if (parseStringToDate(task.deadline).before(before.time)) {
-                        if (curDate != null && curDate != parseStringToDate(task.deadline)) {
+                    if (vm.parseStringToDate(task.deadline).before(before.time)) {
+                        if (index == 0) {
+                            Text(task.deadline, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
+                            curDate = vm.parseStringToDate(task.deadline)
+                        } else if (curDate != null && curDate != vm.parseStringToDate(task.deadline)) {
                             Text(
                                 task.deadline,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(top = 10.dp)
                             )
-                            curDate = parseStringToDate(task.deadline)
+                            curDate = vm.parseStringToDate(task.deadline)
                         }
 
                         Row(
@@ -68,49 +78,20 @@ fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {
                             SingleTaskContainer(task, vm)
                         }
                     }
-                } else {
-                    for (taskType in allTaskTypes.value) {
-                        if (selectedType.value.contains(taskType) && taskType.uid == task.taskTypeId) {
-
-                            val before = Calendar.getInstance()
-                            before.add(Calendar.DATE, -1)
-
-                            if (parseStringToDate(task.deadline).before(before.time)) {
-                                if (curDate != null && curDate != parseStringToDate(task.deadline)) {
-                                    Text(
-                                        task.deadline,
-                                        fontWeight = FontWeight.Bold,
-                                        modifier = Modifier.padding(top = 10.dp)
-                                    )
-                                    curDate = parseStringToDate(task.deadline)
-                                }
-
-                                Row(
-                                    Modifier
-                                        .padding(vertical = 10.dp)
-                                        .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Start,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    SingleTaskContainer(task, vm)
-                                }
-                            }
-                        }
-                    }
                 }
-                if (index >= tasks.value.size -1) {
-                    Column(
-                        Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center) {
-                        Image(painter = painterResource(id = R.drawable.ic_add_task), modifier = Modifier
-                            .padding(top = 30.dp)
-                            .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(
-                            MaterialTheme.colors.surface))
-                        Text(text = stringResource(R.string.no_tasks_found), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
-                    }
-                }
+            }
+        } else {
+            Column(
+                Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center) {
+                Image(painter = painterResource(id = R.drawable.ic_add_task), modifier = Modifier
+                    .padding(top = 30.dp)
+                    .size(100.dp), contentDescription = "plus sign", colorFilter = ColorFilter.tint(
+                    MaterialTheme.colors.surface))
+                Text(text = stringResource(R.string.no_tasks_found), Modifier.padding(20.dp), color = MaterialTheme.colors.surface, fontSize = 18.sp, textAlign = TextAlign.Center)
             }
         }
     }
+
 }
