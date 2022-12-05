@@ -84,33 +84,3 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 }
-
-/**
- * Function takes task as a parameter to use the tasks uid as a requestCode, which needs to be different for every alarm.
- * The function will launch a notification when prompted and redirects user to MainActivity when the notification is clicked.
- */
-fun setAlarm(task: Task, time: String = "09:00", context: Context?) {
-    val converter = DateTimeConverter()
-    val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val intent = Intent(context, AlarmReceiver::class.java)
-    intent.putExtra("task", task)
-
-    val pendingIntent = getBroadcast(context, task.uid.toInt(), intent, FLAG_IMMUTABLE)
-    val mainActivityIntent = Intent(context, MainActivity::class.java)
-    val basicPendingIntent =
-        getActivity(context, task.uid.toInt(), mainActivityIntent, FLAG_IMMUTABLE)
-
-    val date: Date = converter.toTimestamp(time)
-    val now = Date()
-    Log.d("FUU date", date.toString())
-    Log.d("FUU date.time", date.time.toString())
-    Log.d("FUU now", now.toString())
-
-    if (date > now) {
-        val clockInfoTest = AlarmManager.AlarmClockInfo(date.time, basicPendingIntent)
-        alarmManager.setAlarmClock(clockInfoTest, pendingIntent)
-    }
-}
-
-
-// TODO: Cancelling an alarm if task is completed beforehand
