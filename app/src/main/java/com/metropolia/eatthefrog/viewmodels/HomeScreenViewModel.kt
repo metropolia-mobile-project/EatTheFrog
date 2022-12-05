@@ -33,7 +33,7 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
     private val sharedPreferences: SharedPreferences = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
 
     private val database = InitialDB.get(application)
-    private val service = APIService.service
+    val service = APIService
 
     private val sdf = SimpleDateFormat(DATE_FORMAT)
     private val dtf = DateTimeFormatter.ofPattern(DATE_FORMAT)
@@ -47,7 +47,6 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
     val dailyFrogSelected = MutableLiveData(false)
     var showFrogCompletedScreen = MutableLiveData(false)
     var searchInput = mutableStateOf("")
-    var quote = APIService.Result("", "", "")
     var currentStreak = MutableLiveData(sharedPreferences.getInt(CURRENT_STREAK_KEY, 0))
     var longestStreak = MutableLiveData(sharedPreferences.getInt(LONGEST_STREAK_KEY, 0))
 
@@ -55,19 +54,6 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
     fun getDateTaskCount(date: String) = database.taskDao().getDateTaskCount(date)
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
-
-    init {
-        if (quote.q.isEmpty()) {
-            viewModelScope.launch {
-                quote = try {
-                    service.getRandomMotivationalQuote()[0]
-                } catch (e: Exception) {
-                    Log.d("API fetch failed", e.message.toString())
-                    APIService.Result("DO NOT REDEEEEM!", "Mahatma Gandhi", "")
-                }
-            }
-        }
-    }
 
     fun selectDateFilter(dateFilter: DateFilter) {
         selectedFilter.postValue(dateFilter)

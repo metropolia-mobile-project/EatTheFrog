@@ -1,5 +1,12 @@
 package com.metropolia.eatthefrog.services
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -12,6 +19,8 @@ import java.net.URL
 object APIService {
 
     data class Result(val q: String, val a: String, val h: String)
+
+    var quote = MutableLiveData(Result("DO NOT REDEEM!", "Mahatma Gandhi", ""))
 
     private val baseURL = URL("https://zenquotes.io/api/")
 
@@ -26,4 +35,11 @@ object APIService {
         .build()
 
     val service: Service = retrofit.create(Service::class.java)
+
+    init {
+        MainScope().launch {
+            Log.d("API called", "called")
+            quote.value = service.getRandomMotivationalQuote()[0]
+        }
+    }
 }
