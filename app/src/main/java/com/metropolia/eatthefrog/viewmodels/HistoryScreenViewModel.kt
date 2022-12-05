@@ -12,6 +12,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.metropolia.eatthefrog.R
+import com.metropolia.eatthefrog.constants.ALL_UID
 import com.metropolia.eatthefrog.database.*
 import kotlinx.coroutines.launch
 
@@ -22,7 +23,7 @@ import kotlinx.coroutines.launch
 class HistoryScreenViewModel(application: Application) : TasksViewModel(application) {
 
     private val database = InitialDB.get(application)
-    val all = (TaskType(uid = 1000, name = application.getString(R.string.all), icon = null))
+    val all = (TaskType(uid = ALL_UID, name = application.getString(R.string.all), icon = null))
     var selectedTypes = MutableLiveData(listOf(all))
     var showTaskDoneConfirmWindow = mutableStateOf(false)
     var searchInput = mutableStateOf("")
