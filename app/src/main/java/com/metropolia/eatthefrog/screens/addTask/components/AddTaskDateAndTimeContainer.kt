@@ -62,7 +62,7 @@ fun AddTaskDateAndTimeContainer(
             if (isEditMode) {
                 timeDeadline
             } else {
-                "16.00"
+                "16:00"
             }
         )
     }
