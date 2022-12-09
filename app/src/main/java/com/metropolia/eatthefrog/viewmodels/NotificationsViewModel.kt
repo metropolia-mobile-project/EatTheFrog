@@ -54,7 +54,7 @@ class NotificationsViewModel(application: Application) : HomeScreenViewModel(app
     init {
         deadlineValue.value = getDeadlineFromPreferences(NOTIFICATION_KEY, 0)
     }
-    
+
     fun getCertainTask(id: Long) = database.taskDao().getTest(id)
 
     private fun getDeadlineFromPreferences(key: String, default: Int): Int {
