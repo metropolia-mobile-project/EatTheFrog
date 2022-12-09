@@ -79,4 +79,6 @@
     <string name="notif_30before">30 min ennen</string>
     <string name="notif_hour_before">Tuntia ennen</string>
     <string name="add_task_header">Lisää Tehtävä</string>
+    <string name="max_subTask_amount">Alitehtävien maksimimäärä saavutettu</string>
+    <string name="musthave_title">Alitehtä täytyy nimetä ennen tallentamista</string>
 </resources>

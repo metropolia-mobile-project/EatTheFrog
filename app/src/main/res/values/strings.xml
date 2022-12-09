@@ -81,4 +81,6 @@
     <string name="notif_30before">30 min before</string>
     <string name="notif_hour_before">1 hour before</string>
     <string name="add_task_header">Add Task</string>
+    <string name="max_subTask_amount">Maximum amount of subtasks reached</string>
+    <string name="musthave_title">Subtask must have title</string>
 </resources>
