@@ -10,8 +10,6 @@ import com.metropolia.eatthefrog.constants.LATEST_EATEN_FROG_KEY
 import com.metropolia.eatthefrog.constants.NOTIFICATION_KEY
 import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 import com.metropolia.eatthefrog.database.InitialDB
-import java.time.Duration
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -22,9 +20,8 @@ import java.time.format.DateTimeFormatter
 class NotificationsViewModel(application: Application) : HomeScreenViewModel(application) {
     private val database = InitialDB.get(application)
     private val stringGetter = getApplication<Application>().resources
-    private val sharedPreferences: SharedPreferences = application
-        .getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
-    val dtf = DateTimeFormatter.ofPattern(DATE_FORMAT)
+    private val sharedPreferences: SharedPreferences = application.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+    val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT)
 
     val tomorrow: String = dtf.format(LocalDateTime.now().plusDays(1))
     var deadlineValue = MutableLiveData(0)
@@ -61,7 +58,7 @@ class NotificationsViewModel(application: Application) : HomeScreenViewModel(app
     }
 
     fun saveDeadlineValue() {
-        with (sharedPreferences.edit()) {
+        with(sharedPreferences.edit()) {
             putInt(NOTIFICATION_KEY, deadlineValue.value!!)
             apply()
         }

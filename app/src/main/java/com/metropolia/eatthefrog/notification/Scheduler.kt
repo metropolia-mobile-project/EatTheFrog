@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 /**
@@ -38,7 +37,8 @@ fun Scheduler(viewModel: NotificationsViewModel) {
 
     val streak = viewModel.currentStreak.observeAsState(null)
     val latestEatenFrog = viewModel.latestEatenFrog
-    val latestDate =  if (latestEatenFrog !== null) (LocalDate.parse(latestEatenFrog, viewModel.dtf).atStartOfDay()) else null
+    val latestDate = if (latestEatenFrog !== null) (LocalDate.parse(latestEatenFrog, viewModel.dtf)
+        .atStartOfDay()) else null
     val todayDate = (LocalDate.now().atStartOfDay())
 
     // Invoke notifications for tomorrows tasks
@@ -72,10 +72,11 @@ fun Scheduler(viewModel: NotificationsViewModel) {
         }
     }
 
-    // Invoke notification for current streak to be about to reset
-    if (streak.value != null && latestDate !== null) {
 
+    if (streak.value != null && latestDate !== null) {
         val durationBetweenDates = Duration.between(latestDate, todayDate).toDays()
+
+        // Invoke notification for current streak to be about to reset
         if (durationBetweenDates.toInt() == 1) {
             streak.value?.let { setAlarmForStreak(it, context) }
         }
