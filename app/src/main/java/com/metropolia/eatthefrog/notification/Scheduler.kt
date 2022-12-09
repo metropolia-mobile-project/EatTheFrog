@@ -15,6 +15,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 /**
@@ -35,8 +37,9 @@ fun Scheduler(viewModel: NotificationsViewModel) {
     val frogToday = (tasks.value?.filter { it.deadline == today })?.filter { it.isFrog }
 
     val streak = viewModel.currentStreak.observeAsState(null)
-    val latestDate = viewModel.latestDate
-    val todayDate = viewModel.todayDate
+    val latestEatenFrog = viewModel.latestEatenFrog
+    val latestDate =  if (latestEatenFrog !== null) (LocalDate.parse(latestEatenFrog, viewModel.dtf).atStartOfDay()) else null
+    val todayDate = (LocalDate.now().atStartOfDay())
 
     // Invoke notifications for tomorrows tasks
     if (tasksTomorrow != null && tasksTomorrow.isNotEmpty()) {
@@ -51,6 +54,7 @@ fun Scheduler(viewModel: NotificationsViewModel) {
 
     // Invoke notifications for today's tasks
     if (tasksToday != null && tasksToday.isNotEmpty()) {
+        Log.d("BRUH latestEatenFrog", latestEatenFrog.toString())
         var task: Long
         for (item in tasksToday) {
             if (!item.completed) {
@@ -69,14 +73,17 @@ fun Scheduler(viewModel: NotificationsViewModel) {
     }
 
     // Invoke notification for current streak to be about to reset
-    val durationBetweenDates = Duration.between(latestDate, todayDate).toDays()
-    if (durationBetweenDates.toInt() == 1) {
-        return
-    }
+    if (streak.value != null && latestDate !== null) {
 
-    // Cancel notification for current streak when today's frog is eaten
-    if (durationBetweenDates.toInt() == 0) {
-        return
+        val durationBetweenDates = Duration.between(latestDate, todayDate).toDays()
+        if (durationBetweenDates.toInt() == 1) {
+            streak.value?.let { setAlarmForStreak(it, context) }
+        }
+
+        // Cancel notification for current streak when today's frog is eaten
+        if (durationBetweenDates.toInt() == 0) {
+            streak.value?.let { cancelAlarmForStreak(it, context) }
+        }
     }
 }
 
@@ -154,7 +161,8 @@ fun setAlarmForStreak(streak: Int, context: Context?) {
     val intent = Intent(context, AlarmReceiver::class.java)
     intent.putExtra("streak", streak)
 
-    val pendingIntent = PendingIntent.getBroadcast(context, streak, intent, PendingIntent.FLAG_IMMUTABLE)
+    val pendingIntent =
+        PendingIntent.getBroadcast(context, streak, intent, PendingIntent.FLAG_IMMUTABLE)
     val mainActivityIntent = Intent(context, MainActivity::class.java)
     val basicPendingIntent = PendingIntent.getActivity(
         context,
@@ -183,6 +191,7 @@ fun cancelAlarmForStreak(streak: Int, context: Context?) {
     streak.plus(666)
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(context, streak, intent, PendingIntent.FLAG_IMMUTABLE)
+    val pendingIntent =
+        PendingIntent.getBroadcast(context, streak, intent, PendingIntent.FLAG_IMMUTABLE)
     alarmManager.cancel(pendingIntent)
 }

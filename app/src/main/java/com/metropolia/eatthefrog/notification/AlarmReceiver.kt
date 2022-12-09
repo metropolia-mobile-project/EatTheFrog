@@ -62,6 +62,7 @@ class AlarmReceiver : BroadcastReceiver() {
             )
         }
 
+
         // FLAG_ACTIVITY_SINGLE_TOP used only when app has only one activity
         val onTap = Intent(p0, MainActivity::class.java)
         onTap.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -95,12 +96,14 @@ class AlarmReceiver : BroadcastReceiver() {
                     it
                 )
             }
-                ?: streak?.let { item ->
-                    notificationManager?.notify(
-                        item,
-                        it
-                    )
-                }
+        }
+        notification?.let {
+            streak?.let { item ->
+                notificationManager?.notify(
+                    item,
+                    it
+                )
+            }
         }
     }
 }

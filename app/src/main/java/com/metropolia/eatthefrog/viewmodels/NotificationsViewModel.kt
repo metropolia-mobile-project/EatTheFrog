@@ -24,14 +24,12 @@ class NotificationsViewModel(application: Application) : HomeScreenViewModel(app
     private val stringGetter = getApplication<Application>().resources
     private val sharedPreferences: SharedPreferences = application
         .getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
-    private val dtf = DateTimeFormatter.ofPattern(DATE_FORMAT)
+    val dtf = DateTimeFormatter.ofPattern(DATE_FORMAT)
 
     val tomorrow: String = dtf.format(LocalDateTime.now().plusDays(1))
     var deadlineValue = MutableLiveData(0)
 
     val latestEatenFrog = (sharedPreferences.getString(LATEST_EATEN_FROG_KEY, null))
-    val latestDate = (LocalDate.parse(latestEatenFrog.toString(), dtf).atStartOfDay())
-    val todayDate = (LocalDate.now().atStartOfDay())
 
     val listItems = listOf(
         stringGetter.getString(R.string.notif_at_deadline),
