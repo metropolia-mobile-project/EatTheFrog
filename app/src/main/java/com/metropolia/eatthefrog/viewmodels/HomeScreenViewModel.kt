@@ -3,7 +3,6 @@ package com.metropolia.eatthefrog.viewmodels
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,7 +10,7 @@ import com.metropolia.eatthefrog.constants.*
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
-import com.metropolia.eatthefrog.notification.cancelAlarm
+import com.metropolia.eatthefrog.notification.cancelAlarmForTask
 import com.metropolia.eatthefrog.services.APIService
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -106,6 +105,7 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
             closeTaskConfirmWindow()
 
             if ((task?.isFrog == true && !showQuoteToast.value) && !task.completed) {
+                // TODO: Notification cancellation if frog eaten before 20:00
                 saveStreakStatus()
                 popupVisible.value = false
                 openFrogCompletedScreen()
@@ -113,7 +113,7 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
             }
 
             if (task != null && !task.completed) {
-                cancelAlarm(task, context)
+                cancelAlarmForTask(task, context)
             }
         }
     }
