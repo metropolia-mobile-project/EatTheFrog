@@ -14,6 +14,8 @@ import com.metropolia.eatthefrog.viewmodels.NotificationsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.Duration
+import java.time.LocalDate
 import java.util.*
 
 /**
@@ -28,14 +30,16 @@ fun Scheduler(viewModel: NotificationsViewModel) {
     val options = viewModel.listItems
     val index = viewModel.deadlineValue.observeAsState()
 
-    Log.d("HOHHOH today without sdf.format", Date().toString())
-    Log.d("HOHHOH today formatted", today)
-    Log.d("HOHHOH tomorrow", tomorrow)
-
     val tasks = viewModel.getTasks().observeAsState(null)
     val tasksToday = (tasks.value?.filter { it.deadline == today })
     val tasksTomorrow = (tasks.value?.filter { it.deadline == tomorrow })
     val frogToday = (tasks.value?.filter { it.deadline == today })?.filter { it.isFrog }
+
+    val streak = viewModel.currentStreak.observeAsState(null)
+    val latestEatenFrog = viewModel.latestEatenFrog
+    val latestDate = if (latestEatenFrog !== null) (LocalDate.parse(latestEatenFrog, viewModel.dtf)
+        .atStartOfDay()) else null
+    val todayDate = (LocalDate.now().atStartOfDay())
 
     // Invoke notifications for tomorrows tasks
     if (tasksTomorrow != null && tasksTomorrow.isNotEmpty()) {
@@ -50,6 +54,7 @@ fun Scheduler(viewModel: NotificationsViewModel) {
 
     // Invoke notifications for today's tasks
     if (tasksToday != null && tasksToday.isNotEmpty()) {
+        Log.d("BRUH latestEatenFrog", latestEatenFrog.toString())
         var task: Long
         for (item in tasksToday) {
             if (!item.completed) {
@@ -66,10 +71,26 @@ fun Scheduler(viewModel: NotificationsViewModel) {
             scheduleNotification(frogId, options[index.value ?: 0], viewModel, context)
         }
     }
+
+
+    if (streak.value != null && latestDate !== null) {
+        val durationBetweenDates = Duration.between(latestDate, todayDate).toDays()
+
+        // Invoke notification for current streak to be about to reset
+        if (durationBetweenDates.toInt() == 1) {
+            streak.value?.let { setAlarmForStreak(it, context) }
+        }
+
+        // Cancel notification for current streak when today's frog is eaten
+        if (durationBetweenDates.toInt() == 0) {
+            streak.value?.let { cancelAlarmForStreak(it, context) }
+        }
+    }
 }
 
 /**
  * Function responsible for calling setAlarm() and sending the corresponding task for it
+ * Needed as accessing to the task from database has to happen in CoroutineScope, outside of the main thread
  */
 fun scheduleNotification(
     id: Long,
@@ -86,14 +107,14 @@ fun scheduleNotification(
         if (task.time != null) {
             if (option in hours) {
                 val modifiedTime = converter.modifyTime(task.time, hours = hours[option]!!)
-                setAlarm(task, modifiedTime.toString(), context)
+                setAlarmForTask(task, modifiedTime.toString(), context)
             }
             if (option in minutes) {
                 val modifiedTime = converter.modifyTime(task.time, minutes = minutes[option]!!)
-                setAlarm(task, modifiedTime.toString(), context)
+                setAlarmForTask(task, modifiedTime.toString(), context)
             }
-            setAlarm(task, task.time, context)
-        } else setAlarm(task = task, context = context)
+            setAlarmForTask(task, task.time, context)
+        } else setAlarmForTask(task = task, context = context)
     }
 }
 
@@ -101,7 +122,7 @@ fun scheduleNotification(
  * Function takes task as a parameter to use the tasks uid as a requestCode, which needs to be different for every alarm.
  * The function will launch a notification when prompted and redirects user to MainActivity when the notification is clicked.
  */
-fun setAlarm(task: Task, time: String = "09:00", context: Context?) {
+fun setAlarmForTask(task: Task, time: String = "09:00", context: Context?) {
     val converter = DateTimeConverter()
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
@@ -124,19 +145,54 @@ fun setAlarm(task: Task, time: String = "09:00", context: Context?) {
     Log.d("FUU now", now.toString())
 
     if (date > now) {
-        val clockInfoTest = AlarmManager.AlarmClockInfo(date.time, basicPendingIntent)
-        alarmManager.setAlarmClock(clockInfoTest, pendingIntent)
+        val clockInfo = AlarmManager.AlarmClockInfo(date.time, basicPendingIntent)
+        alarmManager.setAlarmClock(clockInfo, pendingIntent)
     }
+}
+
+/**
+ * Function takes current streak as a parameter to use it as a requestCode, which needs to be different for every alarm.
+ * The function will launch a notification when prompted and redirects user to MainActivity when the notification is clicked.
+ */
+fun setAlarmForStreak(streak: Int, context: Context?) {
+    streak.plus(666)
+    Log.d("BLOOP streak: ", streak.toString())
+    val converter = DateTimeConverter()
+    val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmReceiver::class.java)
+    intent.putExtra("streak", streak)
+
+    val pendingIntent =
+        PendingIntent.getBroadcast(context, streak, intent, PendingIntent.FLAG_IMMUTABLE)
+    val mainActivityIntent = Intent(context, MainActivity::class.java)
+    val basicPendingIntent = PendingIntent.getActivity(
+        context,
+        streak,
+        mainActivityIntent,
+        PendingIntent.FLAG_IMMUTABLE
+    )
+    val date: Date = converter.toTimestamp("20:00")
+    val clockInfo = AlarmManager.AlarmClockInfo(date.time, basicPendingIntent)
+    alarmManager.setAlarmClock(clockInfo, pendingIntent)
 }
 
 /**
  * Function takes task as a parameter to use the tasks uid as a requestCode, which needs to be different for every alarm.
  * The function will cancel a notification when prompted, which is when a task or a frog is marked completed.
  */
-fun cancelAlarm(task: Task, context: Context?) {
+fun cancelAlarmForTask(task: Task, context: Context?) {
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
     val pendingIntent =
         PendingIntent.getBroadcast(context, task.uid.toInt(), intent, PendingIntent.FLAG_IMMUTABLE)
+    alarmManager.cancel(pendingIntent)
+}
+
+fun cancelAlarmForStreak(streak: Int, context: Context?) {
+    streak.plus(666)
+    val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmReceiver::class.java)
+    val pendingIntent =
+        PendingIntent.getBroadcast(context, streak, intent, PendingIntent.FLAG_IMMUTABLE)
     alarmManager.cancel(pendingIntent)
 }

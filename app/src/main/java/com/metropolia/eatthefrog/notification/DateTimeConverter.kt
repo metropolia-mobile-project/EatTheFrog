@@ -1,5 +1,6 @@
 package com.metropolia.eatthefrog.notification
 
+import android.annotation.SuppressLint
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.constants.DATE_TIME_FORMAT
 import com.metropolia.eatthefrog.constants.TIME_FORMAT
@@ -15,11 +16,12 @@ class DateTimeConverter {
      * The function takes a time (for example 11:30) as a parameter.
      * Forms a date timestamp from current date and given time.
      */
+    @SuppressLint("SimpleDateFormat")
     fun toTimestamp(time: String): Date {
         val sdfDate = SimpleDateFormat(DATE_FORMAT)
         val sdfDateTime = SimpleDateFormat(DATE_TIME_FORMAT)
         val today: String = sdfDate.format(Date())
-        return sdfDateTime.parse(today + " " + time)
+        return sdfDateTime.parse("$today $time")
     }
 
     /**

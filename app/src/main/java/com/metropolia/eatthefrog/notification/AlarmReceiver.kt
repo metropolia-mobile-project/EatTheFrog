@@ -1,6 +1,6 @@
 package com.metropolia.eatthefrog.notification
 
-import android.app.AlarmManager
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.PendingIntent.*
 import android.content.BroadcastReceiver
@@ -10,7 +10,6 @@ import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.metropolia.eatthefrog.R
@@ -29,6 +28,7 @@ import java.util.*
  * It receives the task which is invoking the notification and uses the title and description of the task as notification title and text.
  * This is the class that gets called at a specific time to invoke the notification.
  */
+@SuppressLint("SimpleDateFormat")
 class AlarmReceiver : BroadcastReceiver() {
     private var notificationManager: NotificationManagerCompat? = null
     private val dtf = DateTimeFormatter.ofPattern(DATE_FORMAT)
@@ -36,14 +36,23 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(p0: Context?, p1: Intent?) {
         val task = p1?.getSerializableExtra("task") as? Task
+        val streak = p1?.getSerializableExtra("streak") as? Int
         val today: String = dtf.format(LocalDateTime.now())
 
         // Bold the notification title
-        val boldTitle: Spannable = if (task?.deadline == today) {
-            if (task.isFrog) SpannableString("Today's frog: " + task.name)
-            else SpannableString("Due today: " + task.name)
-        } else SpannableString("Due tomorrow at " + sdf.format(Date()) + ": " + task?.name)
-        val sb: Spannable = boldTitle
+        val boldTitle: Spannable
+        val sb: Spannable
+        if (task != null) {
+            boldTitle = if (task.deadline == today) {
+                if (task.isFrog) SpannableString("Today's frog: " + task.name)
+                else SpannableString("Due today: " + task.name)
+            } else SpannableString("Due tomorrow at " + sdf.format(Date()) + ": " + task.name)
+            sb = boldTitle
+        } else {
+            boldTitle = SpannableString("Streak about to reset")
+            sb = boldTitle
+        }
+
         boldTitle.length.let {
             sb.setSpan(
                 StyleSpan(Typeface.BOLD),
@@ -52,6 +61,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         }
+
 
         // FLAG_ACTIVITY_SINGLE_TOP used only when app has only one activity
         val onTap = Intent(p0, MainActivity::class.java)
@@ -65,7 +75,12 @@ class AlarmReceiver : BroadcastReceiver() {
         val notification = p0?.let {
             NotificationCompat.Builder(it, CHANNEL_ID)
                 .setContentTitle(boldTitle)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(task?.description))
+                .setStyle(
+                    NotificationCompat.BigTextStyle().bigText(
+                        task?.description
+                            ?: ("Streak of $streak days about to be reset. Continue by eating today's frog")
+                    )
+                )
                 .setSmallIcon(R.drawable.ic_frog_cropped)
                 .setAutoCancel(true)                            // Whether the notification disappears onTap or not
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -78,6 +93,14 @@ class AlarmReceiver : BroadcastReceiver() {
             task?.let { item ->
                 notificationManager?.notify(
                     item.uid.toInt(),
+                    it
+                )
+            }
+        }
+        notification?.let {
+            streak?.let { item ->
+                notificationManager?.notify(
+                    item,
                     it
                 )
             }
