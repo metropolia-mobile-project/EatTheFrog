@@ -11,6 +11,8 @@ import com.metropolia.eatthefrog.constants.*
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Subtask
 import com.metropolia.eatthefrog.database.Task
+import com.metropolia.eatthefrog.notification.cancelAlarmForStreak
+import com.metropolia.eatthefrog.notification.cancelAlarmForTask
 import com.metropolia.eatthefrog.services.APIService
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -30,7 +32,8 @@ enum class DateFilter {
  */
 open class HomeScreenViewModel(application: Application) : TasksViewModel(application) {
 
-    private val sharedPreferences: SharedPreferences = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences =
+        app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
 
     private val database = InitialDB.get(application)
     val service = APIService
@@ -98,19 +101,22 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
         showTaskDoneConfirmWindow.value = true
     }
 
-    fun toggleTaskCompleted(task: Task?) {
+    fun toggleTaskCompleted(task: Task?, context: Context) {
         viewModelScope.launch {
             database.taskDao().toggleTask(highlightedTaskId.value)
             closeTaskConfirmWindow()
 
             if ((task?.isFrog == true && !showQuoteToast.value) && !task.completed) {
+                Log.d("STEAK currentStreak ", currentStreak.value.toString())
+                currentStreak.value?.let { cancelAlarmForStreak(it-1, context) }
                 saveStreakStatus()
                 popupVisible.value = false
                 openFrogCompletedScreen()
                 showQuoteToast.value = true
             }
-            if ((task?.isFrog == true && task.completed)) {
 
+            if (task != null && !task.completed) {
+                cancelAlarmForTask(task, context)
             }
         }
     }
@@ -130,7 +136,7 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
         }
     }
 
-    fun loadProfilePicture() : String? {
+    fun loadProfilePicture(): String? {
         return sharedPreferences.getString(PROFILE_IMAGE_KEY, null)
     }
 
@@ -148,7 +154,7 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
         setLongestStreak()
     }
 
-    private fun checkIfStreakContinues(){
+    private fun checkIfStreakContinues() {
         val latestEatenFrog = sharedPreferences.getString(LATEST_EATEN_FROG_KEY, null)
         if (latestEatenFrog == null) {
             advanceStreak()
@@ -176,7 +182,7 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
 
     private fun advanceStreak() {
         val currentStreak = sharedPreferences.getInt(CURRENT_STREAK_KEY, 0)
-        with (sharedPreferences.edit()) {
+        with(sharedPreferences.edit()) {
             putString(LATEST_EATEN_FROG_KEY, dtf.format(LocalDate.now()))
             putInt(CURRENT_STREAK_KEY, currentStreak + 1)
             apply()
@@ -184,7 +190,7 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
     }
 
     private fun resetStreak() {
-        with (sharedPreferences.edit()) {
+        with(sharedPreferences.edit()) {
             putInt(CURRENT_STREAK_KEY, 1)
             putString(LATEST_EATEN_FROG_KEY, dtf.format(LocalDate.now()))
             apply()
@@ -195,7 +201,7 @@ open class HomeScreenViewModel(application: Application) : TasksViewModel(applic
         val currentStreak = sharedPreferences.getInt(CURRENT_STREAK_KEY, 0)
         val longestStreak = sharedPreferences.getInt(LONGEST_STREAK_KEY, 0)
         if (currentStreak > longestStreak) {
-            with (sharedPreferences.edit()) {
+            with(sharedPreferences.edit()) {
                 putInt(LONGEST_STREAK_KEY, currentStreak)
                 apply()
             }
