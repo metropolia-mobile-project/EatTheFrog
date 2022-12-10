@@ -195,7 +195,6 @@ fun WelcomeScreen(application: Application, activity: Activity) {
             }
         }
     }
-
 }
 
 /**
@@ -297,7 +296,9 @@ fun WelcomeTabContent(tabs: List<WelcomeTabItem>, pagerState: PagerState) {
     }
 }
 
-
+/**
+ * Container for WelcomeText composable.
+ */
 @Composable
 fun WelcomeTextContainer(content: @Composable () -> Unit) {
     Column(
@@ -309,4 +310,7 @@ fun WelcomeTextContainer(content: @Composable () -> Unit) {
     }
 }
 
+/**
+ * Class used for creating the HorizontalPager tabs.
+ */
 class WelcomeTabItem(var screen: ComposableFun)
