@@ -24,12 +24,19 @@ import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 import java.util.*
 
+/**
+ * Contains a LazyRow, which displays all TaskTypes found in the database. Clicking on the TaskTypes filters the displayed
+ * Tasks within the CompleteTasks and IncompleteTasks screens.
+ */
 @Composable
 fun TaskTypeSelectorContainer(vm: HistoryScreenViewModel) {
 
     val taskTypes = vm.getAllTaskTypes().observeAsState(listOf(TaskType(name = stringResource(id = R.string.loading), icon = null)))
     val selectedTypes = vm.selectedTypes.observeAsState()
 
+    /**
+     * Single TaskType item for the LazyRow.
+     */
     @Composable
     fun TypeRow(type: TaskType) {
 

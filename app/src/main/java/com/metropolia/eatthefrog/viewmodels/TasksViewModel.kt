@@ -10,6 +10,9 @@ import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 import com.metropolia.eatthefrog.database.InitialDB
 import com.metropolia.eatthefrog.database.Task
 
+/**
+ * A ViewModel used for handling Task data.
+ */
 open class TasksViewModel(application: Application) : AndroidViewModel(application) {
 
     val app = application

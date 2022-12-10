@@ -28,8 +28,8 @@ import com.metropolia.eatthefrog.viewmodels.TasksViewModel
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SingleTaskContainer(task: Task, vm: TasksViewModel) {
-    val backgroundColor = if (task.isFrog) MaterialTheme.colors.primaryVariant else Color.White
-    val taskNameTextColor = if (task.isFrog) Color.White else Color.Black
+    val backgroundColor = if (task.isFrog) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.background
+    val taskNameTextColor = if (task.isFrog) Color.White else MaterialTheme.colors.onBackground
     val subtaskTextColor = if (task.isFrog) MaterialTheme.colors.secondary else MaterialTheme.colors.primary
     val subtaskAmount = vm.getSubtasksAmount(task.uid).observeAsState()
     val subtasks = vm.getSubtasks(task.uid).observeAsState()

@@ -7,7 +7,7 @@
     <string name="history">Historia</string>
     <string name="save">Tallenna</string>
     <string name="welcome_back">Tervetuloa takaisin</string>
-    <string name="welcome">Tervetuloa</string>
+    <string name="welcome">Aloitetaan</string>
     <string name="please_enter_your_name">Anna nimesi</string>
     <string name="closed_tasks">Tehtäviä valmiina</string>
     <string name="frogs_eaten">Sammakoita syöty</string>
@@ -79,4 +79,5 @@
     <string name="notif_30before">30 min ennen</string>
     <string name="notif_hour_before">Tuntia ennen</string>
     <string name="add_task_header">Lisää Tehtävä</string>
+    <string name="name">Nimi</string>
 </resources>

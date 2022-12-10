@@ -37,7 +37,7 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 import java.text.SimpleDateFormat
 
 /**
- * Popup window which displays the selected Task object and its data.
+ * Popup window which displays the selected Task object and its data within the HistoryScreen.
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
