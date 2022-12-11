@@ -119,7 +119,7 @@ fun scheduleNotification(
 }
 
 /**
- * Function takes task as a parameter to use the tasks uid as a requestCode, which needs to be different for every alarm.
+ * Function takes task as a parameter to use the tasks uid as a requestCode.
  * The function will launch a notification when prompted and redirects user to MainActivity when the notification is clicked.
  */
 fun setAlarmForTask(task: Task, time: String = "09:00", context: Context?) {
@@ -140,9 +140,6 @@ fun setAlarmForTask(task: Task, time: String = "09:00", context: Context?) {
 
     val date: Date = converter.toTimestamp(time)
     val now = Date()
-    Log.d("FUU date", date.toString())
-    Log.d("FUU date.time", date.time.toString())
-    Log.d("FUU now", now.toString())
 
     if (date > now) {
         val clockInfo = AlarmManager.AlarmClockInfo(date.time, basicPendingIntent)
@@ -151,12 +148,10 @@ fun setAlarmForTask(task: Task, time: String = "09:00", context: Context?) {
 }
 
 /**
- * Function takes current streak as a parameter to use it as a requestCode, which needs to be different for every alarm.
- * The function will launch a notification when prompted and redirects user to MainActivity when the notification is clicked.
+ * Function takes current streak as a parameter to use it as a requestCode.
+ * The function will launch a notification at 20:00 if daily frog has not been completed yet today.
  */
 fun setAlarmForStreak(streak: Int, context: Context?) {
-    streak.plus(666)
-    Log.d("BLOOP streak: ", streak.toString())
     val converter = DateTimeConverter()
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
@@ -188,8 +183,12 @@ fun cancelAlarmForTask(task: Task, context: Context?) {
     alarmManager.cancel(pendingIntent)
 }
 
+/**
+ * Function takes previous streak as a parameter to use it as a requestCode.
+ * Previous streak used as the requestCode for canceling needs to be the same as it was for setting.
+ * The function will cancel a notification when prompted, which is when a daily frog is marked completed.
+ */
 fun cancelAlarmForStreak(streak: Int, context: Context?) {
-    streak.plus(666)
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
     val pendingIntent =
