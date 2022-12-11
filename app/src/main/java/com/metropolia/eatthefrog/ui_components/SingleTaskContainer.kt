@@ -16,9 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.database.Task
-import com.metropolia.eatthefrog.database.TaskType
-import com.metropolia.eatthefrog.placeholder_data.PlaceholderTask
-import com.metropolia.eatthefrog.placeholder_data.PlaceholderTasks
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.TasksViewModel
 

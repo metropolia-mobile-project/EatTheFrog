@@ -19,6 +19,9 @@ import com.metropolia.eatthefrog.notification.Scheduler
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 import com.metropolia.eatthefrog.viewmodels.NotificationsViewModel
 
+/**
+ * Base screen component that holds the navigation and other screens in it.
+ */
 
 @ExperimentalMaterialApi
 @Composable

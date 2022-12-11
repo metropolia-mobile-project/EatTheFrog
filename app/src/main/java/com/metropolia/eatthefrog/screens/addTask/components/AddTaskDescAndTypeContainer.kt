@@ -81,6 +81,7 @@ fun AddTaskDescAndTypeContainer(
                 text = stringResource(id = R.string.description),
             )
             Row {
+                // Initial task type can be null here, ignore the warning
                 Text(
                     text = if (selectedTask.value?.name != null) selectedTask.value!!.name else if (initialTaskType.value?.name != null) initialTaskType.value.name else firstTaskType.value!!.name,
                     modifier = Modifier
