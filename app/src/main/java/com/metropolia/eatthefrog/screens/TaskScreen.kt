@@ -107,27 +107,41 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                                     tint = MaterialTheme.colors.secondary,
                                     modifier = Modifier.padding(horizontal = 5.dp)
                                 )
+                                // Task type can be null here, ignore the warning
                                 Text(
-                                    text = taskType.value.name,
+                                    text = taskType.value?.name ?: "<${stringResource(id = R.string.deleted_type)}>",
                                     color = MaterialTheme.colors.secondary,
                                     fontSize = 14.sp
                                 )
                             }
-
-                            Image(
-                                painter = painterResource(R.drawable.ic_baseline_edit_note),
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clickable {
-                                        navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${taskType.value.uid}/${task.value!!.isFrog}") {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                inclusive = true
+                            Row() {
+                                Image(
+                                    painter = painterResource(R.drawable.ic_delete),
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .clickable {
+                                            if (task.value != null) {
+                                                vm.openTaskDeleteWindow()
                                             }
-                                        }
-                                    },
-                                contentDescription = "edit button",
-                                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
-                            )
+                                        },
+                                    contentDescription = "delete button",
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
+                                )
+                                Image(
+                                    painter = painterResource(R.drawable.ic_baseline_edit_note),
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .clickable {
+                                            navController.navigate("add_task/${task.value!!.uid}/true/${task.value!!.name}/${task.value!!.description}/${task.value!!.deadline}/${task.value!!.time}/${taskType.value.uid}/${task.value!!.isFrog}") {
+                                                popUpTo(navController.graph.findStartDestination().id) {
+                                                    inclusive = true
+                                                }
+                                            }
+                                        },
+                                    contentDescription = "edit button",
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
+                                )
+                            }
                         }
 
                         Text(
@@ -301,6 +315,24 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
                 }
             }
         }
+    }
+
+    if (vm.showTaskDeleteConfirmWindow.value) {
+        val desc = stringResource(R.string.delete_task, task.value?.name ?: "")
+        ConfirmWindow(
+            {
+                vm.resetPopupStatus()
+                vm.closeTaskDeleteWindow()
+                vm.deleteTask(task.value!!.uid)
+            },
+            { vm.closeTaskDeleteWindow() },
+            desc,
+            modifier = Modifier.clip(
+                RoundedCornerShape(20.dp)
+            ),
+            application = vm.app,
+            showSlider = false
+        )
     }
 
     if (vm.showTaskDoneConfirmWindow.value) {

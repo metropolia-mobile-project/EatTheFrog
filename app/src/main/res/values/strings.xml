@@ -89,4 +89,5 @@
     <string name="due_tomorrow_at">Due tomorrow at</string>
     <string name="streak_reset">Streak is about to reset</string>
     <string name="streak_of_x">Streak of %1$d days about to be reset. Continue by eating today\'s frog!</string>
+    <string name="delete_task">Delete %1$s?</string>
 </resources>

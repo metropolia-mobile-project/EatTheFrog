@@ -22,12 +22,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.MutableLiveData
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.database.TaskType
-import com.metropolia.eatthefrog.database.TaskTypeOld
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
-import kotlinx.coroutines.delay
 
 /**
  * Description title and TextField
