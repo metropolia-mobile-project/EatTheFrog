@@ -12,6 +12,7 @@ import android.text.SpannableString
 import android.text.style.StyleSpan
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.metropolia.eatthefrog.GlobalApplication
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.activities.MainActivity
 import com.metropolia.eatthefrog.constants.CHANNEL_ID
@@ -33,6 +34,8 @@ class AlarmReceiver : BroadcastReceiver() {
     private var notificationManager: NotificationManagerCompat? = null
     private val dtf = DateTimeFormatter.ofPattern(DATE_FORMAT)
     private val sdf = SimpleDateFormat(TIME_FORMAT)
+    private val app = GlobalApplication.instance
+    private val resources = app.resources
 
     override fun onReceive(p0: Context?, p1: Intent?) {
         val task = p1?.getSerializableExtra("task") as? Task
@@ -44,12 +47,12 @@ class AlarmReceiver : BroadcastReceiver() {
         val sb: Spannable
         if (task != null) {
             boldTitle = if (task.deadline == today) {
-                if (task.isFrog) SpannableString("Today's frog: " + task.name)
-                else SpannableString("Due today: " + task.name)
-            } else SpannableString("Due tomorrow at " + sdf.format(Date()) + ": " + task.name)
+                if (task.isFrog) SpannableString("${resources.getString(R.string.todays_frog)}: ${task.name}")
+                else SpannableString("${resources.getString(R.string.due_today)}: ${task.name}")
+            } else SpannableString("${resources.getString(R.string.due_tomorrow_at)} ${sdf.format(Date())}: ${task.name}")
             sb = boldTitle
         } else {
-            boldTitle = SpannableString("Streak about to reset")
+            boldTitle = SpannableString(resources.getString(R.string.streak_reset))
             sb = boldTitle
         }
 
@@ -78,7 +81,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 .setStyle(
                     NotificationCompat.BigTextStyle().bigText(
                         task?.description
-                            ?: ("Streak of $streak days about to be reset. Continue by eating today's frog")
+                            ?: (String.format(resources.getString(R.string.streak_of_x), streak))
                     )
                 )
                 .setSmallIcon(R.drawable.ic_frog_cropped)
