@@ -86,4 +86,5 @@
     <string name="due_tomorrow_at">Umpeutuu huomenna</string>
     <string name="streak_reset">Putkesi on katkeamassa</string>
     <string name="streak_of_x">%1$d päivän putki on katkeamassa. Jatka putkeasi syömällä tänään sammakko!</string>
+    <string name="delete_task">Poista %1$s?</string>
 </resources>
