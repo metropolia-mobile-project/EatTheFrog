@@ -81,4 +81,9 @@
     <string name="add_task_header">Add Task</string>
     <string name="max_subTask_amount">Maximum amount of subtasks reached</string>
     <string name="musthave_title">Subtask must have title</string>
+    <string name="due_today">Due today</string>
+    <string name="todays_frog">Today\'s frog</string>
+    <string name="due_tomorrow_at">Due tomorrow at</string>
+    <string name="streak_reset">Streak is about to reset</string>
+    <string name="streak_of_x">Streak of %1$d days about to be reset. Continue by eating today\'s frog!</string>
 </resources>

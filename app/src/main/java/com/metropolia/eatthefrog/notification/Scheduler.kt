@@ -140,9 +140,6 @@ fun setAlarmForTask(task: Task, time: String = "09:00", context: Context?) {
 
     val date: Date = converter.toTimestamp(time)
     val now = Date()
-    Log.d("FUU date", date.toString())
-    Log.d("FUU date.time", date.time.toString())
-    Log.d("FUU now", now.toString())
 
     if (date > now) {
         val clockInfo = AlarmManager.AlarmClockInfo(date.time, basicPendingIntent)
@@ -155,8 +152,6 @@ fun setAlarmForTask(task: Task, time: String = "09:00", context: Context?) {
  * The function will launch a notification when prompted and redirects user to MainActivity when the notification is clicked.
  */
 fun setAlarmForStreak(streak: Int, context: Context?) {
-    streak.plus(666)
-    Log.d("BLOOP streak: ", streak.toString())
     val converter = DateTimeConverter()
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
@@ -189,7 +184,6 @@ fun cancelAlarmForTask(task: Task, context: Context?) {
 }
 
 fun cancelAlarmForStreak(streak: Int, context: Context?) {
-    streak.plus(666)
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
     val pendingIntent =
