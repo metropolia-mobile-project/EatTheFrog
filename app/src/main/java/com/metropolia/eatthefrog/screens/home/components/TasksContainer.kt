@@ -64,18 +64,19 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
                 stringResource(R.string.no_tasks_for_today)
             } else stringResource(R.string.no_tasks_found)
 
-            taskItems = tasks.value?.filter { it.deadline == today }
+            taskItems =
+                (tasks.value?.filter { it.deadline == today })?.filter { !it.completed }
         }
         DateFilter.WEEK -> {
             emptyTasksText = if (searchVisible.value == false) {
                 stringResource(id = R.string.no_tasks_for_this_week)
             } else stringResource(R.string.no_tasks_found)
 
-            taskItems = tasks.value?.filter {
+            taskItems = (tasks.value?.filter {
                 val deadlineDate = SimpleDateFormat(DATE_FORMAT).parse(it.deadline)
                 calendar.time = deadlineDate
                 calendar.get(Calendar.WEEK_OF_YEAR) == currentWeek
-            }
+            })?.filter { !it.completed }
             taskItems = taskItems?.sortedByDescending { parseStringToDate(it.deadline) }
         }
         DateFilter.MONTH -> {
@@ -83,11 +84,11 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
                 stringResource(id = R.string.no_tasks_for_this_month)
             } else stringResource(R.string.no_tasks_found)
 
-            taskItems = tasks.value?.filter {
+            taskItems = (tasks.value?.filter {
                 val deadlineArray = it.deadline.split(".")
                 val todayArray = today.split(".")
                 deadlineArray[1] == todayArray[1] && deadlineArray[2] == todayArray[2]
-            }
+            })?.filter { !it.completed }
             taskItems = taskItems?.sortedByDescending { parseStringToDate(it.deadline) }
         }
         else -> { emptyTasksText = "Invalid DateFilter" }

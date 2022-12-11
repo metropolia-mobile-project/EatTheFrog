@@ -82,4 +82,9 @@
     <string name="name">Nimi</string>
     <string name="max_subTask_amount">Alitehtävien maksimimäärä saavutettu</string>
     <string name="musthave_title">Alitehtä täytyy nimetä ennen tallentamista</string>
+    <string name="due_today">Umpeutuu tänään</string>
+    <string name="todays_frog">Päivän sammakko</string>
+    <string name="due_tomorrow_at">Umpeutuu huomenna</string>
+    <string name="streak_reset">Putkesi on katkeamassa</string>
+    <string name="streak_of_x">%1$d päivän putki on katkeamassa. Jatka putkeasi syömällä tänään sammakko!</string>
 </resources>
