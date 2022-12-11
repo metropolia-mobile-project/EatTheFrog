@@ -67,9 +67,9 @@ fun AddTaskCreateButtonContainer(
                         if(newTask.isFrog){
                             viewModel.toggleFrogsFalse(newTask.deadline)
                         }
-                        viewModel.insertTask(newTask)
-                        viewModel.insertSubTask()
-                        viewModel.clearSubTaskList()
+
+                        viewModel.saveTask(newTask)
+
                         onTitleChange("")
                         onDescChange("")
                         onFrogChange(false)

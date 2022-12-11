@@ -30,7 +30,7 @@ data class Task(
 )
 data class Subtask(
     @PrimaryKey(autoGenerate = true) val uid: Long = 0,
-    @ColumnInfo(name = "task_id") val taskId: Long,
+    @ColumnInfo(name = "task_id") var taskId: Long,
     @ColumnInfo(name = "subtask_name") val name: String,
     @ColumnInfo(name = "completed") val completed: Boolean
 )

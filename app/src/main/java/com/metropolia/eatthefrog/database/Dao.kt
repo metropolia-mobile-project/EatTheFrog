@@ -46,6 +46,9 @@ interface TaskDao {
     @Query("SELECT * FROM task ORDER BY uid DESC LIMIT 1")
     fun getLastTask(): LiveData<Task>
 
+    @Query("SELECT * FROM task ORDER BY uid DESC LIMIT 1")
+    suspend fun getLastTaskNoLiveData(): Task
+
     @Query("SELECT COUNT(uid) FROM task WHERE task.deadline = :date")
     fun getDateTaskCount(date: String): LiveData<Int>
 
