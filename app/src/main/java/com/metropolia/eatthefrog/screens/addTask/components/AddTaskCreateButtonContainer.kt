@@ -53,14 +53,14 @@ fun AddTaskCreateButtonContainer(
                 if (newTask.name == "" && newTask.description == "") {
                     Toast.makeText(
                         context,
-                        "Task needs name and description",
+                        R.string.task_name_description_toast,
                         Toast.LENGTH_SHORT
                     )
                         .show()
                 } else if (newTask.name == "") {
-                    Toast.makeText(context, "Give task a name", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, R.string.task_name_toast, Toast.LENGTH_SHORT).show()
                 } else if (newTask.description == "") {
-                    Toast.makeText(context, "Give task a description", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, R.string.task_description_toast, Toast.LENGTH_SHORT)
                         .show()
                 } else {
                     if (isEditMode == false) {

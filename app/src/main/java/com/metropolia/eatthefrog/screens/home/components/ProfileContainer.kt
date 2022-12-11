@@ -112,11 +112,11 @@ fun ProfileContainer(username: String, vm: HomeScreenViewModel) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_streak),
-                        contentDescription = "Current streak",
+                        contentDescription = stringResource(id = R.string.current_streak),
                         modifier = Modifier.padding(5.dp),
                         tint = colorResource(id = R.color.fire_red)
                     )
-                    Text(text = "Current streak:", modifier = Modifier.padding(horizontal = 10.dp))
+                    Text(text = "${stringResource(id = R.string.current_streak)}:", modifier = Modifier.padding(horizontal = 10.dp))
                     Text(text = "${currentStreak.value}", modifier = Modifier.padding(5.dp))
                 }
             }
@@ -128,11 +128,11 @@ fun ProfileContainer(username: String, vm: HomeScreenViewModel) {
                     .padding(bottom = 10.dp)) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(painter = painterResource(id = R.drawable.ic_line_chart),
-                        contentDescription = "Current streak",
+                        contentDescription = stringResource(id = R.string.longest_streak),
                         modifier = Modifier.padding(5.dp),
                         tint = colorResource(id = R.color.green)
                     )
-                    Text(text = "Longest streak:", modifier = Modifier.padding(horizontal = 10.dp))
+                    Text(text = "${stringResource(id = R.string.longest_streak)}:", modifier = Modifier.padding(horizontal = 10.dp))
                     Text(text = "${longestStreak.value}", modifier = Modifier.padding(5.dp))
                 }
             }

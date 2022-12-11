@@ -59,7 +59,7 @@
     <string name="new_task_type">Uusi tehtävätyyppi</string>
     <string name="complete">Suoritettu</string>
     <string name="incomplete">Suorittamatta</string>
-    <string name="search">Etsi</string>
+    <string name="search">Hae</string>
     <string name="all">Kaikki</string>
     <string name="done">valmis</string>
     <string name="at">klo</string>
@@ -81,11 +81,19 @@
     <string name="add_task_header">Lisää Tehtävä</string>
     <string name="name">Nimi</string>
     <string name="max_subTask_amount">Alitehtävien maksimimäärä saavutettu</string>
-    <string name="musthave_title">Alitehtä täytyy nimetä ennen tallentamista</string>
+    <string name="musthave_title">Alitehtävä täytyy nimetä ennen tallentamista</string>
     <string name="due_today">Umpeutuu tänään</string>
     <string name="todays_frog">Päivän sammakko</string>
     <string name="due_tomorrow_at">Umpeutuu huomenna</string>
     <string name="streak_reset">Putkesi on katkeamassa</string>
     <string name="streak_of_x">%1$d päivän putki on katkeamassa. Jatka putkeasi syömällä tänään sammakko!</string>
     <string name="delete_task">Poista %1$s?</string>
+    <string name="eat_the_frog_description_first">Jos ensimmäinen asia jonka teet herätessäsi on syödä elävä sammakko, niin mitään pahempaa ei voi sattua loppupäivänä.</string>
+    <string name="eat_the_frog_description_two">\"Sammakkosi\" pitäisi olla jokin päivän tehtävä, jota luultavimmin yrität vältellä. Vain yksi per päivä! Eihän kuulosta niin pahalta?</string>
+    <string name="eat_the_frog_description_three">Kokeile, ja näe kuinka \"sammakkosi\" syöminen antaa sinulle energiaa loppupäivään!</string>
+    <string name="current_streak">Nykyinen putki</string>
+    <string name="longest_streak">Pisin putki</string>
+    <string name="task_name_description_toast">Anna tehtävälle nimi ja kuvaus</string>
+    <string name="task_name_toast">Anna tehtävälle nimi</string>
+    <string name="task_description_toast">Anna tehtävälle kuvaus</string>
 </resources>
