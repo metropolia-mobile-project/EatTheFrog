@@ -47,14 +47,13 @@ fun Scheduler(viewModel: NotificationsViewModel) {
         for (item in tasksTomorrow) {
             if (!item.completed) {
                 task = item.uid
-                scheduleNotification(task, options[index.value ?: 0], viewModel, context)
+                scheduleNotification(task, options[0], viewModel, context)
             }
         }
     }
 
     // Invoke notifications for today's tasks
     if (tasksToday != null && tasksToday.isNotEmpty()) {
-        Log.d("BRUH latestEatenFrog", latestEatenFrog.toString())
         var task: Long
         for (item in tasksToday) {
             if (!item.completed) {
@@ -113,7 +112,7 @@ fun scheduleNotification(
                 val modifiedTime = converter.modifyTime(task.time, minutes = minutes[option]!!)
                 setAlarmForTask(task, modifiedTime.toString(), context)
             }
-            setAlarmForTask(task, task.time, context)
+            if (option !in hours && option !in minutes) setAlarmForTask(task, task.time, context)
         } else setAlarmForTask(task = task, context = context)
     }
 }
