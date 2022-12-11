@@ -3,7 +3,12 @@ package com.metropolia.eatthefrog.viewmodels
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
@@ -19,13 +24,18 @@ import kotlinx.coroutines.launch
 class WelcomeScreenViewModel(application: Application) : AndroidViewModel(application) {
     private val sharedPreferences: SharedPreferences = application.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
     private val database = InitialDB.get(application)
-    val taskTypeDao = database.taskTypeDao()
+    var endReached = mutableStateOf(false)
+    private val taskTypeDao = database.taskTypeDao()
 
     fun savePreferences(username: String) {
         with (sharedPreferences.edit()) {
             putString(USERNAME_KEY, username)
             apply()
         }
+    }
+
+    fun toggleEndReached() {
+        endReached.value = true
     }
 
     fun saveInitialTypes() {

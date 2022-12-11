@@ -6,10 +6,10 @@
     <string name="history">History</string>
     <string name="save">Save</string>
     <string name="welcome_back">Welcome back</string>
-    <string name="eat_the_frog_description_first" translatable="false">“If the first thing you do when you wake up in the morning is eat a live frog, then nothing worse can happen for the rest of the day.</string>
+    <string name="eat_the_frog_description_first" translatable="false">“If the first thing you do when you wake up in the morning is eat a live frog, then nothing worse can happen for the rest of the day.“</string>
     <string name="eat_the_frog_description_two" translatable="false">Your “frog” should be the task you are most likely to procrastinate upon. Only one a day, doesn’t sound so bad?</string>
     <string name="eat_the_frog_description_three" translatable="false">Try this out and see how eating your “frog” gives you energy for the rest of your day.</string>
-    <string name="welcome">Welcome</string>
+    <string name="welcome">Let\'s get started!</string>
     <string name="please_enter_your_name">Please enter your name</string>
     <string name="closed_tasks">Closed tasks</string>
     <string name="frogs_eaten">Frogs eaten</string>
@@ -83,6 +83,7 @@
     <string name="add_task_header">Add Task</string>
     <string name="max_subTask_amount">Maximum amount of subtasks reached</string>
     <string name="musthave_title">Subtask must have title</string>
+    <string name="name">Name</string>
     <string name="due_today">Due today</string>
     <string name="todays_frog">Today\'s frog</string>
     <string name="due_tomorrow_at">Due tomorrow at</string>

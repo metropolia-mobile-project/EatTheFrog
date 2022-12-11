@@ -21,6 +21,9 @@ import com.metropolia.eatthefrog.navigation.HistoryTabItem
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 import kotlinx.coroutines.launch
 
+/**
+ * Wraps all HistoryScreen content inside a tab navigation.
+ */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HistoryScreenContainer(vm: HistoryScreenViewModel) {
@@ -65,7 +68,9 @@ fun HistoryScreenContainer(vm: HistoryScreenViewModel) {
     }
 }
 
-
+/**
+ * Combines all given HistoryTabItems into the UI.
+ */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HistoryTabs(tabs: List<HistoryTabItem>, pagerState: PagerState) {
@@ -94,6 +99,9 @@ fun HistoryTabs(tabs: List<HistoryTabItem>, pagerState: PagerState) {
     }
 }
 
+/**
+ * Creates a navigation tab. A Navigation tab in the HistoryScreen is used to change the UI between the complete and incomplete screens.
+ */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HistoryTabContent(tabs: List<HistoryTabItem>, pagerState: PagerState) {

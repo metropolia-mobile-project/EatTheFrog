@@ -21,6 +21,9 @@ import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 
+/**
+ * Creates the UI composable for the search field within the HistoryScreen.
+ */
 @Composable
 fun HistorySearchContainer(vm: HistoryScreenViewModel) {
 

@@ -57,6 +57,9 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
         }
     }
 
+    /**
+     * Formats the given string to a Date object, and then reformats it to the given pattern. (dd MMMM, yyyy)
+     */
     fun formatDateString(string: String): String {
         var newDateString = ""
         try {
@@ -375,6 +378,9 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
     }
 }
 
+/**
+ * Creates a Row containing an Image, Switch and a Text object for the Switch component.
+ */
 @Composable
 fun PopupSwitchRow(
     desc: String,

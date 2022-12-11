@@ -13,6 +13,9 @@ import com.metropolia.eatthefrog.database.Task
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
+/**
+ * A ViewModel used for handling Task data.
+ */
 open class TasksViewModel(application: Application) : AndroidViewModel(application) {
 
     val app = application
