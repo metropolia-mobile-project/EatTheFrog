@@ -34,6 +34,13 @@ import com.metropolia.eatthefrog.constants.ICON_LIST
 import com.metropolia.eatthefrog.constants.MAX_TASK_TYPE_NAME_LENGTH
 import com.metropolia.eatthefrog.database.TaskType
 
+/**
+ * Dialog box for adding and selecting task types. When launching the application for the
+ * first time, three default types are created already. User can add and delete types here as they wish.
+ * Task types have a name and a icon that the user selects from a scrollable bar. One task type has to always
+ * exist, so the last type in the list cannot be deleted.
+ */
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AddTaskTypeDialog(

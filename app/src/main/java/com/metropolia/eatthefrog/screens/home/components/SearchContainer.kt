@@ -22,6 +22,10 @@ import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
+/**
+ * Container for the search portion of the home screen. Allows user to search for tasks by name.
+ */
+
 @Composable
 fun SearchContainer(vm: HomeScreenViewModel) {
 

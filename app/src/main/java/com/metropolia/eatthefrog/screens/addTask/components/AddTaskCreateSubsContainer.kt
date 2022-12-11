@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
  * UI and functionality to add new subtasks to subtask list.
  * subtasks are shown in 'AddTaskLazyColumnContainer' before they are saved to database
  */
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AddTaskCreateSubsContainer(
     viewModel: AddTaskScreenViewModel,
@@ -56,10 +56,8 @@ fun AddTaskCreateSubsContainer(
     val subTaskDone by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    val keyboardController = LocalSoftwareKeyboardController.current
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val coroutineScope = rememberCoroutineScope()
-    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier

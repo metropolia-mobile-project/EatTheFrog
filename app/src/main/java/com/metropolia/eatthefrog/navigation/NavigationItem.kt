@@ -2,6 +2,10 @@ package com.metropolia.eatthefrog.navigation
 
 import com.metropolia.eatthefrog.R
 
+/**
+ * Sealed class for all the navigation items of the different screens.
+ */
+
 sealed class NavigationItem(var route: String, var icon: Int, var title: Int) {
     object Home : NavigationItem("home", R.drawable.ic_home, R.string.home)
     object AddTask : NavigationItem("add_task/0/false/''/''/''/''/1/false", R.drawable.ic_add_task, R.string.add_task)
