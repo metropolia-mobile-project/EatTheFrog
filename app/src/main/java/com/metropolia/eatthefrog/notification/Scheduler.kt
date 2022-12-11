@@ -47,14 +47,13 @@ fun Scheduler(viewModel: NotificationsViewModel) {
         for (item in tasksTomorrow) {
             if (!item.completed) {
                 task = item.uid
-                scheduleNotification(task, options[index.value ?: 0], viewModel, context)
+                scheduleNotification(task, options[0], viewModel, context)
             }
         }
     }
 
     // Invoke notifications for today's tasks
     if (tasksToday != null && tasksToday.isNotEmpty()) {
-        Log.d("BRUH latestEatenFrog", latestEatenFrog.toString())
         var task: Long
         for (item in tasksToday) {
             if (!item.completed) {
@@ -113,13 +112,13 @@ fun scheduleNotification(
                 val modifiedTime = converter.modifyTime(task.time, minutes = minutes[option]!!)
                 setAlarmForTask(task, modifiedTime.toString(), context)
             }
-            setAlarmForTask(task, task.time, context)
+            if (option !in hours && option !in minutes) setAlarmForTask(task, task.time, context)
         } else setAlarmForTask(task = task, context = context)
     }
 }
 
 /**
- * Function takes task as a parameter to use the tasks uid as a requestCode, which needs to be different for every alarm.
+ * Function takes task as a parameter to use the tasks uid as a requestCode.
  * The function will launch a notification when prompted and redirects user to MainActivity when the notification is clicked.
  */
 fun setAlarmForTask(task: Task, time: String = "09:00", context: Context?) {
@@ -148,8 +147,8 @@ fun setAlarmForTask(task: Task, time: String = "09:00", context: Context?) {
 }
 
 /**
- * Function takes current streak as a parameter to use it as a requestCode, which needs to be different for every alarm.
- * The function will launch a notification when prompted and redirects user to MainActivity when the notification is clicked.
+ * Function takes current streak as a parameter to use it as a requestCode.
+ * The function will launch a notification at 20:00 if daily frog has not been completed yet today.
  */
 fun setAlarmForStreak(streak: Int, context: Context?) {
     val converter = DateTimeConverter()
@@ -183,6 +182,11 @@ fun cancelAlarmForTask(task: Task, context: Context?) {
     alarmManager.cancel(pendingIntent)
 }
 
+/**
+ * Function takes previous streak as a parameter to use it as a requestCode.
+ * Previous streak used as the requestCode for canceling needs to be the same as it was for setting.
+ * The function will cancel a notification when prompted, which is when a daily frog is marked completed.
+ */
 fun cancelAlarmForStreak(streak: Int, context: Context?) {
     val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
