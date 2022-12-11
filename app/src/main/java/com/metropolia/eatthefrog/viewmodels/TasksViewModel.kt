@@ -2,6 +2,8 @@ package com.metropolia.eatthefrog.viewmodels
 
 import android.app.Application
 import android.content.Context
+import android.os.Handler
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData

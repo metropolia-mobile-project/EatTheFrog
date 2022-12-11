@@ -46,6 +46,7 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
     val context = LocalContext.current
 
     val subtasks = vm.getHighlightedSubtasks().observeAsState(listOf())
+    Log.d("subtasks", subtasks.value.toString())
     val task = vm.getSelectedTask().observeAsState()
     val taskType = vm.getTaskType(if (task.value != null) task.value!!.taskTypeId else 1)
         .observeAsState(TaskType(name = stringResource(id = R.string.loading), icon = null))

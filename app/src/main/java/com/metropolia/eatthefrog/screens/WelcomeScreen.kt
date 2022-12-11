@@ -91,7 +91,7 @@ fun WelcomeScreen(application: Application, activity: Activity) {
                 onValueChange = {
                     if (it.length < maxChar) username = it
                 },
-                textStyle = LocalTextStyle.current.copy(color = Color.Black),
+                textStyle = LocalTextStyle.current.copy(color = Color.White),
                 singleLine = true,
                 modifier = Modifier
                     .clip(RoundedCornerShape(30.dp))
@@ -106,7 +106,9 @@ fun WelcomeScreen(application: Application, activity: Activity) {
                     focusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    backgroundColor = Color.White,
+                    backgroundColor = MaterialTheme.colors.primary,
+                    cursorColor = Color.White,
+                    focusedLabelColor = MaterialTheme.colors.primaryVariant
                 )
             )
             Text(
