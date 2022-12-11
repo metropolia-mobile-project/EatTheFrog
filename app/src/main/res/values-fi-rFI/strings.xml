@@ -96,4 +96,5 @@
     <string name="task_name_description_toast">Anna tehtävälle nimi ja kuvaus</string>
     <string name="task_name_toast">Anna tehtävälle nimi</string>
     <string name="task_description_toast">Anna tehtävälle kuvaus</string>
+    <string name="maximum_length_20">Enintään 20 merkkiä</string>
 </resources>

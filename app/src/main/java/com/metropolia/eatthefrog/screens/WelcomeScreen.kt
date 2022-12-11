@@ -10,6 +10,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -23,6 +24,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -84,11 +86,12 @@ fun WelcomeScreen(application: Application, activity: Activity) {
             )
 
             TextField(
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                 value = username,
                 onValueChange = {
                     if (it.length < maxChar) username = it
                 },
-                textStyle = LocalTextStyle.current.copy(color = Color.White),
+                textStyle = LocalTextStyle.current.copy(color = Color.Black),
                 singleLine = true,
                 modifier = Modifier
                     .clip(RoundedCornerShape(30.dp))
@@ -103,14 +106,14 @@ fun WelcomeScreen(application: Application, activity: Activity) {
                     focusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    backgroundColor = Color.DarkGray,
+                    backgroundColor = Color.White,
                 )
             )
             Text(
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .padding(horizontal = 20.dp),
-                text = "Maximum length 20 characters", fontSize = 8.sp, color = Color.DarkGray, textAlign = TextAlign.Start)
+                text = stringResource(R.string.maximum_length_20), fontSize = 8.sp, color = Color.DarkGray, textAlign = TextAlign.Start)
             Spacer(Modifier.height(10.dp))
             TextButton(
                 modifier = Modifier
@@ -169,14 +172,15 @@ fun WelcomeScreen(application: Application, activity: Activity) {
             .background(MaterialTheme.colors.secondary)
     ) {
         WelcomeTabContent(tabs, pagerState)
-        Box(
-            Modifier
-                .padding(bottom = 50.dp)
-                .align(Alignment.BottomCenter)) {
-            WelcomeTabs(tabs, pagerState, welcomeScreenViewModel)
-        }
+
 
         if (!keyboardOpen) {
+            Box(
+                Modifier
+                    .padding(bottom = 50.dp)
+                    .align(Alignment.BottomCenter)) {
+                WelcomeTabs(tabs, pagerState, welcomeScreenViewModel)
+            }
             Box(
                 Modifier
                     .padding(top = 50.dp)

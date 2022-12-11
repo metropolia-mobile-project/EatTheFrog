@@ -95,4 +95,5 @@
     <string name="task_name_description_toast">Task needs name and description</string>
     <string name="task_name_toast">Give task a name</string>
     <string name="task_description_toast">Give task a description</string>
+    <string name="maximum_length_20">Maximum length 20 characters</string>
 </resources>

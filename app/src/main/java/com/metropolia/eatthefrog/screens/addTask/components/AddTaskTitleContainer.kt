@@ -84,7 +84,7 @@ fun AddTaskTitleContainer(
                 textAlign = TextAlign.Start
             ),
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
     }
 }
