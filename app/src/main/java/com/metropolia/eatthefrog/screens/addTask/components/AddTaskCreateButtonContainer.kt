@@ -69,9 +69,7 @@ fun AddTaskCreateButtonContainer(
                         }
 
                         viewModel.saveTask(newTask)
-              /*          viewModel.insertTask(newTask)
-                        viewModel.insertSubTask()
-                        viewModel.clearSubTaskList()*/
+
                         onTitleChange("")
                         onDescChange("")
                         onFrogChange(false)
