@@ -16,7 +16,6 @@ import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
 import com.metropolia.eatthefrog.database.Task
 import com.metropolia.eatthefrog.database.TaskType
-import com.metropolia.eatthefrog.database.TaskTypeOld
 import com.metropolia.eatthefrog.navigation.NavigationItem
 import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 import java.text.SimpleDateFormat

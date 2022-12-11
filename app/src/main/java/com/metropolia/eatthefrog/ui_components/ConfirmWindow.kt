@@ -30,7 +30,9 @@ import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 @Composable
 fun ConfirmWindow(confirmCallback: (() -> Any?)?, dismissCallback: (() -> Any?)?,
                   description: String,
-                  modifier: Modifier = Modifier, application: Application) {
+                  modifier: Modifier = Modifier,
+                  application: Application,
+                  showSlider: Boolean = true) {
 
     var disabledCheckbox by remember { mutableStateOf(false) }
 
@@ -78,13 +80,16 @@ fun ConfirmWindow(confirmCallback: (() -> Any?)?, dismissCallback: (() -> Any?)?
         text = {
             Column(verticalArrangement = Arrangement.SpaceAround) {
                 Text(description)
-                Spacer(Modifier.height(50.dp))
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.dont_ask_again))
-                    Switch(
-                        colors = SwitchDefaults.colors(checkedThumbColor = MaterialTheme.colors.primaryVariant, uncheckedThumbColor = MaterialTheme.colors.primary),
-                        checked = disabledCheckbox,
-                        onCheckedChange = {disabledCheckbox = it})
+                if (showSlider) {
+                    Spacer(Modifier.height(50.dp))
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.dont_ask_again))
+
+                            Switch(
+                                colors = SwitchDefaults.colors(checkedThumbColor = MaterialTheme.colors.primaryVariant, uncheckedThumbColor = MaterialTheme.colors.primary),
+                                checked = disabledCheckbox,
+                                onCheckedChange = {disabledCheckbox = it})
+                    }
                 }
             }
     })

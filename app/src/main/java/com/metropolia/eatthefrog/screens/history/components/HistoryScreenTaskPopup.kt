@@ -89,7 +89,7 @@ fun HistoryScreenTaskPopup(vm: HistoryScreenViewModel, navController: NavControl
 
                         Row(Modifier.fillMaxWidth().padding(top = 10.dp),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start) {
+                            horizontalArrangement = Arrangement.SpaceBetween) {
 
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
@@ -97,8 +97,22 @@ fun HistoryScreenTaskPopup(vm: HistoryScreenViewModel, navController: NavControl
                                     contentDescription = "type icon", tint = MaterialTheme.colors.secondary,
                                     modifier = Modifier.padding(horizontal = 5.dp)
                                 )
+                                // Task type can be null here, ignore the warning
                                 Text(text = taskType.value?.name ?: "<${stringResource(id = R.string.deleted_type)}>", color = MaterialTheme.colors.secondary, fontSize = 14.sp)
                             }
+
+                            Image(
+                                painter = painterResource(R.drawable.ic_delete),
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clickable {
+                                        if (task.value != null) {
+                                            vm.openTaskDeleteWindow()
+                                        }
+                                    },
+                                contentDescription = "delete button",
+                                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
+                            )
                         }
 
                         Text(
@@ -246,6 +260,24 @@ fun HistoryScreenTaskPopup(vm: HistoryScreenViewModel, navController: NavControl
                 }
             }
         }
+    }
+
+    if (vm.showTaskDeleteConfirmWindow.value) {
+        val desc = stringResource(R.string.delete_task, task.value?.name ?: "")
+        ConfirmWindow(
+            {
+                vm.resetPopupStatus()
+                vm.closeTaskDeleteWindow()
+                vm.deleteTask(task.value!!.uid)
+            },
+            { vm.closeTaskDeleteWindow() },
+            desc,
+            modifier = Modifier.clip(
+                RoundedCornerShape(20.dp)
+            ),
+            application = vm.app,
+            showSlider = false
+        )
     }
 
     if (vm.showTaskDoneConfirmWindow.value) {

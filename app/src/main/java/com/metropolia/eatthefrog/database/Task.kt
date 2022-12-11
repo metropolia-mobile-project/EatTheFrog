@@ -32,9 +32,3 @@ data class Subtask(
     @ColumnInfo(name = "subtask_name") val name: String,
     @ColumnInfo(name = "completed") val completed: Boolean
 )
-
-enum class TaskTypeOld {
-    MEETING,
-    PLANNING,
-    DEVELOPMENT
-}
