@@ -23,6 +23,7 @@ import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 
 /**
  * Creates the UI composable for the search field within the HistoryScreen.
+ * @param vm: HistoryScreenViewModel of the parent composable.
  */
 @Composable
 fun HistorySearchContainer(vm: HistoryScreenViewModel) {
