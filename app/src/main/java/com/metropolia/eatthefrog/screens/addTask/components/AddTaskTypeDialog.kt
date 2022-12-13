@@ -39,8 +39,10 @@ import com.metropolia.eatthefrog.database.TaskType
  * first time, three default types are created already. User can add and delete types here as they wish.
  * Task types have a name and a icon that the user selects from a scrollable bar. One task type has to always
  * exist, so the last type in the list cannot be deleted.
+ *
+ * @param viewModel: AddTaskScreenViewModel of the parent composable.
+ * @param onTaskChange: function to be called when Task is changed.
  */
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AddTaskTypeDialog(

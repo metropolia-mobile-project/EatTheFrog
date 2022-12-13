@@ -32,6 +32,17 @@ lateinit var addTaskScreenViewModel: AddTaskScreenViewModel
  * Actual add task / edit task screen
  * only build screen is called here and gets all the parameters which are given to addTaskScreen
  * when navigated to it.
+ *
+ * @param application: application context
+ * @param navHost: NavHostController of the application.
+ * @param editTaskID: ID of the task to be edited
+ * @param isEditMode: true, if AddTaskScreen is opened in the edit mode.
+ * @param editTitle: title of the Task to be edited.
+ * @param editDesc: description of the Task to be edited.
+ * @param dateDeadline: deadline of the task
+ * @param timeDeadline: time of the deadline.
+ * @param editTaskType: TaskType of the Task to be edited.
+ * @param isFrogBoolean: isFrog value of the Task.
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

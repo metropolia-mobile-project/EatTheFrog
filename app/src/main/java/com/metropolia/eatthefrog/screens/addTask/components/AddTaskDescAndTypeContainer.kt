@@ -29,6 +29,13 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 /**
  * Description title and TextField
  * Dropdown menu for picking task type
+ *
+ * @param description: description for the Task.
+ * @param onDescChange: function to be called when description is changed.
+ * @param onTaskChange: function to be called when Task is changed.
+ * @param isEditMode: edit mode status
+ * @param editTaskType: TaskType of the Task if edited.
+ * @param viewModel: AddTaskScreenViewModel of the parent composable.
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
