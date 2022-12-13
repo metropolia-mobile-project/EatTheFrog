@@ -1,11 +1,7 @@
 package com.metropolia.eatthefrog.screens.profile.components
 
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -43,6 +39,8 @@ import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
 /**
  * Creates placeholder image for profile picture and a button that opens gallery
  * so user can choose their own profile picture.
+ * @param vm: ProfileScreenViewModel of the parent composable.
+ * @param username: name of the user.
  */
 @Composable
 fun ProfileGalleryPickerContainer(vm: ProfileScreenViewModel, username: String) {

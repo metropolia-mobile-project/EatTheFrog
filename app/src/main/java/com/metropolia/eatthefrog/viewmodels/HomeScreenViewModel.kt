@@ -27,6 +27,7 @@ enum class DateFilter {
     MONTH
 }
 
+
 /**
  * ViewModel for the Home screen
  */

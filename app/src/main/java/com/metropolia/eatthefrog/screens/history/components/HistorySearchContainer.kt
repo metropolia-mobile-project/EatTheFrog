@@ -38,7 +38,7 @@ fun HistorySearchContainer(vm: HistoryScreenViewModel) {
             .background(Color.Transparent),
         value = vm.searchInput.value,
         label = { Text(stringResource(R.string.search)) },
-        onValueChange = { vm.updateSearchInput(it) },
+        onValueChange = { vm.updateSearchInput(it); vm.searchInput.value = it },
         singleLine = true,
         keyboardActions = KeyboardActions(
             onDone = { focusManager.clearFocus() }

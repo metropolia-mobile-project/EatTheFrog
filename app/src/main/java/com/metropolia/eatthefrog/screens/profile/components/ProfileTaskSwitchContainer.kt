@@ -25,8 +25,9 @@ import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
 /**
  * SwitchContainer Function creates the bottom of the profile screen where
  * option switches are shown
+ * @param vm: ProfileScreenViewModel of the parent composable.
+ * @param nvm: NotificationsViewModel of the parent composable.
  */
-
 @Composable
 fun ProfileTaskSwitchContainer(vm: ProfileScreenViewModel, nvm: NotificationsViewModel) {
 
@@ -68,6 +69,15 @@ fun ProfileTaskSwitchContainer(vm: ProfileScreenViewModel, nvm: NotificationsVie
     }
 }
 
+
+/**
+ * Creates a row with a switch, a label and a icon.
+ * @param desc: description of the Switch
+ * @param enabledIcon: Icon displayed when Switch is enabled.
+ * @param disabledIcon: Icon displayed when Switch is disabled.
+ * @param enabled: state of the Switch
+ * @param toggleState: callback function to be called when switch value is changed.
+ */
 @Composable
 fun SwitchRow(
     desc: String,
@@ -130,11 +140,16 @@ fun SwitchRow(
     }
 }
 
+
+/**
+ * Creates a DropdownMenu for choosing the interval of notifications.
+ * @param nvm: NotificationsViewModel of the parent composable.
+ */
 @Composable
 fun NotificationDropdown(nvm: NotificationsViewModel) {
     val listItems = nvm.listItems
-
     val indexValue = nvm.deadlineValue.observeAsState()
+
     val disabledValue = ""
     var expanded by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableStateOf(indexValue.value!!) }
@@ -171,7 +186,7 @@ fun NotificationDropdown(nvm: NotificationsViewModel) {
                     } else {
                         ""
                     }
-                    Text(text = s + disabledText)
+                    Text(text = s + disabledText, color = Color.White)
                 }
             }
         }

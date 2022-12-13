@@ -9,11 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.metropolia.eatthefrog.screens.profile.components.ProfileGalleryPickerContainer
 import com.metropolia.eatthefrog.screens.profile.components.ProfileGraphContainer
 import com.metropolia.eatthefrog.screens.profile.components.ProfileTaskDetailsContainer
@@ -21,6 +17,11 @@ import com.metropolia.eatthefrog.screens.profile.components.ProfileTaskSwitchCon
 import com.metropolia.eatthefrog.viewmodels.NotificationsViewModel
 import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
 
+/**
+ * Displays information of the user, statistics and settings.
+ * @param username: Name of the user
+ * @param application: Context of the whole application.
+ */
 @Composable
 fun ProfileScreen(username: String, application: Application) {
     val profileScreenViewModel = ProfileScreenViewModel(application)

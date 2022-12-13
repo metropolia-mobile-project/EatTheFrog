@@ -19,7 +19,9 @@ import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.viewmodels.ProfileScreenViewModel
 
 /**
- * ProfileTaskDetailsContainer function creates the middle part of the profile screen
+ * ProfileTaskDetailsContainer function creates the middle part of the profile screen,
+ * displaying statistics of completed Tasks and frogs.
+ * @param vm: ProfileScreenViewModel of the parent composable.
  */
 @Composable
 fun ProfileTaskDetailsContainer(vm: ProfileScreenViewModel) {
@@ -34,6 +36,15 @@ fun ProfileTaskDetailsContainer(vm: ProfileScreenViewModel) {
         stringResource(id = R.string.total_tasks), totalTasks.value, R.drawable.ic_done_all, false)
 }
 
+/**
+ * Creates a row with 2 TaskInfoContainers.
+ * @param firstTaskTitle: Title of the left TaskInfoContainer.
+ * @param firstTaskAmount: info/amount of the left TaskInfoContainer.
+ * @param firstTaskIcon: Icon of the left TaskInfoContainer.
+ * @param secondTaskTitle: Title of the right TaskInfoContainer.
+ * @param secondTaskAmount: info/amount of the right TaskInfoContainer.
+ * @param secondTaskIcon: Icon of the right TaskInfoContainer.
+ */
 @Composable
 fun ProfileTaskDetailsRow(firstTaskTitle: String, firstTaskAmount: Int, firstTaskIcon: Int,
                           secondTaskTitle: String, secondTaskAmount: Int, secondTaskIcon: Int, upperRow: Boolean) {
@@ -65,6 +76,12 @@ fun ProfileTaskDetailsRow(firstTaskTitle: String, firstTaskAmount: Int, firstTas
     }
 }
 
+/**
+ * Creates a Card with a title, icon and with a info text.
+ * @param title: Title of the composable, displayed on the top left
+ * @param info: Info of the composable, displayed on the bottom left. For example, how many frog completed.
+ * @param icon: Icon displayed on the middle of the composable.
+ */
 @Composable
 fun TaskInfoContainer(title: String, info: String, icon: Int, lightBackground: Boolean) {
     Card(
