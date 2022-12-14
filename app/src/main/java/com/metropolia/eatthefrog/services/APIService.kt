@@ -20,7 +20,7 @@ object APIService {
 
     data class Result(val q: String, val a: String, val h: String)
 
-    var quote = MutableLiveData(Result("DO NOT REDEEM!", "Mahatma Gandhi", ""))
+    var quote = MutableLiveData(Result("The greatest glory in living lies not in never falling, but in rising every time we fall.", "Nelson Mandela", ""))
 
     private val baseURL = URL("https://zenquotes.io/api/")
 
