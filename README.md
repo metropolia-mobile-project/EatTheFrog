@@ -19,7 +19,7 @@ Eat The Frog does not require any registration in order to fully experience the 
 -	Internet connection
 
 ## Installation
-Download the .apk file from [here](https://github.com/metropolia-mobile-project/EatTheFrog/releases/tag/1.0) to your Android phone and install it. Optionally, the source code can also be downloaded from the provided link.
+Download the .apk file from [here](https://github.com/metropolia-mobile-project/EatTheFrog/releases/tag/1.01) to your Android phone and install it. Optionally, the source code can also be downloaded from the provided link.
 
 ## License
 The application is under the MIT License.
