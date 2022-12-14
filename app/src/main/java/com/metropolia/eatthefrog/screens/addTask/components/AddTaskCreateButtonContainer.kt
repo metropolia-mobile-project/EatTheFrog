@@ -26,6 +26,16 @@ import java.util.*
  * Saves subtask list to database if subtasks have been created.
  * if function is launched in edit mode 'create task' button is changed to edit task and
  * instead of creating new task it will make changes for the current task
+ *
+ * @param viewModel: AddTaskScreenViewModel of the parent composable.
+ * @param navHost: NavHostController of the application.
+ * @param newTask: Task object if not in edit mode.
+ * @param isEditMode: Edit mode status.
+ * @param editTask: Task object if in edit mode.
+ * @param onTitleChange: function to be called when title changed.
+ * @param onDescChange: function to be called when description changed.
+ * @param onTaskTypeChange: function to be called when TaskType changed.
+ * @param onFrogChange: function to be called when isFrog changed.
  */
 @Composable
 fun AddTaskCreateButtonContainer(

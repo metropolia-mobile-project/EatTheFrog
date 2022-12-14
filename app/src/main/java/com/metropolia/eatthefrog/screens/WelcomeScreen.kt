@@ -45,6 +45,9 @@ import kotlinx.coroutines.launch
  * is stored to shared preferences. After the name is added and the Save-button is pressed, relaunches
  * MainActivity which then checks if there is a name stored to the shared preferences and therefore
  * doesn't display this screen again.
+ *
+ * @param application: application context.
+ * @param activity: MainActivity.
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -205,6 +208,9 @@ fun WelcomeScreen(application: Application, activity: Activity) {
 
 /**
  * Creates a paragraph with the given String parameter.
+ * @param text: Text to be displayed.
+ * @param size: size of the text.
+ * @param modifier: Modifier for the Text component, a default is provided.
  */
 @Composable
 fun WelcomeText(text: String, size: TextUnit, modifier : Modifier = Modifier.padding(20.dp)) {
@@ -220,6 +226,9 @@ fun WelcomeText(text: String, size: TextUnit, modifier : Modifier = Modifier.pad
 
 /**
  * Combines all given WelcomeTabItems into the UI.
+ * @param tabs: List of WelcomeTabItems to be displayed on the HorizontalPager.
+ * @param pagerState: State of the pager.
+ * @param vm: WelcomeScreenViewModel of the parent composable.
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -287,6 +296,8 @@ fun WelcomeTabs(tabs: List<WelcomeTabItem>, pagerState: PagerState, vm: WelcomeS
 
 /**
  * Creates a navigation tab. A Navigation tab in the WelcomeScreen is used to toggle the help texts.
+ * @param tabs: List of WelcomeTabItems to be displayed on the HorizontalPager.
+ * @param pagerState: State of the pager.
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -304,6 +315,7 @@ fun WelcomeTabContent(tabs: List<WelcomeTabItem>, pagerState: PagerState) {
 
 /**
  * Container for WelcomeText composable.
+ * @param content: composable content to be displayed within the container.
  */
 @Composable
 fun WelcomeTextContainer(content: @Composable () -> Unit) {
@@ -318,5 +330,6 @@ fun WelcomeTextContainer(content: @Composable () -> Unit) {
 
 /**
  * Class used for creating the HorizontalPager tabs.
+ * @param screen: composable object to be displayed as the tab item.
  */
 class WelcomeTabItem(var screen: ComposableFun)

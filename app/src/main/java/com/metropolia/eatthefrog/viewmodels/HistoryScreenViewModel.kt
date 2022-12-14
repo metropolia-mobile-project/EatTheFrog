@@ -21,7 +21,8 @@ import java.util.*
 
 
 /**
- * ViewModel for HistoryScreen. Contains the logic to handle data required within the HistoryScreen.
+ * ViewModel for HistoryScreen.
+ * @param application: Application context.
  */
 class HistoryScreenViewModel(application: Application) : TasksViewModel(application) {
 
@@ -32,20 +33,46 @@ class HistoryScreenViewModel(application: Application) : TasksViewModel(applicat
     var searchInput = mutableStateOf("")
 
     /**
-     * Acquire data from Room db.
+     * Fetch all completed tasks from Room db which contain the searchInput value.
+     * @return List of Task objects wrapped within a LiveData object.
      */
     fun getCompletedTasks() = database.taskDao().getAllCompletedTasksOrderedByDate("%${searchInput.value}")
+
+    /**
+     * Fetch all incomplete tasks from Room db which contain the searchInput value.
+     * @return List of Task objects wrapped within a LiveData object.
+     */
     fun getIncompleteTasks() = database.taskDao().getAllIncompleteTasksOrderedByDate("%${searchInput.value}")
+
+    /**
+     * Fetch the highlighted Task from Room db.
+     * @return Task object wrapped within a LiveData object.
+     */
     fun getSelectedTask() = database.taskDao().getSpecificTask(highlightedTaskId.value)
+
+    /**
+     * Fetch the highlighted Subtasks from Room db.
+     * @return List of Subtask objects wrapped within a LiveData object.
+     */
     fun getHighlightedSubtasks() = database.subtaskDao().getSubtasks(highlightedTaskId.value)
+
+    /**
+     * Fetches all TaskTypes from Room db.
+     * @return List of TaskType objects wrapped within a LiveData object.
+     */
     fun getAllTaskTypes() = database.taskTypeDao().getTaskTypes()
 
+    /**
+     * Update searchInput with the given value.
+     * @param string: value to be set to searchInput
+     */
     fun updateSearchInput(string: String) {
         searchInput.value = string
     }
 
     /**
      * Attempts to convert the given string to a Date object. Returns default current date if an error is thrown.
+     * @param string: Date in string format to be converted
      */
     fun parseStringToDate(string: String): Date {
         var date = Date()
@@ -66,6 +93,7 @@ class HistoryScreenViewModel(application: Application) : TasksViewModel(applicat
 
     /**
      * Adds or removes the given TaskType object from the selectedType -list. If it is empty, add a default "All" TaskType object.
+     * @param type: TaskType to be handled.
      */
     fun toggleSelectedType(type: TaskType) {
 
@@ -97,6 +125,8 @@ class HistoryScreenViewModel(application: Application) : TasksViewModel(applicat
 
     /**
      * Updates the SubTasks to be displayed in the HistoryScreenTaskPopup.
+     * @param st: Subtask to be updated in Room db.
+     * @param status: completed state of the Subtask
      */
     fun updateSubTask(st: Subtask, status: Boolean) {
         viewModelScope.launch {

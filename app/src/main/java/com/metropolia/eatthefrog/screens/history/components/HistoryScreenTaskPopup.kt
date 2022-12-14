@@ -22,7 +22,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.constants.CONFIRM_WINDOW_KEY
 import com.metropolia.eatthefrog.constants.DATE_FORMAT
@@ -33,11 +32,12 @@ import com.metropolia.eatthefrog.ui_components.ConfirmWindow
 import com.metropolia.eatthefrog.ui_components.PopupView
 import com.metropolia.eatthefrog.viewmodels.DateFilter
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
-import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 import java.text.SimpleDateFormat
 
 /**
  * Popup window which displays the selected Task object and its data within the HistoryScreen.
+ * @param vm: HistoryScreenViewModel of the parent composable.
+ * @param navController: NavController of the application.
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -57,6 +57,10 @@ fun HistoryScreenTaskPopup(vm: HistoryScreenViewModel, navController: NavControl
         }
     }
 
+    /**
+     * Formats the string object to a date and formats it to the wanted format.
+     * @param string: string to be formatted.
+     */
     fun formatDateString(string: String): String {
         var newDateString = ""
         try {

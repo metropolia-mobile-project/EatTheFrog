@@ -1,6 +1,5 @@
 package com.metropolia.eatthefrog.screens.history.components
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +26,7 @@ import java.util.*
 
 /**
  * Sorts the incomplete tasks according to the date values and displays them in the HistoryScreen "Incomplete" tab.
+ * @param vm: HistoryScreenViewModel of the parent composable.
  */
 @Composable
 fun IncompleteTasksContainer(vm: HistoryScreenViewModel) {

@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Wraps all HistoryScreen content inside a tab navigation.
+ * @param vm: HistoryScreenViewModel of the parent composable.
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -70,6 +71,8 @@ fun HistoryScreenContainer(vm: HistoryScreenViewModel) {
 
 /**
  * Combines all given HistoryTabItems into the UI.
+ * @param tabs: all tabs to be displayed in the top of the UI.
+ * @param pagerState: state of the HorizontalPager.
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -100,7 +103,10 @@ fun HistoryTabs(tabs: List<HistoryTabItem>, pagerState: PagerState) {
 }
 
 /**
- * Creates a navigation tab. A Navigation tab in the HistoryScreen is used to change the UI between the complete and incomplete screens.
+ * Creates a navigation tab. A Navigation tab in the HistoryScreen is used to change the UI between the
+ * complete and incomplete screens.
+ * @param tabs: all tabs to be displayed in the top of the UI.
+ * @param pagerState: state of the HorizontalPager.
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable

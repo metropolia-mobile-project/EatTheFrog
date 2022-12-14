@@ -45,6 +45,10 @@ import com.metropolia.eatthefrog.viewmodels.AddTaskScreenViewModel
 /**
  * UI and functionality to add title for new task
  * in edit mode title is already given which is current task title and it can be changed writing over it
+ *
+ * @param vm: AddTaskScreenViewModel of the parent composable.
+ * @param taskTitle: title of the Task.
+ * @param onNameChange: function to be called when name is changed.
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

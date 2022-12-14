@@ -25,8 +25,8 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 /**
  * Container for the search portion of the home screen. Allows user to search for tasks by name.
+ * @param vm: HomeScreenViewModel of the parent composable.
  */
-
 @Composable
 fun SearchContainer(vm: HomeScreenViewModel) {
 

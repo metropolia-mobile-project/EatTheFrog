@@ -22,6 +22,9 @@ import com.metropolia.eatthefrog.screens.MainScreen
 import com.metropolia.eatthefrog.screens.WelcomeScreen
 import com.metropolia.eatthefrog.ui.theme.EatTheFrogTheme
 
+/**
+ * Single Activity object used for running the application. Extends ComponentActivity.
+ */
 open class MainActivity : ComponentActivity() {
 
     var darkmode = MutableLiveData(false)

@@ -18,6 +18,9 @@ import kotlinx.coroutines.launch
 
 /**
  * A reusable ModalBottomSheetLayout. Can be used to display wanted UI components within the window.
+ * @param display: display status of the PopupView.
+ * @param callback: function to be called when PopupView is closed.
+ * @param content: Composable content within the PopupView
  */
 @SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalMaterialApi
@@ -76,6 +79,10 @@ fun PopupView(display: MutableLiveData<Boolean>, callback: () -> Unit, content: 
 
 /**
  * A reusable ModalBottomSheetLayout with a offset header component. Can be used to display wanted UI components within the window.
+ * @param display: display status of the PopupView.
+ * @param callback: function to be called when PopupView is closed.
+ * @param headerContent: Composable content for the header of the PopupView
+ * @param content: Composable content within the PopupView
  */
 @SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalMaterialApi

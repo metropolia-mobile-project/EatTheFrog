@@ -28,6 +28,13 @@ import java.util.*
 
 /**
  * UI and functionality to set deadlines (date and time) to task
+ *
+ * @param onDateChange: function called when Date is changed.
+ * @param onTimeChange: function called when Time is changed.
+ * @param isEditMode: edit mode status
+ * @param dateDeadline: Deadline of the Task object.
+ * @param timeDeadline: time of the deadline.
+ * @param sDate: Date to be set on the picker.
  */
 @Composable
 fun AddTaskDateAndTimeContainer(

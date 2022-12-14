@@ -25,6 +25,7 @@ import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 
 /**
  * Sorts the completed tasks according to the date values and displays them in the HistoryScreen "Complete" tab.
+ * @param vm: HistoryScreenViewModel of the parent composable.
  */
 @Composable
 fun CompletedTasksContainer(vm: HistoryScreenViewModel) {

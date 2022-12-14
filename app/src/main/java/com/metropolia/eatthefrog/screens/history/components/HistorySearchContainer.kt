@@ -23,6 +23,7 @@ import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
 
 /**
  * Creates the UI composable for the search field within the HistoryScreen.
+ * @param vm: HistoryScreenViewModel of the parent composable.
  */
 @Composable
 fun HistorySearchContainer(vm: HistoryScreenViewModel) {
@@ -38,7 +39,7 @@ fun HistorySearchContainer(vm: HistoryScreenViewModel) {
             .background(Color.Transparent),
         value = vm.searchInput.value,
         label = { Text(stringResource(R.string.search)) },
-        onValueChange = { vm.updateSearchInput(it) },
+        onValueChange = { vm.updateSearchInput(it); vm.searchInput.value = it },
         singleLine = true,
         keyboardActions = KeyboardActions(
             onDone = { focusManager.clearFocus() }

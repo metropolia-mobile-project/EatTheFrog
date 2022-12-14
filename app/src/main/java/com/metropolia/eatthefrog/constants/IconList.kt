@@ -2,6 +2,9 @@ package com.metropolia.eatthefrog.constants
 
 import com.metropolia.eatthefrog.R
 
+/**
+ * List of icons used in the TaskType creation screen.
+ */
 val ICON_LIST = listOf<Int>(
     R.drawable.ic_meeting,
     R.drawable.ic_planning,

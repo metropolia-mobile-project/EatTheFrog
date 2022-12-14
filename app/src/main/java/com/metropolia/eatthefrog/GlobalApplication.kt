@@ -3,6 +3,9 @@ package com.metropolia.eatthefrog
 import android.app.Application
 import android.content.Context
 
+/**
+ * Application context.
+ */
 class GlobalApplication : Application() {
 
     override fun onCreate() {

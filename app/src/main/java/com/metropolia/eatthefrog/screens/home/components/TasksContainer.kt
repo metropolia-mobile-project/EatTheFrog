@@ -41,6 +41,8 @@ import java.util.*
 /**
  * Bottom half of the Home screen, containing the task list with filtering for the current day, week
  * and month.
+ * @param homeScreenViewModel: HomeScreenViewModel of the parent composable.
+ * @param currentWeek: number of the current week.
  */
 @Composable
 fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
@@ -186,6 +188,11 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
     }
 }
 
+/**
+ * Attempts to convert the given string to a Date object. Returns default current date if an error is thrown.
+ * @param string: Date in string format to be converted
+ * @return Date object of the parsed String.
+ */
 private fun parseStringToDate(string: String): Date {
     var d = Date()
     try {
@@ -196,6 +203,11 @@ private fun parseStringToDate(string: String): Date {
     return d
 }
 
+/**
+ * Creates a customized button, which sets the selected DateFilter object.
+ * @param type: DateFilter object.
+ * @param homeScreenViewModel: HomeScreenViewModel of the parent composable.
+ */
 @Composable
 fun DateFilterButton(type: DateFilter, homeScreenViewModel: HomeScreenViewModel) {
     val currentDateFilter = homeScreenViewModel.selectedFilter.observeAsState()

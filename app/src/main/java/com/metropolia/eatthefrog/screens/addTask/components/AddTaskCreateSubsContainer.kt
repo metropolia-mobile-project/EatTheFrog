@@ -40,6 +40,10 @@ import kotlinx.coroutines.launch
 /**
  * UI and functionality to add new subtasks to subtask list.
  * subtasks are shown in 'AddTaskLazyColumnContainer' before they are saved to database
+ *
+ * @param viewModel: AddTaskScreenViewModel of the parent composable.
+ * @param isEditMode: Edit mode status.
+ * @param editTaskId: ID of the Task to be edited.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -130,11 +134,22 @@ fun AddTaskCreateSubsContainer(
 }
 
 /**
-New subtasks is created here, for new tasks subtaskID is 1 if there is not tasks in database yet
-otherwise it takes last task ID and adds +1 to it
-subtasks are put to list which is stored in viewmodel
-While creating subtasks there is check that subtask have to have title and there is maximum amount of 7 subtasks
- **/
+ * New subtasks is created here, for new tasks subtaskID is 1 if there is not tasks in database yet
+ * otherwise it takes last task ID and adds +1 to it
+ * subtasks are put to list which is stored in viewmodel
+ * While creating subtasks there is check that subtask have to have title and there is maximum amount of 7 subtasks
+ *
+ * @param isEditMode: edit mode status
+ * @param subTaskTitle: title of the subtask
+ * @param lastTask: Current Task.
+ * @param subList: Current subtasks created.
+ * @param viewModel: AddTaskScreenViewModel of the parent composable.
+ * @param onTitleChange: function to be called when title changed.
+ * @param subTaskDone: Status of the subtask done.
+ * @param context: Context of the application
+ * @param editTaskId: ID of the task to be edited
+ * @param editSubList: Subtasks of the Task to be edited.
+ */
 fun addSubTaskList(
     isEditMode: Boolean,
     subTaskTitle: String,

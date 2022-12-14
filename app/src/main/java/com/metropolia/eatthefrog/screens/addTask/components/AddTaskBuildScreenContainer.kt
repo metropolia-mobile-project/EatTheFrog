@@ -32,6 +32,17 @@ import java.util.*
  * This container holds variables that other containers need as a parameter to build new task object.
  * Same screen is also used for editing the existing tasks, if this gets paramater isEditmode = true it will launch as edit mode.
  * Every other container is inside this function and 'AddTaskBuildScreenContainer' is called in 'AddTaskScreen'.
+ *
+ * @param viewModel: AddTaskScreenViewModel of the parent composable.
+ * @param navHost: NavHostController of the application.
+ * @param editTaskId: ID of the task to be edited
+ * @param isEditMode: true, if AddTaskScreen is opened in the edit mode.
+ * @param editTitle: title of the Task to be edited.
+ * @param editDesc: description of the Task to be edited.
+ * @param dateDeadline: deadline of the task
+ * @param timeDeadline: time of the deadline.
+ * @param editTaskType: TaskType of the Task to be edited.
+ * @param isFrogBoolean: isFrog value of the Task.
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -199,6 +210,8 @@ fun AddTaskBuildScreenContainer(
 
 /**
  * Wraps the AddTask composables in a Card composable
+ * @param modifier: possible Modifier object. A default modifier is provided.
+ * @param content: Content to be displayed within the composable.
  */
 @Composable
 fun AddTaskContentCardWrapper(

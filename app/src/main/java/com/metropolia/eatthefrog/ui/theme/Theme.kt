@@ -8,6 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+/**
+ * Dark mode colors.
+ */
 private val DarkColorPalette = darkColors(
     primary = YaleBlueLight,
     primaryVariant = YaleBlue,
@@ -16,22 +19,23 @@ private val DarkColorPalette = darkColors(
     onBackground = Color.White
 )
 
+/**
+ * Light mode colors.
+ */
 private val LightColorPalette = lightColors(
     primary = YaleBlueLight,
     primaryVariant = YaleBlue,
     secondary = GreyBlue,
     background = LightGray,
     onBackground = Color.Black
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
 )
 
+/**
+ * Customized theme colors used in the application.
+ * @param darkTheme: status of the device's darkmode setting.
+ * @param settingsDarkMode: status of the darkmode in the application's settings.
+ * @param content: Composables to be displayed under the theme.
+ */
 @Composable
 fun EatTheFrogTheme(darkTheme: Boolean = isSystemInDarkTheme(), settingsDarkMode: Boolean, content: @Composable () -> Unit) {
     val systemUiController = rememberSystemUiController()

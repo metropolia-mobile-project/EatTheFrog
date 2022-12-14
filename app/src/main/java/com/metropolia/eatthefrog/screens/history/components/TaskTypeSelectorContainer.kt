@@ -22,11 +22,11 @@ import androidx.compose.ui.unit.dp
 import com.metropolia.eatthefrog.R
 import com.metropolia.eatthefrog.database.TaskType
 import com.metropolia.eatthefrog.viewmodels.HistoryScreenViewModel
-import java.util.*
 
 /**
  * Contains a LazyRow, which displays all TaskTypes found in the database. Clicking on the TaskTypes filters the displayed
  * Tasks within the CompleteTasks and IncompleteTasks screens.
+ * @param vm: HistoryScreenViewModel of the parent composable.
  */
 @Composable
 fun TaskTypeSelectorContainer(vm: HistoryScreenViewModel) {

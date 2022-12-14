@@ -38,6 +38,8 @@ import java.util.*
 /**
  * Top half of the Home screen, containing the profile picture and a greeting telling the user
  * how many tasks they have for today.
+ * @param username: name of the user.
+ * @param vm: HomeScreenViewModel of the parent composable.
  */
 @Composable
 fun ProfileContainer(username: String, vm: HomeScreenViewModel) {
@@ -139,10 +141,4 @@ fun ProfileContainer(username: String, vm: HomeScreenViewModel) {
         }
 
     }
-}
-
-@Preview
-@Composable
-fun ProfileContainerPreview() {
-    // ProfileContainer("John Doe")
 }

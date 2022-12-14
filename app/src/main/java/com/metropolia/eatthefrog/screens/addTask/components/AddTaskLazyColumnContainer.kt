@@ -33,6 +33,12 @@ import java.util.*
  * This container shows created subtasks in lazyColumn.
  * if edit mode is true this lazyColumn shows existing sub tasks of that task
  * subtasks can be deleted from the list, and if using in edit mode sub tasks are also deleted from database.
+ *
+ * @param viewModel: AddTaskScreenViewModel of the parent composable.
+ * @param isEditMode: edit mode status.
+ * @param sDate: current selected date.
+ * @param isFrog: isFrog status of the Task.
+ * @param onIsFrogChange: function to be called when isFrog changed.
  */
 @Composable
 fun AddTaskLazyColumnContainer(
