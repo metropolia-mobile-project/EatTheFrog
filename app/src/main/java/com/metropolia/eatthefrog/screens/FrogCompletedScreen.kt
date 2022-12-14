@@ -26,8 +26,8 @@ import com.metropolia.eatthefrog.viewmodels.HomeScreenViewModel
 
 /**
  * Popup the user receives when they close a task marked as a frog, aka. when they eat the frog.
+ * @param vm: HomeScreenViewModel of the parent composable.
  */
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun FrogCompletedScreen(vm: HomeScreenViewModel) {

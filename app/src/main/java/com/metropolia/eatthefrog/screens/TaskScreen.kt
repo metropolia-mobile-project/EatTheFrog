@@ -39,6 +39,8 @@ import java.text.SimpleDateFormat
 /**
  * Popup window which displays the selected Task object and its data.
  * Enables the user to set Sub-tasks as complete, as well as edit the Task object in CreateTaskScreen.
+ * @param vm: HomeScreenViewModel of the parent composable.
+ * @param navController: navController of the application.
  */
 @ExperimentalMaterialApi
 @Composable
@@ -381,6 +383,11 @@ fun TaskScreen(vm: HomeScreenViewModel, navController: NavController) {
 
 /**
  * Creates a Row containing an Image, Switch and a Text object for the Switch component.
+ * @param desc: description text of the row.
+ * @param enabledIcon: Icon displayed when switch status is true.
+ * @param disabledIcon: Icon displayed when switch status is false.
+ * @param enabled: Enabled status of the switch.
+ * @param toggleState: function to be called when state is changed.
  */
 @Composable
 fun PopupSwitchRow(

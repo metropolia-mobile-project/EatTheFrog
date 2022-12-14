@@ -33,6 +33,14 @@ import java.util.*
 
 lateinit var notificationViewModel: NotificationsViewModel
 
+
+/**
+ * The main screen of the application. Displays the Tasks and filtering functionality for them, as well as
+ * the current and longest frog completion streak. Contains also a FloatingActionButton for opening up the AddTaskScreen.
+ * @param username: name of the user.
+ * @param application: Application context.
+ * @param navController: navController of the application.
+ */
 @ExperimentalMaterialApi
 @Composable
 fun HomeScreen(username: String, application: Application, navController: NavController) {

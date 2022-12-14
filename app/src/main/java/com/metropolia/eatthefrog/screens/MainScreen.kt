@@ -21,8 +21,9 @@ import com.metropolia.eatthefrog.viewmodels.NotificationsViewModel
 
 /**
  * Base screen component that holds the navigation and other screens in it.
+ * @param username: name of the user.
+ * @param application: Application context.
  */
-
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(username: String, application: Application) {
