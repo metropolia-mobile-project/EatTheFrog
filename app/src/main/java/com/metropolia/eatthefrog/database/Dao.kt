@@ -3,14 +3,15 @@ package com.metropolia.eatthefrog.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
+/**
+ * Provides access and modification functionality for the Room DB Task table.
+ */
 @Dao
 interface TaskDao {
 
-    // Insert
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: Task): Long
 
-    // Update
     @Update
     suspend fun update(item: Task)
 
@@ -23,11 +24,9 @@ interface TaskDao {
     @Query("UPDATE task SET completed = (CASE WHEN completed = 0 THEN 1 ELSE 0 END) WHERE task.uid = :id")
     suspend fun toggleTask(id: Long)
 
-    // Test
     @Query("SELECT * FROM task WHERE task.uid = :id")
     fun getTest(id: Long): Task
 
-    // Query
     @Query("SELECT * FROM task WHERE task_name LIKE '%' || :pattern || '%' ORDER BY frog DESC")
     fun getAllTasks(pattern: String): LiveData<List<Task>>
 
@@ -64,11 +63,13 @@ interface TaskDao {
     @Query("SELECT COUNT(uid) FROM task")
     fun getTotalTaskCount(): LiveData<Int>
 
-    // Delete
     @Query("DELETE FROM task WHERE task.uid = :id")
     suspend fun deleteTask(id: Long)
 }
 
+/**
+ * Provides access and modification functionality for the Room DB Subtask table.
+ */
 @Dao
 interface SubtaskDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -88,13 +89,15 @@ interface SubtaskDao {
 
 }
 
+/**
+ * Provides access and modification functionality for the Room DB TaskType table.
+ */
 @Dao
 interface TaskTypeDao {
-    // Insert
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTaskType(taskType: TaskType): Long
 
-    // Query
     @Query("SELECT * FROM tasktype")
     fun getTaskTypes(): LiveData<List<TaskType>>
 
@@ -104,7 +107,6 @@ interface TaskTypeDao {
     @Query("SELECT * FROM tasktype LIMIT 1")
     fun getFirstTaskType(): LiveData<TaskType>
 
-    // Delete
     @Query("DELETE FROM tasktype WHERE tasktype.uid = :id")
     suspend fun deleteTasktype(id: Long)
 }

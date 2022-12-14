@@ -1,10 +1,10 @@
 package com.metropolia.eatthefrog.constants
 
-// Amounts
+ /** Amounts */
 const val MAX_SUBTASK_AMOUNT = 7
 const val MAX_TASK_TYPE_NAME_LENGTH = 20
 
-// Shared preferences keys
+/** SharedPreferences keys */
 const val SHARED_PREF_KEY = "PREFERENCES_KEY"
 const val USERNAME_KEY = "USERNAME_KEY"
 const val PROFILE_IMAGE_KEY = "PROFILE_IMAGE_KEY"
@@ -16,13 +16,11 @@ const val CURRENT_STREAK_KEY = "CURRENT_STREAK_KEY"
 const val LONGEST_STREAK_KEY = "LONGEST_STREAK_KEY"
 const val LATEST_EATEN_FROG_KEY = "LATEST_FROG_EATEN_KEY"
 
-// Formats
+/** Formats */
 const val DATE_FORMAT = "d.M.yyyy"
 const val TIME_FORMAT = "HH:mm"
 const val DATE_TIME_FORMAT = "d.M.yyyy HH:mm"
 
-// Notification
+/** Default IDs */
 const val CHANNEL_ID = "NOTIFICATION_CHANNEL_ID"
-
-// "All" tasktype UID
 const val ALL_UID = 1000L

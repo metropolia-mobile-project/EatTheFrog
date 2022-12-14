@@ -17,8 +17,10 @@ import com.metropolia.eatthefrog.screens.history.HistoryScreen
 /**
  * Composable navigation element handling all the navigation in the application. The more complex logic has to do with
  * taking Task parameters to the Add Task -screen when editing a pre-existing task.
+ * @param navController: NavHostController of the application.
+ * @param username: name of the user.
+ * @param application: Application context.
  */
-
 @ExperimentalMaterialApi
 @Composable
 fun Navigation(navController: NavHostController, username: String, application: Application) {

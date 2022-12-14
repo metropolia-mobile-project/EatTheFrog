@@ -10,9 +10,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.metropolia.eatthefrog.navigation.NavigationItem
 
 /**
- * Composable component for the bottom navigation bar, has buttons for Profile, Home and history screens
+ * Composable component for the bottom navigation bar, has buttons for Profile, Home and history screens.
+ * @param navController: NavController component of the parent composable.
  */
-
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
