@@ -21,6 +21,8 @@ import com.metropolia.eatthefrog.viewmodels.TasksViewModel
 
 /**
  * Container for a singular task in the Home screen list
+ * @param task: Task object displayed within the container.
+ * @param vm: TaskViewModel of the parent Composable.
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

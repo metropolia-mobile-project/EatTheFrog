@@ -22,10 +22,13 @@ import com.metropolia.eatthefrog.constants.SHARED_PREF_KEY
 
 
 /**
- * A confirmation window.
+ * An AlertDialog with customized text and callback functions for confirm and dismiss buttons.
  * @param confirmCallback: Called whenever the user clicks the confirm button.
  * @param dismissCallback: Called whenever the user clicks outside the popup or the dismiss button.
  * @param description: The text displayed on the window.
+ * @param modifier: Modifier component for the AlertDialog.
+ * @param application: Application context
+ * @param showSlider: slider status.
  */
 @Composable
 fun ConfirmWindow(confirmCallback: (() -> Any?)?, dismissCallback: (() -> Any?)?,
