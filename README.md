@@ -13,8 +13,6 @@ Eat The Frog does not require any registration in order to fully experience the 
 - See completed and incomplete tasks in the history screen.
 - Notifications from upcoming deadlines, in intervals of your own choosing.
 
-
-
 ## Technical requirements
 -	Android 8.0 (API level 26)
 -	Permission to allow notifications
@@ -26,9 +24,8 @@ Download the .apk file from [here](https://github.com/metropolia-mobile-project/
 ## License
 The application is under the MIT License.
 
-
 ## Developers
-- [Markus Nivasalo](https://github.com/markusniv)
 - [Oskari Arponen](https://github.com/AOskari)
+- [Markus Nivasalo](https://github.com/markusniv)
 - [Jani Salo](https://github.com/Janiksa)
 - [Sirja Kosonen](https://github.com/sirjak)
