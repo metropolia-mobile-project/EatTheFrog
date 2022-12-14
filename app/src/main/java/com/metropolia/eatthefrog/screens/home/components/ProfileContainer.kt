@@ -140,9 +140,3 @@ fun ProfileContainer(username: String, vm: HomeScreenViewModel) {
 
     }
 }
-
-@Preview
-@Composable
-fun ProfileContainerPreview() {
-    // ProfileContainer("John Doe")
-}

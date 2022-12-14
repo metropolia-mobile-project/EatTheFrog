@@ -186,6 +186,11 @@ fun TasksContainer(homeScreenViewModel: HomeScreenViewModel, currentWeek: Int) {
     }
 }
 
+/**
+ * Attempts to convert the given string to a Date object. Returns default current date if an error is thrown.
+ * @param string: Date in string format to be converted
+ * @return Date object of the parsed String.
+ */
 private fun parseStringToDate(string: String): Date {
     var d = Date()
     try {

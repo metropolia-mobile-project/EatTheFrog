@@ -21,6 +21,10 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * ViewModel for the ProfileScreen.
+ * @param application: Application context.
+ */
 class ProfileScreenViewModel(application: Application): AndroidViewModel(application) {
 
     private val dir = application.applicationContext.filesDir.absolutePath
@@ -33,11 +37,36 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
     var showDeadline = MutableLiveData(true)
     var showConfirmWindow = MutableLiveData(true)
 
+    /**
+     * Fetch the amount of closed Task objects from Room db.
+     * @return Count of closed Tasks (Int) within a LiveData object.
+     */
     fun getClosedTasks() = database.taskDao().getClosedTasks()
+
+    /**
+     * Fetch the amount of active Task objects from Room db.
+     * @return Count of active Tasks (Int) within a LiveData object.
+     */
     fun getActiveTasks() = database.taskDao().getActiveTasks()
+
+    /**
+     * Fetch the amount of frogs completed from Room db.
+     * @return Count of completed frogs (Int) within a LiveData object.
+     */
     fun getFrogsEaten() = database.taskDao().getFrogsEaten()
+
+    /**
+     * Fetch the total amount of Task objects from Room db.
+     * @return Count of closed Tasks (Int) within a LiveData object.
+     */
     fun getTotalTaskCount() = database.taskDao().getTotalTaskCount()
 
+
+    /**
+     * Attempts to convert the given string to a Date object. Returns default current date if an error is thrown.
+     * @param string: Date in string format to be converted
+     * @return Date object of the parsed String.
+     */
     private fun parseStringToDate(string: String): Date {
         var d = Date()
         try {
@@ -55,7 +84,8 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
     }
 
     /**
-     * Saves the image uri of the chosen profile picture to the shared preferences
+     * Saves the image uri of the chosen profile picture to the shared preferences.
+     * @param imageUri: URI of the location the image is stored within the device.
      */
     private fun saveImageUri(imageUri: String) {
         with (sharedPreferences.edit()) {
@@ -64,6 +94,9 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
+    /**
+     * Saves the darkmode status to the SharedPreferences.
+     */
     private fun saveDarkModeStatus() {
         with (sharedPreferences.edit()) {
             putBoolean(DARK_MODE_KEY, darkmode.value!!)
@@ -71,6 +104,9 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
+    /**
+     * Saves the showConfirmWindow status to the SharedPreferences.
+     */
     private fun saveConfirmWindowStatus() {
         with (sharedPreferences.edit()) {
             putBoolean(CONFIRM_WINDOW_KEY, showConfirmWindow.value!!)
@@ -78,6 +114,9 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
+    /**
+     * Saves the showDeadline status to the SharedPreferences.
+     */
     private fun saveShowDeadlineStatus() {
         with (sharedPreferences.edit()) {
             putBoolean(DEADLINE_KEY, showDeadline.value!!)
@@ -85,6 +124,12 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
+    /**
+     * Fetches boolean values from the SharedPreferences according to the given key.
+     * @param key: Key/value pair to be fetched.
+     * @param default: default to be set if nothing is found.
+     * @return boolean value of the given key.
+     */
     private fun getBooleanFromPreferences(key: String, default: Boolean): Boolean {
         val prefs = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         return prefs.getBoolean(key, default)
@@ -92,20 +137,32 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
 
     /**
      * Loads the uri of the current saved profile picture from shared preferences
+     * @return URI of the location the image is stored within the device.
      */
     fun loadProfilePicture() : String? {
         val sharedPreferences = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         return sharedPreferences.getString(PROFILE_IMAGE_KEY, null)
     }
 
+    /**
+     * Toggle the status of darkmode and save it to SharedPreferences.
+     */
     fun toggleDarkMode() {
         darkmode.value = !darkmode.value!!
         saveDarkModeStatus()
     }
+
+    /**
+     * Toggle the status of showDeadline and save it to SharedPreferences.
+     */
     fun toggleDeadline() {
         showDeadline.value = !showDeadline.value!!
         saveShowDeadlineStatus()
     }
+
+    /**
+     * Toggle the status of showConfirmWindow and save it to SharedPreferences.
+     */
     fun toggleConfirmWindow() {
         showConfirmWindow.value = !showConfirmWindow.value!!
         saveConfirmWindowStatus()
@@ -113,6 +170,8 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
 
     /**
      * Saves chosen profile picture to the internal storage for displaying later
+     * @param location: URI of the location to be stored to.
+     * @return URI of the location the image was stored to.
      */
     fun saveFileToInternalStorage(location: Uri?): Uri {
         var imageUri = "".toUri()
@@ -152,7 +211,8 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
 
 
     /**
-     * Creates Entry-objects of the completed tasks.
+     * Creates Entry-objects of the completed tasks to be displayed on the Chart.
+     * @return ChartEntryModelProducer, used for displaying Entry object within the Chart.
      */
     fun getTasksCompletedEntries(): ChartEntryModelProducer {
 
@@ -195,6 +255,14 @@ class ProfileScreenViewModel(application: Application): AndroidViewModel(applica
     }
 }
 
+/**
+ * Used for displaying Task entries in the activity Chart. Extends the ChartEntry object.
+ *
+ * @param date: Date of the TaskEntry, displayed on the x-axis.
+ * @param frogCompleted: Completion status, has a frog completed on the given date.
+ * @param x: index of the TaskEntry on the x-axis.
+ * @param y: index of the TaskEntry on the y-axis.
+ */
 class TaskEntry(
     val date: Date,
     var frogCompleted: Boolean,

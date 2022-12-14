@@ -16,7 +16,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 /**
- * A ViewModel used for handling Task data.
+ * An extendable ViewModel used for handling Task data.
+ * @param application: Application context.
  */
 open class TasksViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -28,19 +29,54 @@ open class TasksViewModel(application: Application) : AndroidViewModel(applicati
     var highlightedTaskId = mutableStateOf(0L)
     var showTaskDeleteConfirmWindow = mutableStateOf(false)
 
+    /**
+     * Fetch the the given Task's subtask count from Room db.
+     * @param id: ID of the Task object.
+     * @return amount of subtasks wrapped within a LiveData object.
+     */
     fun getSubtasksAmount(id: Long) = database.subtaskDao().getSubtasksAmount(id)
+
+    /**
+     * Fetch the subtasks of the given Task's id from Room db.
+     * @param id: ID of the Task object.
+     * @return List of Subtask objects wrapped within a LiveData object.
+     */
     fun getSubtasks(id: Long) = database.subtaskDao().getSubtasks(id)
+
+    /**
+     * Fetch the TaskType according to the ID from Room db.
+     * @param id: ID of the TaskType object.
+     * @return TaskType object wrapped within a LiveData object.
+     */
     fun getTaskType(id: Long) = database.taskTypeDao().getTaskType(id)
+
+    /**
+     * Fetch the first TaskType from Room db.
+     * @return TaskType object wrapped within a LiveData object.
+     */
     fun getFirstTaskType() = database.taskTypeDao().getFirstTaskType()
 
+    /**
+     * Updates the highlightedTaskId with the given Task's id.
+     * @param t: Task to be set.
+     */
     fun updateHighlightedTask(t: Task) {
         this.highlightedTaskId.value = t.uid
     }
 
+    /**
+     * Open popup.
+     */
     fun showPopup() {
         popupVisible.value = true
     }
 
+    /**
+     * Fetches boolean values from the SharedPreferences according to the given key.
+     * @param key: Key/value pair to be fetched.
+     * @param default: default to be set if nothing is found.
+     * @return boolean value of the given key.
+     */
     fun getBooleanFromPreferences(key: String, default: Boolean): Boolean {
         val prefs = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         return prefs.getBoolean(key, default)
@@ -60,6 +96,10 @@ open class TasksViewModel(application: Application) : AndroidViewModel(applicati
         showTaskDeleteConfirmWindow.value = true
     }
 
+    /**
+     * Delete a Task from Room db according to the given ID.
+     * @param id: ID of the Task object to be deleted.
+     */
     fun deleteTask(id: Long) {
         viewModelScope.launch {
             database.taskDao().deleteTask(id)

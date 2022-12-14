@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter
 /**
  * ViewModel for notifications logic. Mainly used by Scheduler.
  * Extends to HomeScreenViewModel
+ * @param application: Application context.
  */
 class NotificationsViewModel(application: Application) : HomeScreenViewModel(application) {
     private val database = InitialDB.get(application)
@@ -50,13 +51,26 @@ class NotificationsViewModel(application: Application) : HomeScreenViewModel(app
         deadlineValue.value = getDeadlineFromPreferences(NOTIFICATION_KEY, 0)
     }
 
+    /**
+     * Get the selected Task from Room db according to ID.
+     * @param id: ID of Task to be fetches from Room db Task table.
+      */
     fun getCertainTask(id: Long) = database.taskDao().getTest(id)
 
+    /**
+     * Fetch the deadline of notification stored within the SharedPreferences.
+     * @param key: key to be used to access correct key/value pair from SharedPreferences.
+     * @param default: default value to be set if nothing is found in SharedPreferences.
+     * @return time of deadline (Int)
+     */
     private fun getDeadlineFromPreferences(key: String, default: Int): Int {
         val prefs = app.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         return prefs.getInt(key, default)
     }
 
+    /**
+     * Saves the deadlineValue to SharedPreferences.
+     */
     fun saveDeadlineValue() {
         with(sharedPreferences.edit()) {
             putInt(NOTIFICATION_KEY, deadlineValue.value!!)

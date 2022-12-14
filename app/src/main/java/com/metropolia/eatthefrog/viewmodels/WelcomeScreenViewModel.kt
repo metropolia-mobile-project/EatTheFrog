@@ -18,15 +18,19 @@ import com.metropolia.eatthefrog.database.TaskType
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel for the Welcome screen
+ * ViewModel for the WelcomeScreen.
+ * @param application: Application context.
  */
-
 class WelcomeScreenViewModel(application: Application) : AndroidViewModel(application) {
     private val sharedPreferences: SharedPreferences = application.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
     private val database = InitialDB.get(application)
     var endReached = mutableStateOf(false)
     private val taskTypeDao = database.taskTypeDao()
 
+    /**
+     * Saves the username to SharedPreferences.
+     * @param username: username to be stored to SharedPreferences.
+     */
     fun savePreferences(username: String) {
         with (sharedPreferences.edit()) {
             putString(USERNAME_KEY, username)
@@ -34,10 +38,16 @@ class WelcomeScreenViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
+    /**
+     * Sets endReached as true.
+     */
     fun toggleEndReached() {
         endReached.value = true
     }
 
+    /**
+     * Saves initial TaskTypes to Room db.
+     */
     fun saveInitialTypes() {
         val meeting     = TaskType(name = getApplication<Application>().resources.getString(R.string.meeting), icon = R.drawable.ic_meeting)
         val planning    = TaskType(name = getApplication<Application>().resources.getString(R.string.planning), icon = R.drawable.ic_planning)
