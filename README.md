@@ -1,4 +1,4 @@
-# EatTheFrog
+# Eat The Frog
 "If the first thing you do when you wake up in the morning is eat a live frog, then nothing worse can happen for the rest of the day." 
 Your “frog” should be the task you are most likely to procrastinate upon. Only one a day, doesn’t sound so bad?
 Try this out and see how eating your “frog” gives you energy for the rest of your day.
