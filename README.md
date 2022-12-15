@@ -11,7 +11,7 @@ Eat The Frog does not require any registration in order to fully experience the 
 - Inspect statistics and progression in the profile screen.
 - Inspect upcoming and daily tasks in the home screen. 
 - See completed and incomplete tasks in the history screen.
-- Notifications from upcoming deadlines, in intervals of your own choosing.
+- Notifications from upcoming deadlines, a day before and in intervals of your own choosing.
 
 ## Technical requirements
 -	Android 8.0 (API level 26)
